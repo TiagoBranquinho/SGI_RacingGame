@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
-import { MyRoom } from './MyRoom.js';
 
 /**
  *  This class contains the contents of out application
@@ -14,8 +13,6 @@ class MyContents {
     constructor(app) {
         this.app = app
         this.axis = null
-        this.room = new MyRoom(this.app)
-        this.room.init()
 
         // box related attributes
         this.boxMesh = null
@@ -97,7 +94,9 @@ class MyContents {
         this.planeMesh = new THREE.Mesh(plane, this.planeMaterial);
         this.planeMesh.rotation.x = -Math.PI / 2;
         this.planeMesh.position.y = -0;
-        //this.app.scene.add(this.planeMesh);
+        this.app.scene.add(this.planeMesh);
+        
+        this.app.scene.add(this.cylinder);
     }
 
     /**
