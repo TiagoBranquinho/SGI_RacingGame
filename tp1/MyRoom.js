@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { MyTable } from './MyTable.js';
+import { MyChair } from './MyChair.js';
 
 /**
  *  This class contains the contents of out application
@@ -11,6 +13,10 @@ class MyRoom {
     */
     constructor(app) {
         this.app = app
+        this.table = new MyTable(this.app)
+        this.table.init()
+        this.chair = new MyChair(this.app)
+        this.chair.init()
 
         // floor related attributes
         this.floorMesh = null
@@ -102,6 +108,7 @@ class MyRoom {
         // Create a Plane Mesh with basic material
 
         this.app.scene.add(this.floorMesh)
+
         this.app.scene.add(this.wall1Mesh)
         this.app.scene.add(this.wall2Mesh)
         this.app.scene.add(this.wall3Mesh)

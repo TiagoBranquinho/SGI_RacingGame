@@ -162,12 +162,12 @@ class MyContents {
      */
     update() {
         // check if box mesh needs to be updated
-        this.updateBoxIfRequired()
+        //this.updateBoxIfRequired()
 
         // sets the box mesh position based on the displacement vector
-        this.boxMesh.position.x = this.boxDisplacement.x
-        this.boxMesh.position.y = this.boxDisplacement.y
-        this.boxMesh.position.z = this.boxDisplacement.z
+        //this.boxMesh.position.x = this.boxDisplacement.x
+        //this.boxMesh.position.y = this.boxDisplacement.y
+        //this.boxMesh.position.z = this.boxDisplacement.z
 
     }
 
