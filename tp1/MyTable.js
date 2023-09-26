@@ -64,6 +64,9 @@ class MyTable {
           this.tableMesh.add(tableLeg2);
           this.tableMesh.add(tableLeg3);
           this.tableMesh.add(tableLeg4);
+
+          this.tableMesh.position.set(-4, 1.8, 0)
+          this.tableMesh.scale.set(this.tableSize, this.tableSize, this.tableSize * 2.5);
     
     }
 
@@ -74,8 +77,6 @@ class MyTable {
     init() {
 
         this.buildTable();
-
-        this.app.scene.add(this.tableMesh);
     }
 
 }

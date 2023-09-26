@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MyTable } from './MyTable.js';
 import { MyChair } from './MyChair.js';
+import { MyBalloon } from './MyBallon.js';
 
 /**
  *  This class contains the contents of out application
@@ -15,8 +16,26 @@ class MyRoom {
         this.app = app
         this.table = new MyTable(this.app)
         this.table.init()
-        this.chair = new MyChair(this.app)
-        this.chair.init()
+        this.chair1 = new MyChair(this.app)
+        this.chair1.init()
+        this.chair2 = new MyChair(this.app)
+        this.chair2.init()
+        this.ballon1 = new MyBalloon(this.app)
+        this.ballon1.init()
+        this.ballon2 = new MyBalloon(this.app)
+        this.ballon2.init()
+        this.ballon3 = new MyBalloon(this.app)
+        this.ballon3.init()
+        this.ballon4 = new MyBalloon(this.app)
+        this.ballon4.init()
+
+        // reposition elements
+        this.chair2.chairMesh.position.set(-7, 0, -2)
+        this.chair2.chairMesh.rotation.y = Math.PI/2
+
+        this.ballon2.balloonMesh.position.set(-7, 3, -6)
+        this.ballon3.balloonMesh.position.set(-7, 3, 6)
+        this.ballon4.balloonMesh.position.set(-7, 3, 8)
 
         // floor related attributes
         this.floorMesh = null
@@ -50,6 +69,8 @@ class MyRoom {
         this.lastwall4Enabled = null
         this.wall4Displacement = new THREE.Vector3(0, 0, 0)
 
+        this.roomMesh = new THREE.Group();
+
     }
 
     /**
@@ -65,6 +86,10 @@ class MyRoom {
         this.floorMesh = new THREE.Mesh(floor, floorMaterial);
         this.floorMesh.rotation.x = -Math.PI / 2;
         this.floorMesh.position.y = 0;
+
+        this.floorMesh.scale.set(this.floorMeshSize * 2, this.floorMeshSize * 2)
+
+        this.roomMesh.add(this.floorMesh);
     }
 
     buildWalls() {
@@ -73,27 +98,35 @@ class MyRoom {
             specular: "#000000", emissive: "#000000", shininess: 90
         })
 
-        let wall = new THREE.PlaneGeometry(10, 5);
+        let wall = new THREE.PlaneGeometry(20, 5);
 
         this.wall1Mesh = new THREE.Mesh(wall, wallMaterial);
         this.wall1Mesh.position.y = 2.5;
-        this.wall1Mesh.position.z = -5;
+        this.wall1Mesh.position.z = -10;
 
         this.wall2Mesh = new THREE.Mesh(wall, wallMaterial);
         this.wall2Mesh.position.y = 2.5;
-        this.wall2Mesh.position.z = 5;
+        this.wall2Mesh.position.z = 10;
         this.wall2Mesh.rotation.y = Math.PI;
 
         this.wall3Mesh = new THREE.Mesh(wall, wallMaterial);
-        this.wall3Mesh.position.x = -5;
+        this.wall3Mesh.position.x = -10;
         this.wall3Mesh.position.y = 2.5;
         this.wall3Mesh.rotation.y = Math.PI / 2;
 
 
         this.wall4Mesh = new THREE.Mesh(wall, wallMaterial);
-        this.wall4Mesh.position.x = 5;
+        this.wall4Mesh.position.x = 10;
         this.wall4Mesh.position.y = 2.5;
         this.wall4Mesh.rotation.y = -Math.PI / 2;
+
+        this.wallsMesh = new THREE.Group();
+        this.wallsMesh.add(this.wall1Mesh);
+        this.wallsMesh.add(this.wall2Mesh);
+        this.wallsMesh.add(this.wall3Mesh);
+        this.wallsMesh.add(this.wall4Mesh);
+
+        this.roomMesh.add(this.wallsMesh);
     }
 
 
@@ -105,14 +138,17 @@ class MyRoom {
         this.buildFloor();
         this.buildWalls();
 
-        // Create a Plane Mesh with basic material
+        // Add external elements to room mesh
 
-        this.app.scene.add(this.floorMesh)
+        this.roomMesh.add(this.table.tableMesh);
+        this.roomMesh.add(this.chair1.chairMesh);
+        this.roomMesh.add(this.chair2.chairMesh);
+        this.roomMesh.add(this.ballon1.balloonMesh);
+        this.roomMesh.add(this.ballon2.balloonMesh);
+        this.roomMesh.add(this.ballon3.balloonMesh);
+        this.roomMesh.add(this.ballon4.balloonMesh);
 
-        this.app.scene.add(this.wall1Mesh)
-        this.app.scene.add(this.wall2Mesh)
-        this.app.scene.add(this.wall3Mesh)
-        this.app.scene.add(this.wall4Mesh)
+        this.app.scene.add(this.roomMesh);
     }
 
 }

@@ -73,6 +73,10 @@ class MyChair {
     this.chairMesh.add(chairLeg2);
     this.chairMesh.add(chairLeg3);
     this.chairMesh.add(chairLeg4);
+
+    this.chairMesh.position.set(-7, 0, 2)
+    this.chairMesh.rotation.y = Math.PI/2
+    this.chairMesh.scale.set(this.chairSize * 2, this.chairSize * 4, this.chairSize * 2)
   }
 
   /**
@@ -80,7 +84,6 @@ class MyChair {
    */
   init() {
     this.buildChair();
-    this.app.scene.add(this.chairMesh);
   }
 
 }
