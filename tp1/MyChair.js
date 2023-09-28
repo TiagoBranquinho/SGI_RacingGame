@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 
+
 /**
  *  This class contains the contents of our application
  */
@@ -18,7 +19,6 @@ class MyChair {
     this.chairEnabled = true;
     this.lastChairEnabled = null;
     this.chairDisplacement = new THREE.Vector3(0, 0, 0);
-
   }
 
   buildChair() {
@@ -77,6 +77,7 @@ class MyChair {
     this.chairMesh.position.set(-7, 0, 2)
     this.chairMesh.rotation.y = Math.PI/2
     this.chairMesh.scale.set(this.chairSize * 2, this.chairSize * 4, this.chairSize * 2)
+
   }
 
   /**
