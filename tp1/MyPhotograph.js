@@ -44,6 +44,7 @@ class MyPhotograph {
 
         let photoMaterial = new THREE.MeshBasicMaterial({
             map: this.photoTexture,
+            color: 0xE6E6E6
         });
 
         let photoWidth = frameWidth - 0.1; // Adjust the size of the photo to fit inside the frame

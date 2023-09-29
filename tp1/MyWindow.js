@@ -43,6 +43,7 @@ class MyWindow {
 
         let viewMaterial = new THREE.MeshBasicMaterial({
             map: viewTexture,
+            color: 0x8C8C8C
         });
 
         let viewWidth = windowWidth - 0.1; // Adjust the size of the photo to fit inside the frame
