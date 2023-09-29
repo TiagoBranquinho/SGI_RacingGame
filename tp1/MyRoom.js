@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { MyTable } from './MyTable.js';
 import { MyChair } from './MyChair.js';
 import { MyBalloon } from './MyBallon.js';
+import { MyPhotograph } from './MyPhotograph.js';
+import { MyWindow } from './MyWindow.js';
 
 /**
  *  This class contains the contents of out application
@@ -28,6 +30,13 @@ class MyRoom {
         this.ballon3.init()
         this.ballon4 = new MyBalloon(this.app)
         this.ballon4.init()
+        this.photo1 = new MyPhotograph(this.app, 'textures/mongo1.jpg')
+        this.photo1.init()
+        this.photo2 = new MyPhotograph(this.app, 'textures/mongo2.jpg')
+        this.photo2.init()
+        this.window = new MyWindow(this.app)
+        this.window.init()
+        
 
         // reposition elements
         this.chair2.chairMesh.position.set(-7, 0, -2)
@@ -36,6 +45,7 @@ class MyRoom {
         this.ballon2.balloonMesh.position.set(-7, 3, -6)
         this.ballon3.balloonMesh.position.set(-7, 3, 6)
         this.ballon4.balloonMesh.position.set(-7, 3, 8)
+        this.photo2.frameMesh.position.set(10, 3, 2)
 
         // floor related attributes
         this.floorMesh = null
@@ -147,6 +157,9 @@ class MyRoom {
         this.roomMesh.add(this.ballon2.balloonMesh);
         this.roomMesh.add(this.ballon3.balloonMesh);
         this.roomMesh.add(this.ballon4.balloonMesh);
+        this.roomMesh.add(this.photo1.frameMesh);
+        this.roomMesh.add(this.photo2.frameMesh);
+        this.roomMesh.add(this.window.windowMesh);
 
         this.app.scene.add(this.roomMesh);
     }

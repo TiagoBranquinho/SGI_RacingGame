@@ -25,7 +25,12 @@ class MyTable {
     }
 
     buildTable() {
+        // Load the wood texture image
+        let textureLoader = new THREE.TextureLoader();
+        let woodTexture = textureLoader.load('textures/wood.webp');
+
         let tableMaterial = new THREE.MeshPhongMaterial({
+            map: woodTexture, // Use the wood texture as the map
             color: "#8B4513", // Brown color for the table
             specular: "#000000",
             emissive: "#000000",
@@ -39,14 +44,14 @@ class MyTable {
         // Create table legs
         let legMaterial = new THREE.MeshPhongMaterial({
             color: "#8B4513", // Use the same color as the table top
-            specular: "#000000",
+            specular: "#FFFFFF",
             emissive: "#000000",
             shininess: 90
         });
 
         // Define leg dimensions
         let legWidth = 0.2;
-        let legHeight = 1.8;
+        let legHeight = 1.7;
         let legDepth = 0.2;
 
         // Create table legs
@@ -58,10 +63,10 @@ class MyTable {
         let tableLeg3 = new THREE.Mesh(leg, legMaterial);
         let tableLeg4 = new THREE.Mesh(leg, legMaterial);
 
-        tableLeg1.position.set(-1.4, -1, -1.4);
-        tableLeg2.position.set(-1.4, -1, 1.4);
-        tableLeg3.position.set(1.4, -1, -1.4);
-        tableLeg4.position.set(1.4, -1, 1.4);
+        tableLeg1.position.set(-1.4, -1.1, -1.4);
+        tableLeg2.position.set(-1.4, -1.1, 1.4);
+        tableLeg3.position.set(1.4, -1.1, -1.4);
+        tableLeg4.position.set(1.4, -1.1, 1.4);
 
         this.tableMesh.add(tableLeg1);
         this.tableMesh.add(tableLeg2);
