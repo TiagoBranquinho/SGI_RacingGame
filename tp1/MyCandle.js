@@ -7,13 +7,11 @@ class MyCandle {
     this.app = app;
     this.candleGroup = null;
     this.candleSize = 1;
-    this.candleEnabled = true;
     this.lastCandleEnabled = null;
     this.candleDisplacement = new THREE.Vector3(0, 0, 0);
   }
 
   buildCandle() {
-
     let candleHeight = 0.8;
     let candleRadius = 0.10;
 
@@ -43,6 +41,7 @@ class MyCandle {
     flame.position.set(0, candleHeight * 1.6, 0);
 
     this.candleGroup = new THREE.Group();
+
     this.candleGroup.add(candle);
     this.candleGroup.add(flame);
 
@@ -53,6 +52,10 @@ class MyCandle {
 
   init() {
     this.buildCandle();
+  }
+
+  setEnabled(enabled) {
+    this.candleGroup.visible = enabled;
   }
 }
 

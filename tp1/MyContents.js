@@ -13,7 +13,12 @@ class MyContents {
     */
     constructor(app) {
         this.app = app
-        this.axis = null
+        this.axis = null;
+        this.candleEnabled = true;
+        this.cakeSliceEnabled = true;
+        this.cakeBigPortionEnabled = true;
+        this.plateEnabled = true;
+
         this.room = new MyRoom(this.app)
         this.room.init()
 
@@ -23,6 +28,7 @@ class MyContents {
         this.boxEnabled = true
         this.lastBoxEnabled = null
         this.boxDisplacement = new THREE.Vector3(0, 2, 0)
+
 
         // plane related attributes
         this.diffusePlaneColor = "#00ffff"
@@ -80,10 +86,20 @@ class MyContents {
         pointLight.position.set(0, 20, 0);
         this.app.scene.add(pointLight);
 
+        // Create a spotlight
+        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.9, 0, 0); // White light
+        spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
+        spotLight.castShadow = true; // Enable shadow casting
+        spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
+        this.app.scene.add(spotLight);
+
         // add a point light helper for the previous point light
         const sphereSize = 0.5;
         const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
         this.app.scene.add(pointLightHelper);
+
+        const spotlightHelper = new THREE.SpotLightHelper(spotLight);
+        this.app.scene.add(spotlightHelper);
 
         // add an ambient light
         const ambientLight = new THREE.AmbientLight(0x555555);
@@ -169,6 +185,22 @@ class MyContents {
         //this.boxMesh.position.y = this.boxDisplacement.y
         //this.boxMesh.position.z = this.boxDisplacement.z
 
+    }
+
+    enableCandle() {
+        this.room.table.plate.cake.candle.candleGroup.visible = this.candleEnabled;
+    }
+
+    enableCakeSlice() {
+        this.room.table.plate.cake.cakeGroup.children[1].visible = this.cakeSliceEnabled;
+    }
+
+    enableBigCake() {
+        this.room.table.plate.cake.cakeGroup.children[0].visible = this.cakeBigPortionEnabled;
+    }
+
+    enablePlate() {
+        this.room.table.plate.plateGroup.visible = this.plateEnabled;
     }
 
 }

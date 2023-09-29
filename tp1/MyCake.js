@@ -14,6 +14,7 @@ class MyCake {
     this.lastCakeEnabled = null;
     this.cakeDisplacement = new THREE.Vector3(0, 0, 0);
     this.sliceAngle = Math.PI * 1.60;
+    this.sliceMesh = null;
   }
 
   buildCake() {
@@ -52,20 +53,19 @@ class MyCake {
       bevelEnabled: false,
     });
 
-    const sliceMesh = new THREE.Mesh(sliceGeometry, cakeMaterial);
-
+    this.sliceMesh = new THREE.Mesh(sliceGeometry, cakeMaterial);
 
 
     // Position Cake and slice so it appears that the slice is cut out of the cake
     cakeMesh.position.set(0, 0, 0);
-    sliceMesh.position.set(0.2, 0, 0.2);
+    this.sliceMesh.position.set(0.2, 0, 0.2);
 
 
 
     cakeMesh.rotation.x = -Math.PI / 2;
 
-    sliceMesh.rotation.x = -Math.PI / 2;
-    sliceMesh.rotation.z = this.sliceAngle;
+    this.sliceMesh.rotation.x = -Math.PI / 2;
+    this.sliceMesh.rotation.z = this.sliceAngle;
 
 
 
@@ -82,7 +82,7 @@ class MyCake {
 
     this.bigPortionGroup.add(this.candle.candleGroup);
     this.cakeGroup.add(this.bigPortionGroup);
-    this.cakeGroup.add(sliceMesh);
+    this.cakeGroup.add(this.sliceMesh);
     this.cakeGroup.position.set(0, 0.05, 0);
     this.cakeGroup.scale.set(this.cakeSize, this.cakeSize, this.cakeSize);
   }

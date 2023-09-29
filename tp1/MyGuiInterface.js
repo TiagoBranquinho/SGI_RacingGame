@@ -57,6 +57,33 @@ class MyGuiInterface  {
         // note that we are using a property from the app 
         cameraFolder.add(this.app.activeCamera.position, 'x', 0, 10).name("x coord")
         cameraFolder.open()
+
+        // add a folder to the gui interface for the candle
+        const candleFolder = this.datgui.addFolder( 'Candle' );
+        candleFolder.add(this.contents, 'candleEnabled', true).name("enabled").onChange(() => {this.contents.enableCandle()});
+        // note that we are using a property from the contents object 
+        //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
+        candleFolder.open()
+
+        // add a folder to the gui interface for the cake
+        const cakeFolder = this.datgui.addFolder( 'Cake' );
+        cakeFolder.add(this.contents, 'cakeSliceEnabled', true).name("slice enabled").onChange(() => {this.contents.enableCakeSlice()});
+        cakeFolder.add(this.contents, 'cakeBigPortionEnabled', true).name("big portion enabled").onChange(() => {this.contents.enableBigCake()});
+
+        // note that we are using a property from the contents object 
+        //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
+        cakeFolder.open()
+
+        // add a folder to the gui interface for the plate
+        const plateFolder = this.datgui.addFolder( 'Cake' );
+        plateFolder.add(this.contents, 'plateEnabled', true).name("enabled").onChange(() => {this.contents.enablePlate()});
+
+        // note that we are using a property from the contents object 
+        //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
+        plateFolder.open()
+
+
+        
     }
 }
 
