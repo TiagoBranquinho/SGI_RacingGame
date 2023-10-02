@@ -18,6 +18,8 @@ class MyContents {
         this.cakeSliceEnabled = true;
         this.cakeBigPortionEnabled = true;
         this.plateEnabled = true;
+        this.tableEnabled = true;
+        this.decorationEnabled = true;
 
         this.room = new MyRoom(this.app)
         this.room.init()
@@ -87,7 +89,7 @@ class MyContents {
         this.app.scene.add(pointLight);
 
         // Create a spotlight
-        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.85, 0, 0); // White light
+        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.80, 0, 0); // White light
         spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         spotLight.castShadow = true; // Enable shadow casting
         spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
@@ -201,6 +203,22 @@ class MyContents {
 
     enablePlate() {
         this.room.table.plate.plateGroup.visible = this.plateEnabled;
+    }
+
+    enableTable() {
+        this.room.table.tableMesh.visible = this.tableEnabled;
+        this.room.chair1.chairMesh.visible = this.tableEnabled;
+        this.room.chair2.chairMesh.visible = this.tableEnabled;
+    }
+
+    enableDecoration() {
+        this.room.window.windowMesh.visible = this.decorationEnabled;
+        this.room.ballon1.balloonMesh.visible = this.decorationEnabled;
+        this.room.ballon2.balloonMesh.visible = this.decorationEnabled;
+        this.room.ballon3.balloonMesh.visible = this.decorationEnabled;
+        this.room.ballon4.balloonMesh.visible = this.decorationEnabled;
+        this.room.photo1.frameMesh.visible = this.decorationEnabled;
+        this.room.photo2.frameMesh.visible = this.decorationEnabled;
     }
 
 }

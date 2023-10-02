@@ -75,12 +75,31 @@ class MyGuiInterface  {
         cakeFolder.open()
 
         // add a folder to the gui interface for the plate
-        const plateFolder = this.datgui.addFolder( 'Cake' );
+        const plateFolder = this.datgui.addFolder( 'Plate' );
         plateFolder.add(this.contents, 'plateEnabled', true).name("enabled").onChange(() => {this.contents.enablePlate()});
 
         // note that we are using a property from the contents object 
         //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
         plateFolder.open()
+
+
+        // add a folder to the gui interface for the table
+        const tableFolder = this.datgui.addFolder( 'Table' );
+        tableFolder.add(this.contents, 'tableEnabled', true).name("enabled").onChange(() => {this.contents.enableTable()});
+
+        // note that we are using a property from the contents object 
+        //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
+        tableFolder.open()
+
+        // add a folder to the gui interface for the decoration
+        const decorationFolder = this.datgui.addFolder( 'Decoration' );
+        decorationFolder.add(this.contents, 'decorationEnabled', true).name("enabled").onChange(() => {this.contents.enableDecoration()});
+
+        // note that we are using a property from the contents object 
+        //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
+        decorationFolder.open()
+
+
 
 
         
