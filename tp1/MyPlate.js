@@ -17,8 +17,8 @@ class MyPlate {
   buildPlate() {
     const plateMaterial = new THREE.MeshPhongMaterial({
       color: "#808080",
-      specular: "#808080",
-      emissive: "#808080",
+      specular: "#d9c7c5",
+      emissive: "#d9c7c5",
       shininess: 30
     });
 

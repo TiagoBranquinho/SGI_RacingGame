@@ -87,7 +87,7 @@ class MyContents {
         this.app.scene.add(pointLight);
 
         // Create a spotlight
-        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.9, 0, 0); // White light
+        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.85, 0, 0); // White light
         spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         spotLight.castShadow = true; // Enable shadow casting
         spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
