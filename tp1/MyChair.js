@@ -29,9 +29,9 @@ class MyChair {
     let chairMaterial = new THREE.MeshPhongMaterial({
       map: woodTexture, // Use the wood texture as the map
       color: "#6E260E", // Brown color for the chair
-      specular: "#000000",
+      specular: "#6E260E",
       emissive: "#000000",
-      shininess: 90
+      shininess: 30
     });
 
     // Create chair seat and backrest
@@ -48,9 +48,9 @@ class MyChair {
     // Create chair legs
     let legMaterial = new THREE.MeshPhongMaterial({
       color: "#6E260E", // Use the same color as the seat
-      specular: "#000000",
+      specular: "#6E260E",
       emissive: "#000000",
-      shininess: 90
+      shininess: 30
     });
 
     let legWidth = 0.1;

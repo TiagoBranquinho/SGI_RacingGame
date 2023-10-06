@@ -99,7 +99,9 @@ class MyRoom {
     buildFloor() {
         let floorMaterial = new THREE.MeshPhongMaterial({
             color: "#6E260E",
-            specular: "#000000", emissive: "#000000", shininess: 90
+            specular: "#6E260E", 
+            emissive: "#000000", 
+            shininess: 20
         })
 
         let floor = new THREE.PlaneGeometry(10, 10);
@@ -115,7 +117,9 @@ class MyRoom {
     buildWalls() {
         let wallMaterial = new THREE.MeshPhongMaterial({
             color: "#DFDFDF",
-            specular: "#000000", emissive: "#000000", shininess: 90
+            specular: "#000000", 
+            emissive: "#000000", 
+            shininess: 90
         })
 
         let wall = new THREE.PlaneGeometry(20, 5);

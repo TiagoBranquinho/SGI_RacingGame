@@ -2,6 +2,9 @@ import * as THREE from 'three';
 
 import { MyPlate } from './MyPlate.js';
 
+import { MySpring } from './MySpring.js';
+
+
 /**
  *  This class contains the contents of out application
  */
@@ -21,6 +24,7 @@ class MyTable {
         this.lastTableEnabled = null;
         this.tableDisplacement = new THREE.Vector3(0, 0, 0);
         this.plate = null;
+        this.spring = null;
 
     }
 
@@ -32,9 +36,9 @@ class MyTable {
         let tableMaterial = new THREE.MeshPhongMaterial({
             map: woodTexture, // Use the wood texture as the map
             color: "#8B4513", // Brown color for the table
-            specular: "#000000",
+            specular: "#8B4513",
             emissive: "#000000",
-            shininess: 90
+            shininess: 30
         });
 
         let tableTop = new THREE.BoxGeometry(3, 0.5, 3); // Adjust the dimensions as needed
@@ -44,9 +48,9 @@ class MyTable {
         // Create table legs
         let legMaterial = new THREE.MeshPhongMaterial({
             color: "#8B4513", // Use the same color as the table top
-            specular: "#FFFFFF",
+            specular: "#8B4513",
             emissive: "#000000",
-            shininess: 90
+            shininess: 30
         });
 
         // Define leg dimensions
@@ -76,11 +80,15 @@ class MyTable {
         this.plate = new MyPlate(this.app);
         this.plate.init();
 
+        this.spring = new MySpring(this.app);
+        this.spring.init();
+
 
         this.tableMesh.position.set(-4, 1.8, 0)
 
         this.tableMesh.scale.set(this.tableSize, this.tableSize, this.tableSize * 2.5); 
         this.tableMesh.add(this.plate.plateGroup);
+        this.tableMesh.add(this.spring.spring);
     }
 
 

@@ -107,6 +107,16 @@ class MyContents {
         const ambientLight = new THREE.AmbientLight(0x555555);
         this.app.scene.add(ambientLight);
 
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
+        directionalLight.position.set(0, 3, -9.8);
+        directionalLight.target = this.room.wall2Mesh;
+
+        this.app.scene.add(directionalLight);
+
+        const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+        this.app.scene.add(directionalLightHelper);
+
         this.buildBox()
 
         // Create a Plane Mesh with basic material
