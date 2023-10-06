@@ -22,8 +22,13 @@ class MyChair {
   }
 
   buildChair() {
+    // Load the wood texture image
+    let textureLoader = new THREE.TextureLoader();
+    let woodTexture = textureLoader.load('textures/wood.webp');
+
     let chairMaterial = new THREE.MeshPhongMaterial({
-      color: "#6E260E", // Adjust the color as needed
+      map: woodTexture, // Use the wood texture as the map
+      color: "#6E260E", // Brown color for the chair
       specular: "#000000",
       emissive: "#000000",
       shininess: 90
@@ -60,10 +65,10 @@ class MyChair {
     let chairLeg4 = new THREE.Mesh(legGeometry, legMaterial);
 
     // Position chair legs
-    chairLeg1.position.set(-0.45, 0.15, -0.45);
-    chairLeg2.position.set(-0.45, 0.15, 0.45);
-    chairLeg3.position.set(0.45, 0.15, -0.45);
-    chairLeg4.position.set(0.45, 0.15, 0.45);
+    chairLeg1.position.set(-0.45, 0.12, -0.45);
+    chairLeg2.position.set(-0.45, 0.12, 0.45);
+    chairLeg3.position.set(0.45, 0.12, -0.45);
+    chairLeg4.position.set(0.45, 0.12, 0.45);
 
     // Create chair group and add components
     this.chairMesh = new THREE.Group();

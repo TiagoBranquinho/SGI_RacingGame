@@ -4,6 +4,9 @@ import { MyChair } from './MyChair.js';
 import { MyBalloon } from './MyBallon.js';
 import { MyPhotograph } from './MyPhotograph.js';
 import { MyWindow } from './MyWindow.js';
+import { MyCarocha } from './MyCarocha.js';
+import { MyJournal } from './MyJournal.js';
+import { MyJar } from './MyJar.js';
 
 /**
  *  This class contains the contents of out application
@@ -36,6 +39,12 @@ class MyRoom {
         this.photo2.init()
         this.window = new MyWindow(this.app)
         this.window.init()
+        this.carocha = new MyCarocha(this.app)
+        this.carocha.init()
+        this.journal = new MyJournal(this.app)
+        this.journal.init()
+        this.jar = new MyJar(this.app)
+        this.jar.init()
         
 
         // reposition elements
@@ -45,6 +54,7 @@ class MyRoom {
         this.ballon2.balloonMesh.position.set(-7, 3, -6)
         this.ballon3.balloonMesh.position.set(-7, 3, 6)
         this.ballon4.balloonMesh.position.set(-7, 3, 8)
+
         this.photo2.frameMesh.position.set(10, 3, 2)
 
         // floor related attributes
@@ -160,8 +170,13 @@ class MyRoom {
         this.roomMesh.add(this.photo1.frameMesh);
         this.roomMesh.add(this.photo2.frameMesh);
         this.roomMesh.add(this.window.windowMesh);
+        this.roomMesh.add(this.carocha.frameMesh);
+        this.roomMesh.add(this.journal.meshes);
+        //this.roomMesh.add(this.jar.meshes);
 
         this.app.scene.add(this.roomMesh);
+
+        this.app.scene.add(this.jar.meshes);
     }
 
 }
