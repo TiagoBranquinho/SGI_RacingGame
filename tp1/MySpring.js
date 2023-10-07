@@ -42,7 +42,7 @@ class MySpring {
 
   buildSpring() {
     this.springGroup = new THREE.Group();
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       const spring = this.buildSpringPart(); // Call your buildSpring() method here
       spring.position.set(2, 0.4*i, 0); // Adjust the x-coordinate as needed
       this.springGroup.add(spring); // Add the spring to the array
@@ -60,3 +60,4 @@ class MySpring {
 }
 
 export { MySpring };
+
