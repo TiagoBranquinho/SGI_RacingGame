@@ -88,7 +88,7 @@ class MyTable {
 
         this.tableMesh.scale.set(this.tableSize, this.tableSize, this.tableSize * 2.5); 
         this.tableMesh.add(this.plate.plateGroup);
-        this.tableMesh.add(this.spring.springGroup);
+        this.tableMesh.add(this.spring.springMesh);
     }
 
 
