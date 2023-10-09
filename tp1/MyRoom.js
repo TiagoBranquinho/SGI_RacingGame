@@ -7,6 +7,7 @@ import { MyWindow } from './MyWindow.js';
 import { MyCarocha } from './MyCarocha.js';
 import { MyJournal } from './MyJournal.js';
 import { MyJar } from './MyJar.js';
+import { MyFlower } from './MyFlower.js';
 
 /**
  *  This class contains the contents of out application
@@ -176,11 +177,9 @@ class MyRoom {
         this.roomMesh.add(this.window.windowMesh);
         this.roomMesh.add(this.carocha.frameMesh);
         this.roomMesh.add(this.journal.meshes);
-        //this.roomMesh.add(this.jar.meshes);
+        this.roomMesh.add(this.jar.jarFlowerGroup);
 
         this.app.scene.add(this.roomMesh);
-
-        this.app.scene.add(this.jar.meshes);
     }
 
 }
