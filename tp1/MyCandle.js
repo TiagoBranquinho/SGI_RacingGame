@@ -18,7 +18,7 @@ class MyCandle {
     let candleMaterial = new THREE.MeshPhongMaterial({
       color: "#FFD700",
       specular: "#FFD700",
-      emissive: "#FFD700",
+      emissive: "#000000",
       shininess: 90
     });
 

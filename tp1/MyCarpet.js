@@ -28,9 +28,12 @@ class MyCarpet {
     let textureLoader = new THREE.TextureLoader();
     let viewTexture = textureLoader.load('textures/carpet.jpg');
 
-    let viewMaterial = new THREE.MeshBasicMaterial({
+    let viewMaterial = new THREE.MeshPhongMaterial({
       map: viewTexture,
       color: 0xf75959,
+      specular: 0xf75959,
+      emissive: 0x000000,
+      shininess: 60
     });
 
     let viewGeometry = new THREE.PlaneGeometry(carpetWidth, carpetHeight);

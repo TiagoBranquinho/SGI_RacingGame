@@ -21,7 +21,7 @@ class MyCake {
     let cakeMaterial = new THREE.MeshPhongMaterial({
       color: "#C70039",
       specular: "#FC1703",
-      emissive: "#FC1703",
+      emissive: "#000000",
       shininess: 10
     });
 

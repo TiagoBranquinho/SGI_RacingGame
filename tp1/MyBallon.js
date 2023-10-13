@@ -15,7 +15,7 @@ class MyBalloon {
     let balloonMaterial = new THREE.MeshPhongMaterial({
       color: "#FF0000", // Red color for the balloon
       specular: "#FFFFFF",
-      emissive: "#FF0000",
+      emissive: "#000000",
       shininess: 90
     });
 

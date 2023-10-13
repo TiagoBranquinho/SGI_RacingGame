@@ -7,8 +7,12 @@ class MyFlower {
   }
 
   createPetals() {
-    const petalMaterial = new THREE.MeshBasicMaterial({ color: 0xffc0cb });
-
+    let petalMaterial = new THREE.MeshPhongMaterial({
+      color: "#ffc0cb",
+      specular: "#ffc0cb",
+      emissive: "#000000",
+      shininess: 10
+    });
     const numPetals = 6;
     const petalRadius = 0.5;
     const petalHeight = 0.1;
@@ -38,14 +42,23 @@ class MyFlower {
     const centerHeight = 0.2;
     const centerSegments = 50;
     const centerGeometry = new THREE.CylinderGeometry(centerRadiusTop, centerRadiusBottom, centerHeight, centerSegments);
-    const centerMaterial = new THREE.MeshBasicMaterial({ color: centerColor });
-    const centerCylinder = new THREE.Mesh(centerGeometry, centerMaterial);
+    let centerMaterial = new THREE.MeshPhongMaterial({
+      color: "#FFFF00",
+      specular: "#FFFF00",
+      emissive: "#000000",
+      shininess: 10
+    });    const centerCylinder = new THREE.Mesh(centerGeometry, centerMaterial);
     centerCylinder.rotateX(Math.PI / 2);
     this.flowerGroup.add(centerCylinder);
   }
 
   createStem() {
-    const stemMaterial = new THREE.MeshBasicMaterial({ color: 0x228B22 });
+    let stemMaterial = new THREE.MeshPhongMaterial({
+      color: "#228B22",
+      specular: "#228B22",
+      emissive: "#000000",
+      shininess: 10
+    });
     const stemPoints = [
       new THREE.Vector3(0, 0, 0),
       new THREE.Vector3(0, 5, 0), // Adjust stem height
