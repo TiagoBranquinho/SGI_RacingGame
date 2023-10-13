@@ -7,7 +7,8 @@ import { MyWindow } from './MyWindow.js';
 import { MyCarocha } from './MyCarocha.js';
 import { MyJournal } from './MyJournal.js';
 import { MyJar } from './MyJar.js';
-import { MyFlower } from './MyFlower.js';
+import { MyCarpet } from './MyCarpet.js';
+
 
 /**
  *  This class contains the contents of out application
@@ -22,30 +23,58 @@ class MyRoom {
         this.app = app
         this.table = new MyTable(this.app)
         this.table.init()
+        this.table.tableMesh.receiveShadow = true;
+        this.table.tableMesh.castShadow = true;
         this.chair1 = new MyChair(this.app)
         this.chair1.init()
+        this.chair1.chairMesh.receiveShadow = true;
+        this.chair1.chairMesh.castShadow = true;
         this.chair2 = new MyChair(this.app)
         this.chair2.init()
+        this.chair2.chairMesh.receiveShadow = true;
+        this.chair2.chairMesh.castShadow = true;
         this.ballon1 = new MyBalloon(this.app)
         this.ballon1.init()
+        this.ballon1.balloonMesh.receiveShadow = true;
+        this.ballon1.balloonMesh.castShadow = true;
         this.ballon2 = new MyBalloon(this.app)
         this.ballon2.init()
+        this.ballon2.balloonMesh.receiveShadow = true;
+        this.ballon2.balloonMesh.castShadow = true;
         this.ballon3 = new MyBalloon(this.app)
         this.ballon3.init()
+        this.ballon3.balloonMesh.receiveShadow = true;
+        this.ballon3.balloonMesh.castShadow = true;
         this.ballon4 = new MyBalloon(this.app)
         this.ballon4.init()
+        this.ballon4.balloonMesh.receiveShadow = true;
+        this.ballon4.balloonMesh.castShadow = true;
         this.photo1 = new MyPhotograph(this.app, 'textures/mongo1.jpg')
         this.photo1.init()
+        this.photo1.frameMesh.receiveShadow = true;
+        this.photo1.frameMesh.castShadow = true;
         this.photo2 = new MyPhotograph(this.app, 'textures/mongo2.jpg')
         this.photo2.init()
+        this.photo2.frameMesh.receiveShadow = true;
+        this.photo2.frameMesh.castShadow = true;
         this.window = new MyWindow(this.app)
         this.window.init()
+        this.window.windowMesh.receiveShadow = true;
+        this.window.windowMesh.castShadow = true;
         this.carocha = new MyCarocha(this.app)
         this.carocha.init()
+        this.carocha.frameMesh.receiveShadow = true;
+        this.carocha.frameMesh.castShadow = true;
         this.journal = new MyJournal(this.app)
         this.journal.init()
+        this.journal.meshes.receiveShadow = true;
+        this.journal.meshes.castShadow = true;
         this.jar = new MyJar(this.app)
         this.jar.init()
+        this.jar.jarFlowerGroup.receiveShadow = true;
+        this.jar.jarFlowerGroup.castShadow = true;
+        this.carpet = new MyCarpet(this.app)
+        this.carpet.init()
         
 
         // reposition elements
@@ -107,6 +136,8 @@ class MyRoom {
 
         let floor = new THREE.PlaneGeometry(10, 10);
         this.floorMesh = new THREE.Mesh(floor, floorMaterial);
+        this.floorMesh.receiveShadow = true;
+        this.floorMesh.castShadow = true;
         this.floorMesh.rotation.x = -Math.PI / 2;
         this.floorMesh.position.y = 0;
 
@@ -120,27 +151,36 @@ class MyRoom {
             color: "#DFDFDF",
             specular: "#000000", 
             emissive: "#000000", 
-            shininess: 90
+            shininess: 10
         })
 
         let wall = new THREE.PlaneGeometry(20, 5);
 
         this.wall1Mesh = new THREE.Mesh(wall, wallMaterial);
+        this.wall1Mesh.receiveShadow = true;
+        this.wall1Mesh.castShadow = true;
         this.wall1Mesh.position.y = 2.5;
         this.wall1Mesh.position.z = -10;
 
         this.wall2Mesh = new THREE.Mesh(wall, wallMaterial);
+        this.wall2Mesh.receiveShadow = true;
+        this.wall2Mesh.castShadow = true;
         this.wall2Mesh.position.y = 2.5;
         this.wall2Mesh.position.z = 10;
         this.wall2Mesh.rotation.y = Math.PI;
+        
 
         this.wall3Mesh = new THREE.Mesh(wall, wallMaterial);
         this.wall3Mesh.position.x = -10;
         this.wall3Mesh.position.y = 2.5;
         this.wall3Mesh.rotation.y = Math.PI / 2;
+        this.wall3Mesh.receiveShadow = true;
+        this.wall3Mesh.castShadow = true;
 
 
         this.wall4Mesh = new THREE.Mesh(wall, wallMaterial);
+        this.wall4Mesh.receiveShadow = true;
+        this.wall4Mesh.castShadow = true;
         this.wall4Mesh.position.x = 10;
         this.wall4Mesh.position.y = 2.5;
         this.wall4Mesh.rotation.y = -Math.PI / 2;
@@ -152,6 +192,8 @@ class MyRoom {
         this.wallsMesh.add(this.wall4Mesh);
 
         this.roomMesh.add(this.wallsMesh);
+
+        this.roomMesh.add(this.carpet.carpetMesh);
     }
 
 

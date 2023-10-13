@@ -91,7 +91,7 @@ class MyContents {
         }
 
         // add a point light on top of the model
-        const pointLight = new THREE.PointLight(0xffffff, 500, 0);
+        const pointLight = new THREE.PointLight(0xffffff, 0, 0);
         pointLight.position.set(0, 20, 0);
         pointLight.castShadow = true;
         pointLight.shadow.mapSize.width = this.mapSize;
@@ -101,7 +101,7 @@ class MyContents {
         this.app.scene.add(pointLight);
 
         // Create a spotlight
-        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.80, 0, 0); // White light
+        const spotLight = new THREE.SpotLight(0xe38007, 20, 1.5, 0.80, 0, 0); // Yellowish light
         spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         spotLight.castShadow = true; // Enable shadow casting
         spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
@@ -120,9 +120,9 @@ class MyContents {
         this.app.scene.add(ambientLight);
 
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
+        const directionalLight = new THREE.DirectionalLight(0xde7f0b, 0.3);
         directionalLight.position.set(0, 3, -9.8);
-        directionalLight.target = this.room.wall2Mesh;
+        directionalLight.target.position.set(0, 0, 9);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = this.mapSize;
         directionalLight.shadow.mapSize.height = this.mapSize;
