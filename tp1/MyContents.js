@@ -101,18 +101,18 @@ class MyContents {
         this.app.scene.add(pointLight);
 
         // Create a spotlight
-        const spotLight = new THREE.SpotLight(0xe38007, 20, 1.5, 0.80, 0, 0); // Yellowish light
-        spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
-        spotLight.castShadow = true; // Enable shadow casting
-        spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
-        this.app.scene.add(spotLight);
+        this.spotLight = new THREE.SpotLight(0xe38007, 10, 1.5, 0.90, 0, 0); // Yellowish light
+        this.spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
+        this.spotLight.castShadow = true; // Enable shadow casting
+        this.spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
+        this.app.scene.add(this.spotLight);
 
         // add a point light helper for the previous point light
         const sphereSize = 0.5;
         const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
         this.app.scene.add(pointLightHelper);
 
-        const spotlightHelper = new THREE.SpotLightHelper(spotLight);
+        const spotlightHelper = new THREE.SpotLightHelper(this.spotLight);
         this.app.scene.add(spotlightHelper);
 
         // add an ambient light
@@ -279,6 +279,7 @@ class MyContents {
 
     enableBigCake() {
         this.room.table.plate.cake.cakeGroup.children[0].visible = this.cakeBigPortionEnabled;
+        this.spotLight.intensity = this.cakeBigPortionEnabled === true ? 10 : 0;
     }
 
     enablePlate() {

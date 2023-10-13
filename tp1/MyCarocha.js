@@ -42,9 +42,12 @@ class MyCarocha {
         let textureLoader = new THREE.TextureLoader();
         let viewTexture = textureLoader.load('textures/white.avif');
 
-        let viewMaterial = new THREE.MeshBasicMaterial({
+        let viewMaterial = new THREE.MeshPhongMaterial({
             map: viewTexture,
-            color: 0x8C8C8C
+            color: 0x8C8C8C,
+            specular: 0x8C8C8C,
+            emissive: 0x000000,
+            shininess: 40
         });
 
         let viewWidth = frameWidth - 0.1; // Adjust the size of the photo to fit inside the frame

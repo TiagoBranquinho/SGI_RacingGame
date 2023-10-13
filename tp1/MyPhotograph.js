@@ -42,9 +42,12 @@ class MyPhotograph {
         this.frameMesh.rotation.y = -Math.PI/2
         this.frameMesh.position.set(10, 3, -2)
 
-        let photoMaterial = new THREE.MeshBasicMaterial({
+        let photoMaterial = new THREE.MeshPhongMaterial({
             map: this.photoTexture,
-            color: 0xE6E6E6
+            color: 0xE6E6E6,
+            specular: 0xE6E6E6,
+            emissive: 0x000000,
+            shininess: 30
         });
 
         let photoWidth = frameWidth - 0.1; // Adjust the size of the photo to fit inside the frame
