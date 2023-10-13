@@ -40,6 +40,13 @@ class MyContents {
             color: this.diffusePlaneColor,
             specular: this.diffusePlaneColor, emissive: "#000000", shininess: this.planeShininess
         })
+
+        this.mapSize = 4096
+        this.nbrPolyg = 10
+        this.volumeDimX = 10
+        this.volumeDimY = 10
+        this.volumeDimZ = 10
+        this.volumeMeshes = []
     }
 
     /**
@@ -86,6 +93,11 @@ class MyContents {
         // add a point light on top of the model
         const pointLight = new THREE.PointLight(0xffffff, 500, 0);
         pointLight.position.set(0, 20, 0);
+        pointLight.castShadow = true;
+        pointLight.shadow.mapSize.width = this.mapSize;
+        pointLight.shadow.mapSize.height = this.mapSize;
+        pointLight.shadow.camera.near = 0.5;
+        pointLight.shadow.camera.far = 100;
         this.app.scene.add(pointLight);
 
         // Create a spotlight
@@ -111,6 +123,15 @@ class MyContents {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
         directionalLight.position.set(0, 3, -9.8);
         directionalLight.target = this.room.wall2Mesh;
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = this.mapSize;
+        directionalLight.shadow.mapSize.height = this.mapSize;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 100;
+        directionalLight.shadow.camera.left = -15;
+        directionalLight.shadow.camera.right = 15;
+        directionalLight.shadow.camera.bottom = -15;
+        directionalLight.shadow.camera.top = 15;
 
         this.app.scene.add(directionalLight);
 
@@ -126,6 +147,55 @@ class MyContents {
         this.planeMesh.rotation.x = -Math.PI / 2;
         this.planeMesh.position.y = -0;
         //this.app.scene.add(this.planeMesh);
+    }
+
+    rebuildVolume() {
+        for ( let i = 0; i < this.nbrPolyg; i ++ ) {
+            if (this.volumeMeshes[i] !== null) {
+                this.app.scene.remove(this.volumeMeshes[i])
+            }
+        }
+            this.buildVolume()
+    }
+
+   
+
+    buildVolume() {
+        const volumeDimXd2 = this.volumeDimX / 2
+        const volumeDimYd2 = this.volumeDimY / 2
+        const volumeDimZd2 = this.volumeDimZ / 2
+
+        const maxDimX = this.volumeDimX / 3
+        const maxDimY = this.volumeDimY / 3
+
+        for (let i = 0; i < this.nbrPolyg; i ++) {
+            const dimX = maxDimX * Math.random()
+            const dimY = maxDimY * Math.random()
+
+            const rotX = 2 * Math.PI * Math.random()
+            const rotY = 2 * Math.PI * Math.random()
+            const rotZ = 2 * Math.PI * Math.random()
+
+            const posX = this.volumeDimX * Math.random() - volumeDimXd2
+            const posY = this.volumeDimY * Math.random() - volumeDimYd2
+            const posZ = this.volumeDimZ * Math.random() - volumeDimZd2
+
+            const colorR = Math.random()
+            const colorG = Math.random()
+            const colorB = Math.random()
+            const colorP = new THREE.Color(colorR, colorG, colorB);
+            var smallP = new THREE.PlaneGeometry( dimX, dimY )
+            this.volumeMeshes[i] = new THREE.Mesh(smallP, new THREE.MeshStandardMaterial({color: colorP}) )
+            this.volumeMeshes[i].rotation.x = rotX
+            this.volumeMeshes[i].rotation.y = rotY
+            this.volumeMeshes[i].rotation.z = rotZ  
+            this.volumeMeshes[i].position.x = posX
+            this.volumeMeshes[i].position.y = posY
+            this.volumeMeshes[i].position.z = posZ
+            this.volumeMeshes[i].receiveShadow = true
+            this.volumeMeshes[i].castShadow = true
+            this.app.scene.add( this.volumeMeshes[i] )
+        }
     }
 
     /**
