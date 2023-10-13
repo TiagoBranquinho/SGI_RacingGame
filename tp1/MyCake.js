@@ -22,7 +22,7 @@ class MyCake {
       color: "#C70039",
       specular: "#FC1703",
       emissive: "#FC1703",
-      shininess: 30
+      shininess: 10
     });
 
     let cakeShape = new THREE.Shape();

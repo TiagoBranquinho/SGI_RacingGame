@@ -89,7 +89,7 @@ class MyContents {
         this.app.scene.add(pointLight);
 
         // Create a spotlight
-        const spotLight = new THREE.SpotLight(0xffffff, 20, 1.5, 0.80, 0, 0); // White light
+        const spotLight = new THREE.SpotLight(0xe38007, 20, 1.5, 0.80, 0, 0); // Yellowish light
         spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         spotLight.castShadow = true; // Enable shadow casting
         spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
@@ -108,9 +108,11 @@ class MyContents {
         this.app.scene.add(ambientLight);
 
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
-        directionalLight.position.set(0, 3, -9.8);
-        directionalLight.target = this.room.wall2Mesh;
+        const directionalLight = new THREE.DirectionalLight(0xde7f0b, 0.3);
+        directionalLight.position.set(0, 3, -9.5);
+        directionalLight.target.position.set(0, 0, 9);
+
+
 
         this.app.scene.add(directionalLight);
 
