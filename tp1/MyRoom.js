@@ -7,7 +7,8 @@ import { MyWindow } from './MyWindow.js';
 import { MyCarocha } from './MyCarocha.js';
 import { MyJournal } from './MyJournal.js';
 import { MyJar } from './MyJar.js';
-import { MyFlower } from './MyFlower.js';
+import { MyCarpet } from './MyCarpet.js';
+
 
 /**
  *  This class contains the contents of out application
@@ -46,6 +47,8 @@ class MyRoom {
         this.journal.init()
         this.jar = new MyJar(this.app)
         this.jar.init()
+        this.carpet = new MyCarpet(this.app)
+        this.carpet.init()
         
 
         // reposition elements
@@ -152,6 +155,8 @@ class MyRoom {
         this.wallsMesh.add(this.wall4Mesh);
 
         this.roomMesh.add(this.wallsMesh);
+
+        this.roomMesh.add(this.carpet.carpetMesh);
     }
 
 
