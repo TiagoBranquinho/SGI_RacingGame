@@ -20,6 +20,7 @@ class MyContents {
         this.plateEnabled = true;
         this.tableEnabled = true;
         this.decorationEnabled = true;
+        this.hbMode = false;
 
         this.room = new MyRoom(this.app)
         this.room.init()
@@ -64,20 +65,6 @@ class MyContents {
         this.boxMesh.rotation.x = -Math.PI / 2;
         this.boxMesh.position.y = this.boxDisplacement.y;
     }
-
-    buildCylinder() {
-        let cylinder = new THREE.CylinderGeometry({
-            radiusTop: 4, radiusBottom: 4, height: 8,
-            radialSegments: 12, heightSegments: 2,
-            openEnded: false,
-            thetaStart: Math.PI * 0.25, thetaLength: Math.PI * 1.5
-        });
-    }
-
-    buildRectangle(height, width) {
-        let rectangle = new THREE.PlaneGeometry(height, width);
-    }
-
     /**
      * initializes the contents
      */
@@ -91,25 +78,34 @@ class MyContents {
         }
 
         // add a point light on top of the model
-        const pointLight = new THREE.PointLight(0xffffff, 150, 0);
-        pointLight.position.set(0, 20, 0);
-        pointLight.castShadow = true;
-        pointLight.shadow.mapSize.width = this.mapSize;
-        pointLight.shadow.mapSize.height = this.mapSize;
-        pointLight.shadow.camera.near = 0.5;
-        pointLight.shadow.camera.far = 100;
-        this.app.scene.add(pointLight);
+        this.pointLight = new THREE.PointLight(0xffffff, 200, 0);
+        this.pointLight.position.set(0, 20, 0);
+        this.pointLight.castShadow = true;
+        this.pointLight.shadow.mapSize.width = this.mapSize;
+        this.pointLight.shadow.mapSize.height = this.mapSize;
+        this.pointLight.shadow.camera.near = 0.5;
+        this.pointLight.shadow.camera.far = 100;
+        this.app.scene.add(this.pointLight);
 
         // Create a spotlight
-        this.spotLight = new THREE.SpotLight(0xe38007, 10, 1.5, 0.90, 0, 0); // Yellowish light
+        this.spotLight = new THREE.SpotLight(0xe38007, 20, 3, 0.90, 0, 0); // Yellowish light
         this.spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         this.spotLight.castShadow = true; // Enable shadow casting
+        /* this.spotLight.shadow.mapSize.width = this.mapSize;
+        this.spotLight.shadow.mapSize.height = this.mapSize;
+        this.spotLight.shadow.camera.near = 0.5;
+        this.spotLight.shadow.camera.far = 100;
+        this.spotLight.shadow.camera.left = -5;
+        this.spotLight.shadow.camera.right = 4;
+        this.spotLight.shadow.camera.bottom = -15;
+        this.spotLight.shadow.camera.top = 15; */
         this.spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
+        this.spotLight.visible = false;
         this.app.scene.add(this.spotLight);
 
         // add a point light helper for the previous point light
         const sphereSize = 0.5;
-        const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+        const pointLightHelper = new THREE.PointLightHelper(this.pointLight, sphereSize);
         this.app.scene.add(pointLightHelper);
 
         const spotlightHelper = new THREE.SpotLightHelper(this.spotLight);
@@ -121,7 +117,7 @@ class MyContents {
 
 
         const directionalLight = new THREE.DirectionalLight(0xde7f0b, 0.8);
-        directionalLight.position.set(0, 4, -11.8); 
+        directionalLight.position.set(0, 4, -11.8);
         directionalLight.target.position.set(-6, 0, 9);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = this.mapSize;
@@ -150,15 +146,15 @@ class MyContents {
     }
 
     rebuildVolume() {
-        for ( let i = 0; i < this.nbrPolyg; i ++ ) {
+        for (let i = 0; i < this.nbrPolyg; i++) {
             if (this.volumeMeshes[i] !== null) {
                 this.app.scene.remove(this.volumeMeshes[i])
             }
         }
-            this.buildVolume()
+        this.buildVolume()
     }
 
-   
+
 
     buildVolume() {
         const volumeDimXd2 = this.volumeDimX / 2
@@ -168,7 +164,7 @@ class MyContents {
         const maxDimX = this.volumeDimX / 3
         const maxDimY = this.volumeDimY / 3
 
-        for (let i = 0; i < this.nbrPolyg; i ++) {
+        for (let i = 0; i < this.nbrPolyg; i++) {
             const dimX = maxDimX * Math.random()
             const dimY = maxDimY * Math.random()
 
@@ -184,17 +180,17 @@ class MyContents {
             const colorG = Math.random()
             const colorB = Math.random()
             const colorP = new THREE.Color(colorR, colorG, colorB);
-            var smallP = new THREE.PlaneGeometry( dimX, dimY )
-            this.volumeMeshes[i] = new THREE.Mesh(smallP, new THREE.MeshStandardMaterial({color: colorP}) )
+            var smallP = new THREE.PlaneGeometry(dimX, dimY)
+            this.volumeMeshes[i] = new THREE.Mesh(smallP, new THREE.MeshStandardMaterial({ color: colorP }))
             this.volumeMeshes[i].rotation.x = rotX
             this.volumeMeshes[i].rotation.y = rotY
-            this.volumeMeshes[i].rotation.z = rotZ  
+            this.volumeMeshes[i].rotation.z = rotZ
             this.volumeMeshes[i].position.x = posX
             this.volumeMeshes[i].position.y = posY
             this.volumeMeshes[i].position.z = posZ
             this.volumeMeshes[i].receiveShadow = true
             this.volumeMeshes[i].castShadow = true
-            this.app.scene.add( this.volumeMeshes[i] )
+            this.app.scene.add(this.volumeMeshes[i])
         }
     }
 
@@ -304,7 +300,8 @@ class MyContents {
     }
 
     enableLight() {
-        this.spotLight.visible = this.candleEnabled;
+        this.spotLight.visible = this.hbMode;
+        this.pointLight.visible = !this.hbMode;
     }
 
 }

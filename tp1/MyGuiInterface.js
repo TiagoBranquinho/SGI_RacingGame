@@ -29,27 +29,12 @@ class MyGuiInterface  {
      * Initialize the gui interface
      */
     init() {
-        // add a folder to the gui interface for the box
-        const boxFolder = this.datgui.addFolder( 'Box' );
+        // add a folder to the gui interface for the happybirthday mode
+        const hbfolder = this.datgui.addFolder( 'Hapy birthday mode' );
+        hbfolder.add(this.contents, 'hbMode', true).name("enabled").onChange(() => {this.contents.enableLight()});
         // note that we are using a property from the contents object 
-        boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
-        boxFolder.add(this.contents, 'boxEnabled', true).name("enabled");
-        boxFolder.add(this.contents.boxDisplacement, 'x', -5, 5)
-        boxFolder.add(this.contents.boxDisplacement, 'y', -5, 5)
-        boxFolder.add(this.contents.boxDisplacement, 'z', -5, 5)
-        boxFolder.open()
-        
-        const data = {  
-            'diffuse color': this.contents.diffusePlaneColor,
-            'specular color': this.contents.specularPlaneColor,
-        };
-
-        // adds a folder to the gui interface for the plane
-        const planeFolder = this.datgui.addFolder( 'Plane' );
-        planeFolder.addColor( data, 'diffuse color' ).onChange( (value) => { this.contents.updateDiffusePlaneColor(value) } );
-        planeFolder.addColor( data, 'specular color' ).onChange( (value) => { this.contents.updateSpecularPlaneColor(value) } );
-        planeFolder.add(this.contents, 'planeShininess', 0, 1000).name("shininess").onChange( (value) => { this.contents.updatePlaneShininess(value) } );
-        planeFolder.open();
+        //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
+        hbfolder.open()
 
         // adds a folder to the gui interface for the camera
         const cameraFolder = this.datgui.addFolder('Camera')
