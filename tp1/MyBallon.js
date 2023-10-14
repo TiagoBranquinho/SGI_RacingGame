@@ -16,7 +16,7 @@ class MyBalloon {
       color: "#FF0000", // Red color for the balloon
       specular: "#FFFFFF",
       emissive: "#000000",
-      shininess: 90
+      shininess: 80
     });
 
     // Create balloon body

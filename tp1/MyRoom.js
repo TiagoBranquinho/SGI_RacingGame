@@ -59,8 +59,6 @@ class MyRoom {
         this.photo2.frameMesh.castShadow = true;
         this.window = new MyWindow(this.app)
         this.window.init()
-        this.window.windowMesh.receiveShadow = true;
-        this.window.windowMesh.castShadow = true;
         this.carocha = new MyCarocha(this.app)
         this.carocha.init()
         this.carocha.frameMesh.receiveShadow = true;
@@ -158,7 +156,7 @@ class MyRoom {
 
         this.wall1Mesh = new THREE.Mesh(wall, wallMaterial);
         this.wall1Mesh.receiveShadow = true;
-        this.wall1Mesh.castShadow = true;
+        this.wall1Mesh.castShadow = false;
         this.wall1Mesh.position.y = 2.5;
         this.wall1Mesh.position.z = -10;
 

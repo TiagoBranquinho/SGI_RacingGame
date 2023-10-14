@@ -14,9 +14,9 @@ class MyCarpet {
   buildCarpet() {
     let carpetMaterial = new THREE.MeshPhongMaterial({
       color: 0xf75959, // red color
-      specular: 0x000000,
+      specular: 0xf75959,
       emissive: 0x000000,
-      shininess: 60
+      shininess: 20
     });
     let carpetWidth = 6;
     let carpetHeight = 3;
@@ -33,7 +33,7 @@ class MyCarpet {
       color: 0xf75959,
       specular: 0xf75959,
       emissive: 0x000000,
-      shininess: 60
+      shininess: 20
     });
 
     let viewGeometry = new THREE.PlaneGeometry(carpetWidth, carpetHeight);

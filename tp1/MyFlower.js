@@ -22,6 +22,8 @@ class MyFlower {
 
       const petalGeometry = new THREE.CylinderGeometry(petalRadius, petalRadius, petalHeight, 50);
       const petalMesh = new THREE.Mesh(petalGeometry, petalMaterial);
+      petalMesh.receiveShadow = true;
+      petalMesh.castShadow = true;
 
       const distanceFromCenter = 0.6; // Adjust the distance from the center
       petalMesh.position.x = Math.cos(angle) * distanceFromCenter;
