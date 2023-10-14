@@ -271,6 +271,7 @@ class MyContents {
 
     enableCandle() {
         this.room.table.plate.cake.candle.candleGroup.visible = this.candleEnabled;
+        this.spotLight.visible = this.candleEnabled;
     }
 
     enableCakeSlice() {
@@ -279,7 +280,7 @@ class MyContents {
 
     enableBigCake() {
         this.room.table.plate.cake.cakeGroup.children[0].visible = this.cakeBigPortionEnabled;
-        this.spotLight.intensity = this.cakeBigPortionEnabled === true ? 10 : 0;
+        this.spotLight.visible = this.cakeBigPortionEnabled;
     }
 
     enablePlate() {
@@ -300,6 +301,10 @@ class MyContents {
         this.room.ballon4.balloonMesh.visible = this.decorationEnabled;
         this.room.photo1.frameMesh.visible = this.decorationEnabled;
         this.room.photo2.frameMesh.visible = this.decorationEnabled;
+    }
+
+    enableLight() {
+        this.spotLight.visible = this.candleEnabled;
     }
 
 }
