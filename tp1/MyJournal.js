@@ -90,11 +90,11 @@ class MyJournal {
         mesh.rotation.x = 0
         mesh.rotation.y = 0
         mesh.rotation.z = 0
-        mesh.scale.set(0.3,0.4,0.3)
+        mesh.scale.set(0.3*0.5,0.4*0.5,0.3*0.5)
 
         this.meshes.add(mesh);
 
-        this.meshes.position.set(-4.5,2.54,-3.0)
+        this.meshes.position.set(0.0,0.49,-1.2)
         this.meshes.rotation.x = Math.PI / 2
         this.meshes.rotation.z = -Math.PI / 4
     }

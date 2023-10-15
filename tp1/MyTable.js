@@ -4,6 +4,8 @@ import { MyPlate } from './MyPlate.js';
 
 import { MySpring } from './MySpring.js';
 
+import { MyJournal } from './MyJournal.js';
+
 
 /**
  *  This class contains the contents of out application
@@ -83,12 +85,17 @@ class MyTable {
         this.spring = new MySpring(this.app);
         this.spring.init();
 
+        this.journal = new MyJournal(this.app)
+        this.journal.init()
+        this.journal.meshes.receiveShadow = true;
+        this.journal.meshes.castShadow = true;
 
         this.tableMesh.position.set(-4, 1.8, 0)
 
         this.tableMesh.scale.set(this.tableSize, this.tableSize, this.tableSize * 2.5); 
         this.tableMesh.add(this.plate.plateGroup);
         this.tableMesh.add(this.spring.springMesh);
+        this.tableMesh.add(this.journal.meshes);
     }
 
 

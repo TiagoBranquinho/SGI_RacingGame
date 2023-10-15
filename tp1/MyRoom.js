@@ -63,10 +63,6 @@ class MyRoom {
         this.carocha.init()
         this.carocha.frameMesh.receiveShadow = true;
         this.carocha.frameMesh.castShadow = true;
-        this.journal = new MyJournal(this.app)
-        this.journal.init()
-        this.journal.meshes.receiveShadow = true;
-        this.journal.meshes.castShadow = true;
         this.jar = new MyJar(this.app)
         this.jar.init()
         this.jar.jarFlowerGroup.receiveShadow = true;
@@ -216,7 +212,6 @@ class MyRoom {
         this.roomMesh.add(this.photo2.frameMesh);
         this.roomMesh.add(this.window.windowMesh);
         this.roomMesh.add(this.carocha.frameMesh);
-        this.roomMesh.add(this.journal.meshes);
         this.roomMesh.add(this.jar.jarFlowerGroup);
 
         this.app.scene.add(this.roomMesh);

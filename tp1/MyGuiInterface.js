@@ -30,7 +30,7 @@ class MyGuiInterface  {
      */
     init() {
         // add a folder to the gui interface for the happybirthday mode
-        const hbfolder = this.datgui.addFolder( 'Hapy birthday mode' );
+        const hbfolder = this.datgui.addFolder( 'Happy birthday mode' );
         hbfolder.add(this.contents, 'hbMode', true).name("enabled").onChange(() => {this.contents.enableLight()});
         // note that we are using a property from the contents object 
         //boxFolder.add(this.contents, 'boxMeshSize', 0, 10).name("size").onChange( () => { this.contents.rebuildBox() } );
