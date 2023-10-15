@@ -109,7 +109,7 @@ class MyContents {
         this.app.scene.add(pointLightHelper);
 
         const spotlightHelper = new THREE.SpotLightHelper(this.spotLight);
-        this.app.scene.add(spotlightHelper);
+        //this.app.scene.add(spotlightHelper);
 
         // add an ambient light
         const ambientLight = new THREE.AmbientLight(0x555555);
@@ -132,7 +132,7 @@ class MyContents {
         this.app.scene.add(directionalLight);
 
         const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
-        this.app.scene.add(directionalLightHelper);
+        //this.app.scene.add(directionalLightHelper);
 
         this.buildBox()
 
