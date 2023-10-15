@@ -34,6 +34,9 @@ class MyCandle {
     candleGeometry.translate(0, candleHeight, 0);
     let candle = new THREE.Mesh(candleGeometry, candleMaterial);
 
+    candle.receiveShadow = true;
+    candle.castShadow = true;
+
 
     let flameGeometry = new THREE.ConeGeometry(candleRadius * 1.1, candleRadius * 1.5, 32);
     let flame = new THREE.Mesh(flameGeometry, flameMaterial);

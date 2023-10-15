@@ -75,7 +75,7 @@ class MyCarocha {
         ]
     
         let positionWheel1 = new THREE.Vector3(-1, -0.6, frameDepth / 2 + 0.01)
-        this.drawHull(positionWheel1, pointsWheel1);
+        //this.drawHull(positionWheel1, pointsWheel1);
     
         let curveWheel1 = new THREE.CubicBezierCurve3(pointsWheel1[0], pointsWheel1[1], pointsWheel1[2], pointsWheel1[3])
     
@@ -96,7 +96,7 @@ class MyCarocha {
         ]
     
         let positionWheel2 = new THREE.Vector3(1, -0.6, frameDepth / 2 + 0.01)
-        this.drawHull(positionWheel2, pointsWheel2);
+        //this.drawHull(positionWheel2, pointsWheel2);
     
         let curveWheel2 = new THREE.CubicBezierCurve3(pointsWheel2[0], pointsWheel2[1], pointsWheel2[2], pointsWheel2[3])
     
@@ -110,36 +110,57 @@ class MyCarocha {
         this.carochaMesh.add(this.lineObjWheel2);
 
 
-        let pointsBody = [
+        let pointsBody1 = [
             new THREE.Vector3(-0.6, -0.6, 0.0), // starting point
-            new THREE.Vector3(-0.4, 1.6, 0.0),
-            new THREE.Vector3(1.9, 1.6, 0.0),
-            new THREE.Vector3(1.9, 0.4, 0.0)  // ending point
+            new THREE.Vector3(-0.6, 1.0, 0.0),
+            new THREE.Vector3(1.0, 1.0, 0.0),
+            new THREE.Vector3(1.0, 1.0, 0.0)  // ending point
         ]
         
-        let positionBody = new THREE.Vector3(-1, -0.6, frameDepth / 2 + 0.01)
-        this.drawHull(positionBody, pointsBody);
+        let positionBody1 = new THREE.Vector3(-1, -0.6, frameDepth / 2 + 0.01)
+        //this.drawHull(positionBody1, pointsBody1);
     
-        let curveBody = new THREE.CubicBezierCurve3(pointsBody[0], pointsBody[1], pointsBody[2], pointsBody[3])
+        let curveBody1 = new THREE.CubicBezierCurve3(pointsBody1[0], pointsBody1[1], pointsBody1[2], pointsBody1[3])
     
         // sample a number of points on the curve
-        let sampledPointsBody = curveBody.getPoints(this.numberOfSamples);
+        let sampledPointsBody1 = curveBody1.getPoints(this.numberOfSamples);
     
-        this.curveGeometryBody = new THREE.BufferGeometry().setFromPoints(sampledPointsBody)
+        this.curveGeometryBody1 = new THREE.BufferGeometry().setFromPoints(sampledPointsBody1)
         this.lineMaterial = new THREE.LineBasicMaterial({color: 0x000000})
-        this.lineObjBody = new THREE.Line(this.curveGeometryBody, this.lineMaterial)
-        this.lineObjBody.position.set(positionBody.x,positionBody.y,positionBody.z)
-        this.carochaMesh.add(this.lineObjBody);
+        this.lineObjBody1 = new THREE.Line(this.curveGeometryBody1, this.lineMaterial)
+        this.lineObjBody1.position.set(positionBody1.x,positionBody1.y,positionBody1.z)
+        this.carochaMesh.add(this.lineObjBody1);
+
+        let pointsBody2 = [
+            new THREE.Vector3(1.0, 1.0, 0.0), // starting point
+            new THREE.Vector3(1.0, 1.0, 0.0),
+            new THREE.Vector3(1.8, 1.0, 0.0),
+            new THREE.Vector3(1.8, 0.4, 0.0)  // ending point
+        ]
+        
+        let positionBody2 = new THREE.Vector3(-1, -0.6, frameDepth / 2 + 0.01)
+        //this.drawHull(positionBody2, pointsBody2);
+    
+        let curveBody2 = new THREE.CubicBezierCurve3(pointsBody2[0], pointsBody2[1], pointsBody2[2], pointsBody2[3])
+    
+        // sample a number of points on the curve
+        let sampledPointsBody2 = curveBody2.getPoints(this.numberOfSamples);
+    
+        this.curveGeometryBody2 = new THREE.BufferGeometry().setFromPoints(sampledPointsBody2)
+        this.lineMaterial = new THREE.LineBasicMaterial({color: 0x000000})
+        this.lineObjBody2 = new THREE.Line(this.curveGeometryBody2, this.lineMaterial)
+        this.lineObjBody2.position.set(positionBody2.x,positionBody2.y,positionBody2.z)
+        this.carochaMesh.add(this.lineObjBody2);
 
         let pointsFront = [
-            new THREE.Vector3(1.9, 0.4, 0.0), // starting point
-            new THREE.Vector3(1.9, 0.4, 0.0),
+            new THREE.Vector3(1.8, 0.4, 0.0), // starting point
+            new THREE.Vector3(1.8, 0.4, 0.0),
             new THREE.Vector3(2.6, 0.4, 0.0),
             new THREE.Vector3(2.6, -0.6, 0.0)  // ending point
         ]
         
         let positionFront = new THREE.Vector3(-1, -0.6, frameDepth / 2 + 0.01)
-        this.drawHull(positionFront, pointsFront);
+        //this.drawHull(positionFront, pointsFront);
     
         let curveFront = new THREE.CubicBezierCurve3(pointsFront[0], pointsFront[1], pointsFront[2], pointsFront[3])
     

@@ -88,7 +88,7 @@ class MyContents {
         this.app.scene.add(this.pointLight);
 
         // Create a spotlight
-        this.spotLight = new THREE.SpotLight(0xe38007, 20, 3, 0.90, 0, 0); // Yellowish light
+        this.spotLight = new THREE.SpotLight(0xe38007, 2, 3, 0.90, 1, 0); // Yellowish light
         this.spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         this.spotLight.castShadow = true; // Enable shadow casting
         /* this.spotLight.shadow.mapSize.width = this.mapSize;
@@ -100,7 +100,7 @@ class MyContents {
         this.spotLight.shadow.camera.bottom = -15;
         this.spotLight.shadow.camera.top = 15; */
         this.spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
-        this.spotLight.visible = false;
+        //this.spotLight.visible = false;
         this.app.scene.add(this.spotLight);
 
         // add a point light helper for the previous point light
@@ -300,7 +300,6 @@ class MyContents {
     }
 
     enableLight() {
-        this.spotLight.visible = this.hbMode;
         this.pointLight.visible = !this.hbMode;
     }
 

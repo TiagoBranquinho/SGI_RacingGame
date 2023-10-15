@@ -37,8 +37,10 @@ class MyCake {
       bevelEnabled: false,
     });
 
-    const cakeMesh = new THREE.Mesh(cakeGeometry, cakeMaterial);
+    this.cakeMesh = new THREE.Mesh(cakeGeometry, cakeMaterial);
 
+    this.cakeMesh.receiveShadow = true;
+    this.cakeMesh.castShadow = true;
 
 
     let sliceShape = new THREE.Shape();
@@ -55,14 +57,17 @@ class MyCake {
 
     this.sliceMesh = new THREE.Mesh(sliceGeometry, cakeMaterial);
 
+    this.sliceMesh.receiveShadow = true;
+    this.sliceMesh.castShadow = true;
+
 
     // Position Cake and slice so it appears that the slice is cut out of the cake
-    cakeMesh.position.set(0, 0, 0);
+    this.cakeMesh.position.set(0, 0, 0);
     this.sliceMesh.position.set(0.2, 0, 0.2);
 
 
 
-    cakeMesh.rotation.x = -Math.PI / 2;
+    this.cakeMesh.rotation.x = -Math.PI / 2;
 
     this.sliceMesh.rotation.x = -Math.PI / 2;
     this.sliceMesh.rotation.z = this.sliceAngle;
@@ -76,7 +81,7 @@ class MyCake {
     this.cakeGroup = new THREE.Group();
 
     this.bigPortionGroup = new THREE.Group();
-    this.bigPortionGroup.add(cakeMesh);
+    this.bigPortionGroup.add(this.cakeMesh);
 
 
 
