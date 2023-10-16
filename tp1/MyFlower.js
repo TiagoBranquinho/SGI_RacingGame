@@ -25,11 +25,13 @@ class MyFlower {
       petalMesh.receiveShadow = true;
       petalMesh.castShadow = true;
 
-      const distanceFromCenter = 0.6; // Adjust the distance from the center
+      const distanceFromCenter = 0.5; // Adjust the distance from the center
       petalMesh.position.x = Math.cos(angle) * distanceFromCenter;
       petalMesh.position.y = Math.sin(angle) * distanceFromCenter;
+      petalMesh.position.z = - 0.1;
       petalMesh.rotation.z = angle;
       petalMesh.rotateX(Math.PI / 2);
+      petalMesh.rotateZ(- Math.PI / 12);
       petalMesh.scale.set(0.9, 0.45, 0.45);
 
       this.flowerGroup.add(petalMesh);
@@ -38,10 +40,9 @@ class MyFlower {
 
 
   createCenter() {
-    const centerColor = 0xFFFF00; // Yellow color
     const centerRadiusTop = 0.2;
     const centerRadiusBottom = 0.2;
-    const centerHeight = 0.2;
+    const centerHeight = 0.1;
     const centerSegments = 50;
     const centerGeometry = new THREE.CylinderGeometry(centerRadiusTop, centerRadiusBottom, centerHeight, centerSegments);
     let centerMaterial = new THREE.MeshPhongMaterial({
