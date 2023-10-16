@@ -38,6 +38,8 @@ class MyBalloon {
     // Create rope geometry (cylinder)
     let ropeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 3, 16); // Adjust dimensions as needed
     this.ropeMesh = new THREE.Mesh(ropeGeometry, ropeMaterial);
+    this.ropeMesh.receiveShadow = true;
+    this.ropeMesh.castShadow = true;
 
     // Position the rope from the bottom of the balloon
     this.ropeMesh.position.set(0, -1, 0);

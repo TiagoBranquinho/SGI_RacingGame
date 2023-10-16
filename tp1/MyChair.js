@@ -41,6 +41,12 @@ class MyChair {
     let seatMesh = new THREE.Mesh(seatGeometry, chairMaterial);
     let backrestMesh = new THREE.Mesh(backrestGeometry, chairMaterial);
 
+    backrestMesh.receiveShadow = true;
+    backrestMesh.castShadow = true;
+
+    seatMesh.receiveShadow = true;
+    seatMesh.castShadow = true;
+
     // Position seat and backrest
     seatMesh.position.set(0, 0.25, 0);
     backrestMesh.position.set(0, 0.55, -0.45);

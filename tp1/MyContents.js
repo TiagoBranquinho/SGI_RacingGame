@@ -49,22 +49,6 @@ class MyContents {
         this.volumeDimZ = 10
         this.volumeMeshes = []
     }
-
-    /**
-     * builds the box mesh with material assigned
-     */
-    buildBox() {
-        let boxMaterial = new THREE.MeshPhongMaterial({
-            color: "#ffff77",
-            specular: "#000000", emissive: "#000000", shininess: 90
-        })
-
-        // Create a Cube Mesh with basic material
-        let box = new THREE.BoxGeometry(this.boxMeshSize, this.boxMeshSize, this.boxMeshSize);
-        this.boxMesh = new THREE.Mesh(box, boxMaterial);
-        this.boxMesh.rotation.x = -Math.PI / 2;
-        this.boxMesh.position.y = this.boxDisplacement.y;
-    }
     /**
      * initializes the contents
      */
@@ -73,8 +57,8 @@ class MyContents {
         // create once 
         if (this.axis === null) {
             // create and attach the axis to the scene
-            this.axis = new MyAxis(this)
-            this.app.scene.add(this.axis)
+            //this.axis = new MyAxis(this)
+            //this.app.scene.add(this.axis)
         }
 
         // add a point light on top of the model
@@ -91,14 +75,7 @@ class MyContents {
         this.spotLight = new THREE.SpotLight(0xe38007, 2, 3, 0.90, 1, 0); // Yellowish light
         this.spotLight.position.set(-4, 3.5, 0); // Set the position of the spotlight
         this.spotLight.castShadow = true; // Enable shadow casting
-        /* this.spotLight.shadow.mapSize.width = this.mapSize;
-        this.spotLight.shadow.mapSize.height = this.mapSize;
-        this.spotLight.shadow.camera.near = 0.5;
-        this.spotLight.shadow.camera.far = 100;
-        this.spotLight.shadow.camera.left = -5;
-        this.spotLight.shadow.camera.right = 4;
-        this.spotLight.shadow.camera.bottom = -15;
-        this.spotLight.shadow.camera.top = 15; */
+    
         this.spotLight.target = this.room.table.plate.cake.cakeGroup; // Define the target of the spotlight
         //this.spotLight.visible = false;
         this.app.scene.add(this.spotLight);
@@ -133,8 +110,6 @@ class MyContents {
 
         const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
         //this.app.scene.add(directionalLightHelper);
-
-        this.buildBox()
 
         // Create a Plane Mesh with basic material
 
