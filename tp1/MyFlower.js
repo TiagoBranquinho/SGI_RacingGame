@@ -62,36 +62,35 @@ class MyFlower {
   }
 
   createStem() {
-    let textureLoader = new THREE.TextureLoader();
-    let viewTexture = textureLoader.load('textures/flower_stem.jpg');
-    let stemMaterial = new THREE.MeshPhongMaterial({
-      map: viewTexture,
-      color: "#228B22",
-      specular: "#228B22",
-      emissive: "#000000",
-      shininess: 10
+    let stemMaterial = new THREE.LineBasicMaterial({
+      color: "#2f540e",
     });
+  
+    // Adjust the stem points for the desired curvature
     const stemPoints = [
       new THREE.Vector3(0, 0, 0),
       new THREE.Vector3(0, 5, 0), // Adjust stem height
-      new THREE.Vector3(0, 7, -0.5),
-      new THREE.Vector3(0, 10, -1), // Adjust stem height and curve
+      new THREE.Vector3(0, 7, -1), // Adjust stem height and curvature
+      new THREE.Vector3(0, 10, -2), // Further adjust stem height and curvature
     ];
-
+  
     const stemSpline = new THREE.CatmullRomCurve3(stemPoints);
-    const stemGeometry = new THREE.TubeGeometry(stemSpline, 50, 0.1, 8, false);
-    const stemMesh = new THREE.Mesh(stemGeometry, stemMaterial);
-    this.flowerGroup.position.set(-0.5, 4, -0.5);
-    stemMesh.rotateX(Math.PI / 2);    
-    stemMesh.scale.set(0.3, 0.3, 1);
-
-    this.flowerGroup.add(stemMesh);
-
+    const stemGeometry = new THREE.BufferGeometry().setFromPoints(stemSpline.getPoints(50));
+  
+    const stemLine = new THREE.Line(stemGeometry, stemMaterial);
+    stemLine.castShadow = true;
+    stemLine.receiveShadow = true;
+    stemLine.scale.set(1, 0.2, 1);
+    stemLine.rotateX(Math.PI / 2);
+    this.flowerGroup.add(stemLine);
+  
+    this.flowerGroup.position.set(0, 4, 0);
+  
     this.flowerGroup.rotation.x = Math.PI / 4;
     this.flowerGroup.rotation.y = Math.PI / 4;
-
     this.flowerGroup.rotation.z = 3 * Math.PI / 4;
   }
+  
 
   init() {
     this.createPetals();
