@@ -1,6 +1,6 @@
 # SGI 2023/2024
 
-## Group T0xG0y
+## Group T08G01
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
 | Henrique Silva         | 202007242 | up202007242@up.pt                |
