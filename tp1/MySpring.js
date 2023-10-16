@@ -42,6 +42,8 @@ class MySpring {
 
     // Create the line from material and geometry
     this.springMesh = new THREE.Line(geometry, material);
+    this.springMesh.receiveShadow = true;
+    this.springMesh.castShadow = true;
     this.springMesh.position.set(0, 0, 1);
 
     // Create a group to hold the spring mesh

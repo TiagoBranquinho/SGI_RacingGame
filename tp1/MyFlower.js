@@ -7,7 +7,10 @@ class MyFlower {
   }
 
   createPetals() {
+    let textureLoader = new THREE.TextureLoader();
+    let viewTexture = textureLoader.load('textures/flower.jpg');
     let petalMaterial = new THREE.MeshPhongMaterial({
+      map: viewTexture,
       color: "#ffc0cb",
       specular: "#ffc0cb",
       emissive: "#000000",
@@ -40,12 +43,15 @@ class MyFlower {
 
 
   createCenter() {
+    let textureLoader = new THREE.TextureLoader();
+    let viewTexture = textureLoader.load('textures/flower_middle.jpg');
     const centerRadiusTop = 0.2;
     const centerRadiusBottom = 0.2;
     const centerHeight = 0.1;
     const centerSegments = 50;
     const centerGeometry = new THREE.CylinderGeometry(centerRadiusTop, centerRadiusBottom, centerHeight, centerSegments);
     let centerMaterial = new THREE.MeshPhongMaterial({
+      map: viewTexture,
       color: "#FFFF00",
       specular: "#FFFF00",
       emissive: "#000000",
@@ -56,7 +62,10 @@ class MyFlower {
   }
 
   createStem() {
+    let textureLoader = new THREE.TextureLoader();
+    let viewTexture = textureLoader.load('textures/flower_stem.jpg');
     let stemMaterial = new THREE.MeshPhongMaterial({
+      map: viewTexture,
       color: "#228B22",
       specular: "#228B22",
       emissive: "#000000",
