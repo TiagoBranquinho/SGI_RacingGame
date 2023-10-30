@@ -22,12 +22,7 @@ class MyContents  {
      * initializes the contents
      */
     init() {
-        // create once 
-        if (this.axis === null) {
-            // create and attach the axis to the scene
-            this.axis = new MyAxis(this)
-            this.app.scene.add(this.axis)
-        }
+        
     }
 
     /**
@@ -44,9 +39,11 @@ class MyContents  {
     }
 
     onAfterSceneLoadedAndBeforeRender(data) {
+        this.setupCameras(data);
        
         // refer to descriptors in class MySceneData.js
         // to see the data structure for each item
+
 
         this.output(data.options)
         console.log("textures:")
@@ -60,12 +57,12 @@ class MyContents  {
             let material = data.materials[key]
             this.output(material, 1)
         }
-
         console.log("cameras:")
         for (var key in data.cameras) {
             let camera = data.cameras[key]
             this.output(camera, 1)
         }
+
 
         console.log("nodes:")
         for (var key in data.nodes) {
@@ -84,6 +81,26 @@ class MyContents  {
                 }
             }
         }
+    }
+
+    setupCameras(data){
+        let cameras = {}
+        for (var key in data.cameras) {
+            let camera_data = data.cameras[key]
+            console.log(camera)
+            if(camera_data.type == "perspective"){
+                let camera =  new THREE.PerspectiveCamera(camera_data.angle, camera_data.near, camera_data.far, camera_data.position, camera_data.target)
+                camera.position.set(camera_data.location.x, camera_data.location.y, camera_data.location.z)
+                cameras[camera_data.id] = camera
+            }
+            else if(camera_data.type == "orthogonal"){
+                let camera = new THREE.OrthographicCamera(camera_data.left, camera_data.right, camera_data.top, camera_data.bottom, camera_data.near, camera_data.far)
+                camera.position.set(camera_data.location.x, camera_data.location.y, camera_data.location.z)
+                camera.lookAt(camera_data.target)
+                cameras[camera_data.id] = camera
+            }
+        }
+        this.app.initCameras(cameras, data.activeCameraId);
     }
 
     update() {

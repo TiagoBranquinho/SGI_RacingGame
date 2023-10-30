@@ -5,7 +5,6 @@ import { MyContents } from './MyContents.js';
 // create the application object
 let app = new MyApp()
 // initializes the application
-app.init()
 
 // create the contents object
 let contents = new MyContents(app)
@@ -13,6 +12,7 @@ let contents = new MyContents(app)
 contents.init()
 // hooks the contents object in the application object
 app.setContents(contents);
+app.init()
 
 // create the gui interface object
 let gui = new MyGuiInterface(app)
