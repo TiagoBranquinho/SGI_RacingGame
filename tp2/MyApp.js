@@ -69,7 +69,11 @@ class MyApp  {
      * initializes all the cameras
      */
     initCameras(cameras, activeCameraName) {
-        console.log(cameras)
+        let cameraNames = []
+        for (var key in cameras) {
+            cameraNames.push(key)
+        }
+        this.gui.cameraNames = cameraNames
         this.cameras = cameras
         this.setActiveCamera(activeCameraName)
     }

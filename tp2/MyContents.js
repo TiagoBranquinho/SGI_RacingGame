@@ -4,25 +4,27 @@ import { MyFileReader } from './parser/MyFileReader.js';
 /**
  *  This class contains the contents of out application
  */
-class MyContents  {
+class MyContents {
 
     /**
        constructs the object
        @param {MyApp} app The application object
-    */ 
+    */
     constructor(app) {
         this.app = app
         this.axis = null
-
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-		this.reader.open("scenes/demo/demo.xml");		
+        this.reader.open("scenes/demo/demo.xml");
     }
 
     /**
      * initializes the contents
      */
     init() {
-        
+        if (this.axis === null) {
+            this.axis = new MyAxis(this.app)
+            this.app.scene.add(this.axis)
+        }
     }
 
     /**
@@ -40,7 +42,7 @@ class MyContents  {
 
     onAfterSceneLoadedAndBeforeRender(data) {
         this.setupCameras(data);
-       
+
         // refer to descriptors in class MySceneData.js
         // to see the data structure for each item
 
@@ -68,10 +70,10 @@ class MyContents  {
         for (var key in data.nodes) {
             let node = data.nodes[key]
             this.output(node, 1)
-            for (let i=0; i< node.children.length; i++) {
+            for (let i = 0; i < node.children.length; i++) {
                 let child = node.children[i]
                 if (child.type === "primitive") {
-                    console.log("" + new Array(2 * 4).join(' ') + " - " + child.type + " with "  + child.representations.length + " " + child.subtype + " representation(s)")
+                    console.log("" + new Array(2 * 4).join(' ') + " - " + child.type + " with " + child.representations.length + " " + child.subtype + " representation(s)")
                     if (child.subtype === "nurbs") {
                         console.log("" + new Array(3 * 4).join(' ') + " - " + child.representations[0].controlpoints.length + " control points")
                     }
@@ -83,28 +85,27 @@ class MyContents  {
         }
     }
 
-    setupCameras(data){
+    setupCameras(data) {
         let cameras = {}
         for (var key in data.cameras) {
             let camera_data = data.cameras[key]
-            console.log(camera)
-            if(camera_data.type == "perspective"){
-                let camera =  new THREE.PerspectiveCamera(camera_data.angle, camera_data.near, camera_data.far, camera_data.position, camera_data.target)
+            let camera = null
+            if (camera_data.type == "perspective") {
+                camera = new THREE.PerspectiveCamera(camera_data.angle, camera_data.near, camera_data.far, camera_data.position, camera_data.target)
                 camera.position.set(camera_data.location.x, camera_data.location.y, camera_data.location.z)
-                cameras[camera_data.id] = camera
             }
-            else if(camera_data.type == "orthogonal"){
-                let camera = new THREE.OrthographicCamera(camera_data.left, camera_data.right, camera_data.top, camera_data.bottom, camera_data.near, camera_data.far)
+            else if (camera_data.type == "orthogonal") {
+                camera = new THREE.OrthographicCamera(camera_data.left, camera_data.right, camera_data.top, camera_data.bottom, camera_data.near, camera_data.far)
                 camera.position.set(camera_data.location.x, camera_data.location.y, camera_data.location.z)
                 camera.lookAt(camera_data.target)
-                cameras[camera_data.id] = camera
             }
+            cameras[camera_data.id] = camera
         }
         this.app.initCameras(cameras, data.activeCameraId);
     }
 
     update() {
-        
+
     }
 }
 
