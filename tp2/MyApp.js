@@ -73,6 +73,7 @@ class MyApp  {
         for (var key in cameras) {
             this.cameraNames.push(key)
         }
+        this.gui.init()
         this.cameras = cameras
         this.setActiveCamera(activeCameraName)
     }

@@ -91,14 +91,16 @@ class MyContents {
             let camera_data = data.cameras[key]
             let camera = null
             if (camera_data.type == "perspective") {
-                camera = new THREE.PerspectiveCamera(camera_data.angle, camera_data.near, camera_data.far, camera_data.position, camera_data.target)
-                camera.position.set(camera_data.location.x, camera_data.location.y, camera_data.location.z)
+                camera = new THREE.PerspectiveCamera(camera_data.angle)
             }
             else if (camera_data.type == "orthogonal") {
-                camera = new THREE.OrthographicCamera(camera_data.left, camera_data.right, camera_data.top, camera_data.bottom, camera_data.near, camera_data.far)
-                camera.position.set(camera_data.location.x, camera_data.location.y, camera_data.location.z)
-                camera.lookAt(camera_data.target)
+                console.error(camera_data)
+                camera = new THREE.OrthographicCamera(camera_data.left, camera_data.right, camera_data.top, camera_data.bottom)
             }
+            camera.near = camera_data.near
+            camera.far = camera_data.far
+            camera.lookAt(camera_data.target[0], camera_data.target[1], camera_data.target[2])
+            camera.position.set(camera_data.location[0], camera_data.location[1], camera_data.location[2])
             cameras[camera_data.id] = camera
         }
         this.app.initCameras(cameras, data.activeCameraId);
