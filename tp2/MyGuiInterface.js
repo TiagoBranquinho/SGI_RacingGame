@@ -7,7 +7,6 @@ class MyGuiInterface {
         this.app = app;
         this.datgui = new GUI();
         this.contents = null;
-        this.cameraNames = [];
     }
 
     setContents(contents) {
@@ -20,7 +19,7 @@ class MyGuiInterface {
 
     createGUI() {
         let cameraFolder = this.datgui.addFolder('Camera');
-        cameraFolder.add(this.app, 'activeCameraName', this.cameraNames).name('active camera').listen().onChange((value) => {this.app.setActiveCamera(value)});
+        cameraFolder.add(this.app, 'activeCameraName', this.app.cameraNames).name('active camera').listen().onChange((value) => {this.app.setActiveCamera(value)});
         cameraFolder.open();
     }
 }

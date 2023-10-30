@@ -29,6 +29,7 @@ class MyApp  {
         this.gui = null
         this.axis = null
         this.contents = null
+        this.cameraNames = []
     }
     /**
      * initializes the application
@@ -69,11 +70,9 @@ class MyApp  {
      * initializes all the cameras
      */
     initCameras(cameras, activeCameraName) {
-        let cameraNames = []
         for (var key in cameras) {
-            cameraNames.push(key)
+            this.cameraNames.push(key)
         }
-        this.gui.cameraNames = cameraNames
         this.cameras = cameras
         this.setActiveCamera(activeCameraName)
     }
