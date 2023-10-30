@@ -41,8 +41,10 @@ class MyContents {
     }
 
     onAfterSceneLoadedAndBeforeRender(data) {
-
+        console.log(data)
         this.configureGlobals(data.options);
+
+        this.configureFog(data.fog);
 
         this.configureCameras(data.cameras, data.activeCameraId);
 
@@ -62,6 +64,18 @@ class MyContents {
             }
         }
 
+    }
+
+    configureFog(data) {
+        if (data.type === "fog") {
+            let colorData = data.color;
+            let color = null;
+            if (colorData.isColor) {
+                color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+            }
+            let fog = new THREE.Fog(color, data.near, data.far)
+            this.app.scene.fog = fog;
+        }
     }
 
     configureCameras(data, activeCameraId) {
