@@ -67,15 +67,17 @@ class MyApp  {
     }
 
     /**
-     * initializes all the cameras
+     * initializes all the textures
      */
-    initCameras(cameras, activeCameraName) {
-        for (var key in cameras) {
-            this.cameraNames.push(key)
-        }
-        this.gui.init()
-        this.cameras = cameras
-        this.setActiveCamera(activeCameraName)
+    initTextures(textures) {
+        this.textures = textures
+    }
+
+    /**
+     * initializes all the materials
+     */
+    initMaterials(materials) {
+        this.materials = materials
     }
 
     /**
@@ -85,6 +87,18 @@ class MyApp  {
     setActiveCamera(cameraName) {   
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
+    }
+
+    /**
+     * initializes all the cameras
+     */
+    initCameras(cameras, activeCameraName) {
+        for (var key in cameras) {
+            this.cameraNames.push(key)
+        }
+        this.gui.init()
+        this.cameras = cameras
+        this.setActiveCamera(activeCameraName)
     }
 
     /**

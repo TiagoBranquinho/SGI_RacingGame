@@ -48,6 +48,10 @@ class MyContents {
 
         this.configureCameras(data.cameras, data.activeCameraId);
 
+        this.configureTextures(data.textures);
+
+        this.configureMaterials(data.materials);
+
     }
 
     configureGlobals(data) {
@@ -96,6 +100,55 @@ class MyContents {
             cameras[camera_el.id] = camera
         }
         this.app.initCameras(cameras, activeCameraId);
+    }
+
+    configureTextures(data) {
+        let textures = {}
+        for (var key in data) {
+            let texture_el = data[key]
+            let texture = null
+            if (texture_el.type === "texture") {
+                if (texture_el.isVideo) {
+                    texture = new THREE.VideoTexture(texture_el.filepath)
+                }
+                else {
+                    texture = new THREE.TextureLoader().load(texture_el.filepath)
+                }
+                texture.anisotropy = texture_el.anisotropy
+                //texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
+                //texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
+                texture.mipmaps = texture_el.mipmaps
+            }
+            textures[texture_el.id] = texture
+        }
+        this.app.initTextures(textures);
+    }
+
+    configureMaterials(data) {
+        let materials = {}
+        for (var key in data) {
+            let material_el = data[key]
+            let material = null
+            if (material_el.type === "material") {
+                const colorData = material_el.color;
+                const emissiveData = material_el.emissive;
+                const specularData = material_el.specular;
+                const color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+                const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
+                const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
+                const shininess = material_el.shininess
+                const bumpMap = material_el.bump_ref
+                const bumpScale = material_el.bump_scale
+                const flatShading = material_el.shading === "flat" ? true : false
+                const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
+                const wireframe = material_el.wireframe
+                const map = this.app.textures[material_el.textureref]
+                //missing texlenght_t and s
+                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe, map: map })
+            }
+            materials[material_el.id] = material
+        }
+        this.app.initMaterials(materials);
     }
 
     update() {
