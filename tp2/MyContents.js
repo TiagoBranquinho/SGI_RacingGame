@@ -151,6 +151,90 @@ class MyContents {
         this.app.initMaterials(materials);
     }
 
+    createNodes(data) {
+        let nodes = {}
+        for (var key in data) {
+            let node_el = data[key]
+            let node = null
+            if (node_el.type === "node") {
+                node = new THREE.Group()
+                for (child in node_el.children) {
+                    node.add(this.retrieveNode(node_el.children[child]))
+                }
+                for (transformation in node_el.transformations) {
+                    switch (transformation.type) {
+                        case "R":
+                            node.rotateX(transformation[0] * (Math.PI / 180))
+                            node.rotateY(transformation[1] * (Math.PI / 180))
+                            node.rotateZ(transformation[2] * (Math.PI / 180))
+                            break;
+                        case "T":
+                            node.position.set(transformation[0], transformation[1], transformation[2])
+                            break;
+                        default:
+                            console.error("Invalid transformation type: " + transformation.type)
+                            break;
+                    }
+                }
+                return node
+            }
+            else if (node_el.type === "primitive") {
+                nodes[node_el.id] = node
+            }
+            return nodes
+        }
+    }
+
+    retrieveNode(node) {
+        if (node.type === "node") {
+            node = new THREE.Group()
+            for (child in node.children) {
+                node.add(this.retrieveNode(node_el.children[child]))
+            }
+            for (transformation in node.transformations) {
+                switch (transformation.type) {
+                    case "R":
+                        node.rotateX(transformation[0] * (Math.PI / 180))
+                        node.rotateY(transformation[1] * (Math.PI / 180))
+                        node.rotateZ(transformation[2] * (Math.PI / 180))
+                        break;
+                    case "T":
+                        node.position.set(transformation[0], transformation[1], transformation[2])
+                        break;
+                    default:
+                        console.error("Invalid transformation type: " + transformation.type)
+                        break;
+                }
+            }
+            return node
+        }
+        else if (node.type === "primitive") {
+            switch (node.subtype) {
+                case "rectangle":
+                    return new THREE.Mesh(new THREE.PlaneGeometry(node.x1 - node.x0, node.y1 - node.y0), this.app.materials[node.materialref])
+                case "triangle":
+                    return new THREE.Mesh(new THREE.TriangleGeometry(node.x0, node.y0, node.x1, node.y1, node.x2, node.y2), this.app.materials[node.materialref])
+                case "cylinder":
+                    return new THREE.Mesh(new THREE.CylinderGeometry(node.base, node.top, node.height, node.slices, node.stacks), this.app.materials[node.materialref])
+                case "sphere":
+                    return new THREE.Mesh(new THREE.SphereGeometry(node.radius, node.slices, node.stacks), this.app.materials[node.materialref])
+                case "nurbs":
+                    return new THREE.Mesh(new THREE.NURBSSurfaceGeometry(node.degreeU, node.degreeV, node.knotsU, node.knotsV, node.controlvertexes), this.app.materials[node.materialref])
+                case "box":
+                    return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+                case "model3d":
+                    return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+                case "skybox":
+                    return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+                default:
+                    console.error("Invalid primitive subtype: " + node.subtype)
+                    break;
+                    
+            }
+        }
+        return nodes
+    }
+
     update() {
 
     }
