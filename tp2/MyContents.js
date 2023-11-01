@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
+import { MyNurbsBuilder } from './MyNurbsBuilder.js';
+
 /**
  *  This class contains the contents of out application
  */
@@ -15,6 +17,7 @@ class MyContents {
         this.axis = null
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
         this.reader.open("scenes/demo/demo.xml");
+        this.nurbsBuilder = new MyNurbsBuilder();
     }
 
     /**
@@ -51,6 +54,8 @@ class MyContents {
         this.configureTextures(data.textures);
 
         this.configureMaterials(data.materials);
+
+        this.createNodes(data.nodes.scene.children);
 
     }
 
@@ -152,87 +157,139 @@ class MyContents {
     }
 
     createNodes(data) {
-        let nodes = {}
+        let nodes = []
         for (var key in data) {
-            let node_el = data[key]
-            let node = null
-            if (node_el.type === "node") {
-                node = new THREE.Group()
-                for (child in node_el.children) {
-                    node.add(this.retrieveNode(node_el.children[child]))
-                }
-                for (transformation in node_el.transformations) {
-                    switch (transformation.type) {
-                        case "R":
-                            node.rotateX(transformation[0] * (Math.PI / 180))
-                            node.rotateY(transformation[1] * (Math.PI / 180))
-                            node.rotateZ(transformation[2] * (Math.PI / 180))
-                            break;
-                        case "T":
-                            node.position.set(transformation[0], transformation[1], transformation[2])
-                            break;
-                        default:
-                            console.error("Invalid transformation type: " + transformation.type)
-                            break;
-                    }
-                }
-                return node
-            }
-            else if (node_el.type === "primitive") {
-                nodes[node_el.id] = node
-            }
-            return nodes
+            nodes.push(this.retrieveNode(data[key], null))
         }
+        for (var key in nodes) {
+            this.app.scene.add(nodes[key])
+        }
+        console.log(nodes)
     }
 
-    retrieveNode(node) {
+    getPrimitiveMesh(geometry, materialref) {
+        return new THREE.Mesh(geometry, this.app.materials[materialref])
+    }
+
+    retrieveNode(node, materialref) {
         if (node.type === "node") {
-            node = new THREE.Group()
-            for (child in node.children) {
-                node.add(this.retrieveNode(node_el.children[child]))
+            let group = new THREE.Group()
+            console.log(node)
+            for (var child in node.children) {
+                console.log(node.materialIds[0])
+                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0]))
             }
-            for (transformation in node.transformations) {
+            for (var el in node.transformations) {
+                const transformation = node.transformations[el]
                 switch (transformation.type) {
                     case "R":
-                        node.rotateX(transformation[0] * (Math.PI / 180))
-                        node.rotateY(transformation[1] * (Math.PI / 180))
-                        node.rotateZ(transformation[2] * (Math.PI / 180))
+                        group.rotateX(transformation.rotation[0] * (Math.PI / 180))
+                        group.rotateY(transformation.rotation[1] * (Math.PI / 180))
+                        group.rotateZ(transformation.rotation[2] * (Math.PI / 180))
                         break;
                     case "T":
-                        node.position.set(transformation[0], transformation[1], transformation[2])
+                        group.position.set(transformation.translate[0], transformation.translate[1], transformation.translate[2])
+                        break;
+                    case "S":
+                        group.scale.set(transformation.scale[0], transformation.scale[1], transformation.scale[2])
                         break;
                     default:
                         console.error("Invalid transformation type: " + transformation.type)
                         break;
                 }
             }
-            return node
+            return group
         }
         else if (node.type === "primitive") {
+            const representation = node.representations[0]
+            let geometry = null;
             switch (node.subtype) {
                 case "rectangle":
-                    return new THREE.Mesh(new THREE.PlaneGeometry(node.x1 - node.x0, node.y1 - node.y0), this.app.materials[node.materialref])
-                case "triangle":
-                    return new THREE.Mesh(new THREE.TriangleGeometry(node.x0, node.y0, node.x1, node.y1, node.x2, node.y2), this.app.materials[node.materialref])
+                    if (representation.length === 1) {
+                        const geometry = new THREE.PlaneGeometry(
+                            representation.xy2[0] - representation.xy1[0],
+                            representation.xy2[1] - representation.xy1[1],
+                            representation.parts_x,
+                            representation.parts_y
+                        );
+                        console.log("in rectangle now")
+                        console.log(materialref)
+
+                        return this.getPrimitiveMesh(geometry, materialref);
+                    }
+
+
+                /*case "triangle":
+                    geometry = new THREE.Geometry();
+                    geometry.vertices = [
+                        representation.xyz1,
+                        representation.xyz2,
+                        representation.xyz3,
+                    ];
+                    const face = new THREE.Face3(0, 1, 2);
+                    geometry.faces.push(face);
+                    return this.getPrimitiveMesh(geometry, materialref);*/
+
                 case "cylinder":
-                    return new THREE.Mesh(new THREE.CylinderGeometry(node.base, node.top, node.height, node.slices, node.stacks), this.app.materials[node.materialref])
+                    geometry = new THREE.CylinderGeometry(
+                        representation.base,
+                        representation.top,
+                        representation.height,
+                        representation.slices,
+                        representation.stacks,
+                        representation.capsclose,
+                        representation.thetastart,
+                        representation.thetalength
+                    );
+                    return this.getPrimitiveMesh(geometry, materialref);
+
                 case "sphere":
-                    return new THREE.Mesh(new THREE.SphereGeometry(node.radius, node.slices, node.stacks), this.app.materials[node.materialref])
+                    geometry = new THREE.SphereGeometry(
+                        representation.radius,
+                        representation.slices,
+                        representation.stacks,
+                        representation.thetastart,
+                        representation.thetalength,
+                        representation.phistart,
+                        representation.philength
+                    );
+                    return this.getPrimitiveMesh(geometry, materialref);
+
                 case "nurbs":
-                    return new THREE.Mesh(new THREE.NURBSSurfaceGeometry(node.degreeU, node.degreeV, node.knotsU, node.knotsV, node.controlvertexes), this.app.materials[node.materialref])
+                    let controlPoints = []
+                    for (let i = 0; i <= representation.degree_u; i++) {
+                        controlPoints.push([])
+                        for (let j = 0; j <= representation.degree_v; j++) {
+                            let controlPoint = representation.controlpoints[i * (representation.degree_v + 1) + j]
+                            controlPoints[i].push(new THREE.Vector4(controlPoint.xx, controlPoint.yy, controlPoint.zz, 1))
+                        }
+                    }
+                    console.log(controlPoints)
+                    geometry = this.nurbsBuilder.build(
+                        controlPoints,
+                        representation.degree_u,
+                        representation.degree_v,
+                        representation.parts_u,
+                        representation.parts_v
+                    );
+                    return this.getPrimitiveMesh(geometry, materialref);
+
                 case "box":
-                    return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
-                case "model3d":
-                    return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
-                case "skybox":
-                    return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+                    geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz2[0], representation.xyz2[1] - representation.xyz2[1], representation.xyz2[2] - representation.xyz2[2], representation.parts_x, representation.parts_y, representation.parts_z);
+                    return this.getPrimitiveMesh(geometry, materialref);
+
+                //case "model3d":
+                //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+
+                //case "skybox":
+                //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+
                 default:
                     console.error("Invalid primitive subtype: " + node.subtype)
                     break;
-                    
+
             }
         }
-        return nodes
     }
 
     update() {
