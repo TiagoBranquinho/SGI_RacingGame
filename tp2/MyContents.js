@@ -149,7 +149,14 @@ class MyContents {
                 const wireframe = material_el.wireframe
                 const map = this.app.textures[material_el.textureref]
                 //missing texlenght_t and s
-                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe, map: map })
+                const texlength_t = 1 //material_el.texlength_t
+                const texlength_s = 1 //material_el.texlength_s
+
+                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe})
+                material.map = map
+                material.map.wrapS = THREE.RepeatWrapping
+                material.map.wrapT = THREE.RepeatWrapping
+                material.map.repeat.set(texlength_s, texlength_t)
             }
             materials[material_el.id] = material
         }
@@ -174,10 +181,6 @@ class MyContents {
     retrieveNode(node, materialref = undefined) {
         if (node.type === "node") {
             let group = new THREE.Group()
-            console.log(node)
-            console.log(node.materialIds[0])
-            console.log(materialref)
-            console.log(node.materialIds[0] === undefined ? materialref : node.materialIds[0])
             for (var child in node.children) {
                 group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0]))
             }
