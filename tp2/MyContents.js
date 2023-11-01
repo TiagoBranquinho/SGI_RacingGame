@@ -16,7 +16,7 @@ class MyContents {
         this.app = app
         this.axis = null
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.reader.open("scenes/demo/demo.xml");
+        this.reader.open("scenes/demo/scene.xml");
         this.nurbsBuilder = new MyNurbsBuilder();
     }
 
@@ -147,16 +147,19 @@ class MyContents {
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
                 const wireframe = material_el.wireframe
-                const map = this.app.textures[material_el.textureref]
                 //missing texlenght_t and s
                 const texlength_t = 1 //material_el.texlength_t
                 const texlength_s = 1 //material_el.texlength_s
 
-                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe})
-                material.map = map
-                material.map.wrapS = THREE.RepeatWrapping
-                material.map.wrapT = THREE.RepeatWrapping
-                material.map.repeat.set(texlength_s, texlength_t)
+                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe })
+                if (material_el.textureref !== null) {
+                    const map = this.app.textures[material_el.textureref]
+                    material.map = map
+                    material.map.wrapS = THREE.RepeatWrapping
+                    material.map.wrapT = THREE.RepeatWrapping
+                    material.map.repeat.set(texlength_s, texlength_t)
+                }
+
             }
             materials[material_el.id] = material
         }
@@ -188,9 +191,9 @@ class MyContents {
                 const transformation = node.transformations[el]
                 switch (transformation.type) {
                     case "R":
-                        group.rotateX(group.rotation.x + transformation.rotation[0] * (Math.PI / 180))
-                        group.rotateY(group.rotation.y + transformation.rotation[1] * (Math.PI / 180))
-                        group.rotateZ(group.rotation.z + transformation.rotation[2] * (Math.PI / 180))
+                        group.rotation.x = group.rotation.x + transformation.rotation[0] * (Math.PI / 180)
+                        group.rotation.y = group.rotation.y + transformation.rotation[1] * (Math.PI / 180)
+                        group.rotation.z = group.rotation.z + transformation.rotation[2] * (Math.PI / 180)
                         break;
                     case "T":
                         group.position.set(group.position.x + transformation.translate[0], group.position.y + transformation.translate[1], group.position.z + transformation.translate[2])
