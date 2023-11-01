@@ -159,7 +159,7 @@ class MyContents {
     createNodes(data) {
         let nodes = []
         for (var key in data) {
-            nodes.push(this.retrieveNode(data[key], null))
+            nodes.push(this.retrieveNode(data[key]))
         }
         for (var key in nodes) {
             this.app.scene.add(nodes[key])
@@ -171,27 +171,29 @@ class MyContents {
         return new THREE.Mesh(geometry, this.app.materials[materialref])
     }
 
-    retrieveNode(node, materialref) {
+    retrieveNode(node, materialref = undefined) {
         if (node.type === "node") {
             let group = new THREE.Group()
             console.log(node)
+            console.log(node.materialIds[0])
+            console.log(materialref)
+            console.log(node.materialIds[0] === undefined ? materialref : node.materialIds[0])
             for (var child in node.children) {
-                console.log(node.materialIds[0])
                 group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0]))
             }
             for (var el in node.transformations) {
                 const transformation = node.transformations[el]
                 switch (transformation.type) {
                     case "R":
-                        group.rotateX(transformation.rotation[0] * (Math.PI / 180))
-                        group.rotateY(transformation.rotation[1] * (Math.PI / 180))
-                        group.rotateZ(transformation.rotation[2] * (Math.PI / 180))
+                        group.rotateX(group.rotation.x + transformation.rotation[0] * (Math.PI / 180))
+                        group.rotateY(group.rotation.y + transformation.rotation[1] * (Math.PI / 180))
+                        group.rotateZ(group.rotation.z + transformation.rotation[2] * (Math.PI / 180))
                         break;
                     case "T":
-                        group.position.set(transformation.translate[0], transformation.translate[1], transformation.translate[2])
+                        group.position.set(group.position.x + transformation.translate[0], group.position.y + transformation.translate[1], group.position.z + transformation.translate[2])
                         break;
                     case "S":
-                        group.scale.set(transformation.scale[0], transformation.scale[1], transformation.scale[2])
+                        group.scale.set(group.scale.x * transformation.scale[0], group.scale.y * transformation.scale[1], group.scale.z * transformation.scale[2])
                         break;
                     default:
                         console.error("Invalid transformation type: " + transformation.type)
@@ -201,22 +203,24 @@ class MyContents {
             return group
         }
         else if (node.type === "primitive") {
+            console.log(node)
+            console.log(materialref)
             const representation = node.representations[0]
             let geometry = null;
+            let mesh = null;
             switch (node.subtype) {
                 case "rectangle":
-                    if (representation.length === 1) {
-                        const geometry = new THREE.PlaneGeometry(
-                            representation.xy2[0] - representation.xy1[0],
-                            representation.xy2[1] - representation.xy1[1],
-                            representation.parts_x,
-                            representation.parts_y
-                        );
-                        console.log("in rectangle now")
-                        console.log(materialref)
+                    geometry = new THREE.PlaneGeometry(
+                        representation.xy2[0] - representation.xy1[0],
+                        representation.xy2[1] - representation.xy1[1],
+                        representation.parts_x,
+                        representation.parts_y
+                    );
 
-                        return this.getPrimitiveMesh(geometry, materialref);
-                    }
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+
+                    mesh.position.set((representation.xy2[0] + representation.xy1[0]) / 2, (representation.xy2[1] + representation.xy1[1]) / 2)
+                    return mesh;
 
 
                 /*case "triangle":
@@ -232,8 +236,8 @@ class MyContents {
 
                 case "cylinder":
                     geometry = new THREE.CylinderGeometry(
-                        representation.base,
                         representation.top,
+                        representation.base,
                         representation.height,
                         representation.slices,
                         representation.stacks,
@@ -275,8 +279,15 @@ class MyContents {
                     return this.getPrimitiveMesh(geometry, materialref);
 
                 case "box":
-                    geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz2[0], representation.xyz2[1] - representation.xyz2[1], representation.xyz2[2] - representation.xyz2[2], representation.parts_x, representation.parts_y, representation.parts_z);
-                    return this.getPrimitiveMesh(geometry, materialref);
+                    geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz2[0],
+                        representation.xyz2[1] - representation.xyz2[1],
+                        representation.xyz2[2] - representation.xyz2[2],
+                        representation.parts_x, representation.parts_y,
+                        representation.parts_z);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.position.set((representation.xyz2[0] + representation.xyz1[0]) / 2, (representation.xyz2[1] + representation.xyz1[1]) / 2, (representation.xyz2[2] + representation.xyz1[2]) / 2)
+                    return mesh;
+
 
                 //case "model3d":
                 //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
@@ -289,6 +300,70 @@ class MyContents {
                     break;
 
             }
+        }
+        else if (node.type === "spotlight") {
+            let colorData = node.color;
+            let color = null;
+            if (colorData.isColor) {
+                color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+            }
+            let lightGroup = new THREE.Group();
+            let light = new THREE.SpotLight(color, node.intensity, node.distance, node.angle, node.penumbra, node.decay);
+            light.enabled = node.enabled;
+            light.castShadow = node.castshadow;
+            light.position.set(node.position[0], node.position[1], node.position[2]);
+            light.target.position.set(node.target[0], node.target[1], node.target[2]);
+            light.distance = node.distance;
+            light.shadow.mapSize.width = node.shadowmapsize;
+            light.shadow.mapSize.height = node.shadowmapsize;
+            light.shadow.camera.far = node.shadowfar;
+            lightGroup.add(light);
+            const helper = new THREE.SpotLightHelper(light);
+            lightGroup.add(helper);
+            return lightGroup;
+        }
+        else if (node.type === "pointlight") {
+            let colorData = node.color;
+            let color = null;
+            if (colorData.isColor) {
+                color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+            }
+            let lightGroup = new THREE.Group();
+            let light = new THREE.PointLight(color, node.intensity, node.distance, node.decay);
+            light.enabled = node.enabled;
+            light.castShadow = node.castshadow;
+            light.position.set(node.position[0], node.position[1], node.position[2]);
+            light.distance = node.distance;
+            light.shadow.mapSize.width = node.shadowmapsize;
+            light.shadow.mapSize.height = node.shadowmapsize;
+            light.shadow.camera.far = node.shadowfar;
+            lightGroup.add(light);
+            const helper = new THREE.PointLightHelper(light);
+            lightGroup.add(helper);
+            return lightGroup;
+        }
+        else if (node.type === "directionallight") {
+            let colorData = node.color;
+            let color = null;
+            if (colorData.isColor) {
+                color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+            }
+            let lightGroup = new THREE.Group();
+            let light = new THREE.DirectionalLight(color, node.intensity, node.distance, node.decay);
+            light.enabled = node.enabled;
+            light.castShadow = node.castshadow;
+            light.position.set(node.position[0], node.position[1], node.position[2]);
+            light.shadow.left = node.shadowleft;
+            light.shadow.right = node.shadowright;
+            light.shadow.top = node.shadowtop;
+            light.shadow.bottom = node.shadowbottom;
+            light.shadow.mapSize.width = node.shadowmapsize;
+            light.shadow.mapSize.height = node.shadowmapsize;
+            light.shadow.camera.far = node.shadowfar;
+            lightGroup.add(light);
+            const helper = new THREE.DirectionalLightHelper(light);
+            lightGroup.add(helper);
+            return lightGroup;
         }
     }
 
