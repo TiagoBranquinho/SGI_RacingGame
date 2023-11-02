@@ -16,7 +16,7 @@ class MyContents {
         this.app = app
         this.axis = null
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.reader.open("scenes/demo/scene.xml");
+        this.reader.open("scenes/demo/myScene.xml");
         this.nurbsBuilder = new MyNurbsBuilder();
     }
 
@@ -157,7 +157,8 @@ class MyContents {
                     material.map = map
                     material.map.wrapS = THREE.RepeatWrapping
                     material.map.wrapT = THREE.RepeatWrapping
-                    material.map.repeat.set(texlength_s, texlength_t)
+                    material.map.repeat.x = texlength_s
+                    material.map.repeat.y = texlength_t
                 }
 
             }
@@ -271,10 +272,10 @@ class MyContents {
                         controlPoints.push([])
                         for (let j = 0; j <= representation.degree_v; j++) {
                             let controlPoint = representation.controlpoints[i * (representation.degree_v + 1) + j]
-                            controlPoints[i].push(new THREE.Vector4(controlPoint.xx, controlPoint.yy, controlPoint.zz, 1))
+                            controlPoints[i].push([controlPoint.xx, controlPoint.yy, controlPoint.zz, 1])
                         }
                     }
-                    console.log(controlPoints)
+                    console.error(controlPoints)
                     geometry = this.nurbsBuilder.build(
                         controlPoints,
                         representation.degree_u,
@@ -285,9 +286,9 @@ class MyContents {
                     return this.getPrimitiveMesh(geometry, materialref);
 
                 case "box":
-                    geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz2[0],
-                        representation.xyz2[1] - representation.xyz2[1],
-                        representation.xyz2[2] - representation.xyz2[2],
+                    geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz1[0],
+                        representation.xyz2[1] - representation.xyz1[1],
+                        representation.xyz2[2] - representation.xyz1[2],
                         representation.parts_x, representation.parts_y,
                         representation.parts_z);
                     mesh = this.getPrimitiveMesh(geometry, materialref);
@@ -298,8 +299,26 @@ class MyContents {
                 //case "model3d":
                 //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
 
-                //case "skybox":
-                //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+                case "skybox":
+                    const cubeMapTexture = new THREE.CubeTextureLoader()
+                        .setPath('scenes/demo/textures/skybox/') // Replace with the path to your skybox textures
+                        .load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png']);
+
+                    geometry = new THREE.BoxGeometry(
+                        representation.width,
+                        representation.height,
+                        representation.depth
+                    );
+
+                    const material = new THREE.MeshBasicMaterial({
+                        envMap: cubeMapTexture,
+                        side: THREE.BackSide // Make the cube visible from the inside DoubleSide//FrontSide
+                    });
+
+                    mesh = new THREE.Mesh(geometry, material);
+
+
+                    return mesh;
 
                 default:
                     console.error("Invalid primitive subtype: " + node.subtype)
