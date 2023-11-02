@@ -272,10 +272,10 @@ class MyContents {
                         controlPoints.push([])
                         for (let j = 0; j <= representation.degree_v; j++) {
                             let controlPoint = representation.controlpoints[i * (representation.degree_v + 1) + j]
-                            controlPoints[i].push(new THREE.Vector4(controlPoint.xx, controlPoint.yy, controlPoint.zz, 1))
+                            controlPoints[i].push([controlPoint.xx, controlPoint.yy, controlPoint.zz, 1])
                         }
                     }
-                    console.log(controlPoints)
+                    console.error(controlPoints)
                     geometry = this.nurbsBuilder.build(
                         controlPoints,
                         representation.degree_u,
@@ -312,11 +312,11 @@ class MyContents {
 
                     const material = new THREE.MeshBasicMaterial({
                         envMap: cubeMapTexture,
-                        side: THREE.BackSide // Make the cube visible from the inside
+                        side: THREE.BackSide // Make the cube visible from the inside DoubleSide//FrontSide
                     });
 
                     mesh = new THREE.Mesh(geometry, material);
-                    
+
 
                     return mesh;
 
