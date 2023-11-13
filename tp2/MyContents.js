@@ -16,8 +16,14 @@ class MyContents {
         this.app = app
         this.axis = null
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
+<<<<<<< HEAD
         this.reader.open("scenes/demo/scene.xml");
+=======
+        this.reader.open("scenes/t08g01/demo.xml");
+>>>>>>> 73dafae (updated work for new parser, still missing demo texture, cant continue working)
         this.nurbsBuilder = new MyNurbsBuilder();
+
+        
     }
 
     /**
@@ -142,8 +148,8 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                const bumpMap = material_el.bump_ref
-                const bumpScale = material_el.bump_scale
+                const bumpMap = material_el.bumpref
+                const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
                 const wireframe = material_el.wireframe
@@ -175,7 +181,6 @@ class MyContents {
         for (var key in nodes) {
             this.app.scene.add(nodes[key])
         }
-        console.log(nodes)
     }
 
     getPrimitiveMesh(geometry, materialref) {
@@ -210,8 +215,6 @@ class MyContents {
             return group
         }
         else if (node.type === "primitive") {
-            console.log(node)
-            console.log(materialref)
             const representation = node.representations[0]
             let geometry = null;
             let mesh = null;
@@ -267,7 +270,7 @@ class MyContents {
                     return this.getPrimitiveMesh(geometry, materialref);
 
                 case "nurbs":
-                    let controlPoints = []
+                    /*let controlPoints = []
                     for (let i = 0; i <= representation.degree_u; i++) {
                         controlPoints.push([])
                         for (let j = 0; j <= representation.degree_v; j++) {
@@ -275,7 +278,6 @@ class MyContents {
                             controlPoints[i].push([controlPoint.xx, controlPoint.yy, controlPoint.zz, 1])
                         }
                     }
-                    console.error(controlPoints)
                     geometry = this.nurbsBuilder.build(
                         controlPoints,
                         representation.degree_u,
@@ -283,7 +285,8 @@ class MyContents {
                         representation.parts_u,
                         representation.parts_v
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
+                    return this.getPrimitiveMesh(geometry, materialref);*/
+                    break;
 
                 case "box":
                     geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz1[0],
@@ -301,7 +304,7 @@ class MyContents {
 
                 case "skybox":
                     const cubeMapTexture = new THREE.CubeTextureLoader()
-                        .setPath('scenes/demo/textures/skybox/') // Replace with the path to your skybox textures
+                        .setPath('scenes/demo/textures/') // Replace with the path to your skybox textures
                         .load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png']);
 
                     geometry = new THREE.BoxGeometry(
