@@ -16,14 +16,10 @@ class MyContents {
         this.app = app
         this.axis = null
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-<<<<<<< HEAD
-        this.reader.open("scenes/demo/scene.xml");
-=======
         this.reader.open("scenes/t08g01/demo.xml");
->>>>>>> 73dafae (updated work for new parser, still missing demo texture, cant continue working)
         this.nurbsBuilder = new MyNurbsBuilder();
 
-        
+
     }
 
     /**
@@ -148,7 +144,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                const bumpMap = material_el.bumpref
+                const bumpMap = null//material_el.bumpref
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
@@ -213,6 +209,14 @@ class MyContents {
                 }
             }
             return group
+        }
+        else if (node.type === "lod") {
+            let lod = new THREE.LOD()
+            for (var el in node.children) {
+                const child = node.children[el]
+                lod.addLevel(this.retrieveNode(child.node, materialref), child.mindist)
+            }
+            return lod
         }
         else if (node.type === "primitive") {
             const representation = node.representations[0]
@@ -396,7 +400,6 @@ class MyContents {
     }
 
     update() {
-
     }
 }
 

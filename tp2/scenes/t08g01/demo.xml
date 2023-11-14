@@ -23,7 +23,7 @@
             left="-5" 
             right="5" 
             bottom="-5" 
-            top="-5" /> 
+            top="5" /> 
     </cameras> 
 
     <skybox size="100 100 100" center="0 0 0" emissive="1.0 1.0 1.0 1.0" intensity="1.0" up="./textures/pine.jpg" down="./textures/pine.jpg" left="./textures/pine.jpg" right="./textures/pine.jpg" front="./textures/pine.jpg" back="./textures/pine.jpg"/>
@@ -40,15 +40,15 @@
 		<texture id="tapeSupportTex" filepath="scenes/t08g01/textures/lamp.png" />
 		<texture id="pineTex" filepath="scenes/t08g01/textures/pine.png" />
 		<texture id="vaseTex" filepath="scenes/t08g01/textures/vase.png" />
-        <texture id="demo" filepath="scenes/t08g01/textures/demo.png" 
-            mipmap0="scenes/t08g01/textures/demo1024.png"
-            mipmap1="scenes/t08g01/textures/demo512.png"
-            mipmap2="scenes/t08g01/textures/demo256.png"
-            mipmap3="scenes/t08g01/textures/demo128.png"
-            mipmap4="scenes/t08g01/textures/demo64.png"
-            mipmap5="scenes/t08g01/textures/demo32.png"
-            mipmap6="scenes/t08g01/textures/demo16.png"
-            mipmap7="scenes/t08g01/textures/demo8.png"
+        <texture id="demo" filepath="scenes/t08g01/textures/energy.jpg" 
+            mipmap0="scenes/t08g01/textures/energy.jpg"
+            mipmap1="scenes/t08g01/textures/energy.jpg"
+            mipmap2="scenes/t08g01/textures/energy.jpg"
+            mipmap3="scenes/t08g01/textures/energy.jpg"
+            mipmap4="scenes/t08g01/textures/energy.jpg"
+            mipmap5="scenes/t08g01/textures/energy.jpg"
+            mipmap6="scenes/t08g01/textures/energy.jpg"
+            mipmap7="scenes/t08g01/textures/energy.jpg"
         />
     </textures> 
 
