@@ -120,6 +120,8 @@
                 <noderef id="cup1" />
                 <noderef id="cup2" />
                 <noderef id="cup3" />
+                <noderef id="shelf1" />
+                <noderef id="bottle" />
 
                 <pointlight id="chandelier1" enabled="true" 
                     color="0.8 0.8 1.0 1" 
@@ -541,6 +543,52 @@
             <children>             
                 <noderef id="cup" />
             </children> 
+        </node>
+
+        <node id="shelf">
+			<transforms>
+                <translate value3="0.0 0.0 0.0" />
+				<scale value3="1.5 0.5 10.5" />
+            </transforms> 
+
+            <materialref id="tableApp" />
+
+            <children>             
+                <noderef id="unitCube" />
+            </children> 
+        </node>
+
+        <node id="shelf1">
+			<transforms>
+                <translate value3="0.76 6.0 5.26" />
+            </transforms>
+			
+            <children>             
+                <noderef id="shelf" />
+            </children> 
+        </node>
+
+        <node id="bottle">
+			<transforms>
+				<translate value3="0.0 0.0 0.0" />
+            </transforms> 
+			
+            <children>             
+                <primitive>
+                    <nurbs degree_u="2" degree_v="2" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="-0.5" yy="0" zz="0" />
+                        <controlpoint xx="-0.5" yy="1" zz="0" />
+                        <controlpoint xx="0" yy="1.5" zz="0" />
+                        <controlpoint xx="0.5" yy="1" zz="0" />
+                        <controlpoint xx="0.5" yy="0" zz="0" />
+                        <controlpoint xx="-0.5" yy="0" zz="1" />
+                        <controlpoint xx="-0.5" yy="1" zz="1" />
+                        <controlpoint xx="0" yy="1.5" zz="1" />
+                        <controlpoint xx="0.5" yy="1" zz="1" />
+                        <controlpoint xx="0.5" yy="0" zz="1" />
+                    </nurbs>
+                </primitive>
+            </children>     
         </node>
     </graph> 
 </yaf> 

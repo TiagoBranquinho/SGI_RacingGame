@@ -17,7 +17,7 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.reader.open("scenes/t08g01/demo.xml");
+        this.reader.open("scenes/t08g01/scene.xml");
         
 
     }
