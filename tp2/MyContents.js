@@ -144,7 +144,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                const bumpMap = this.app.textures[material_el.bumpref]
+                const bumpMap = null
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
