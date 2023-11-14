@@ -15,10 +15,10 @@ class MyContents {
     constructor(app) {
         this.app = app
         this.axis = null
+        this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
         this.reader.open("scenes/t08g01/demo.xml");
-        this.nurbsBuilder = new MyNurbsBuilder();
-
+        
 
     }
 
@@ -144,7 +144,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                const bumpMap = null//material_el.bumpref
+                const bumpMap = this.app.textures[material_el.bumpref]
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
@@ -224,9 +224,11 @@ class MyContents {
             let mesh = null;
             switch (node.subtype) {
                 case "rectangle":
+                    width = representation.xy2[0] - representation.xy1[0];
+                    height = representation.xy2[1] - representation.xy1[1];
                     geometry = new THREE.PlaneGeometry(
-                        representation.xy2[0] - representation.xy1[0],
-                        representation.xy2[1] - representation.xy1[1],
+                        width,
+                        height,
                         representation.parts_x,
                         representation.parts_y
                     );
@@ -274,7 +276,7 @@ class MyContents {
                     return this.getPrimitiveMesh(geometry, materialref);
 
                 case "nurbs":
-                    /*let controlPoints = []
+                    let controlPoints = []
                     for (let i = 0; i <= representation.degree_u; i++) {
                         controlPoints.push([])
                         for (let j = 0; j <= representation.degree_v; j++) {
@@ -289,7 +291,7 @@ class MyContents {
                         representation.parts_u,
                         representation.parts_v
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);*/
+                    return this.getPrimitiveMesh(geometry, materialref);
                     break;
 
                 case "box":
