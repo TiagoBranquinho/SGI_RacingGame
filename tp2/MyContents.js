@@ -224,8 +224,8 @@ class MyContents {
             let mesh = null;
             switch (node.subtype) {
                 case "rectangle":
-                    width = representation.xy2[0] - representation.xy1[0];
-                    height = representation.xy2[1] - representation.xy1[1];
+                    let width = representation.xy2[0] - representation.xy1[0];
+                    let height = representation.xy2[1] - representation.xy1[1];
                     geometry = new THREE.PlaneGeometry(
                         width,
                         height,
