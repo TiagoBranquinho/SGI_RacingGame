@@ -194,14 +194,19 @@ class MyContents {
                 const material = new THREE.MeshPhongMaterial({
                     color: color,
                     emissiveIntensity: skybox_el.intensity,
+                    envMap: cubeMapTexture,
+                    side: THREE.BackSide
                 });
 
                 skybox = new THREE.Mesh(geometry, material);
                 skybox.position.set(skybox_el.center[0], skybox_el.center[1], skybox_el.center[2])
             }
             skyboxes[skybox_el.id] = skybox
+            
         }
-        this.app.scene.add(skyboxes);
+        for (var key in skyboxes) {
+            this.app.scene.add(skyboxes[key])
+        }
     }
 
     createNodes(data) {
