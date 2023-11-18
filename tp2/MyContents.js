@@ -18,7 +18,7 @@ class MyContents {
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
         this.reader.open("scenes/t08g01/scene.xml");
-        
+
 
     }
 
@@ -118,15 +118,39 @@ class MyContents {
             let texture = null
             if (texture_el.type === "texture") {
                 if (texture_el.isVideo) {
-                    texture = new THREE.VideoTexture(texture_el.filepath)
+                    const video_html = document.createElement('video');
+                    video_html.style.display = 'none';
+                    video_html.id = 'some-video';
+                    video_html.autoplay = true;
+                    video_html.muted = true;
+                    video_html.preload = 'auto';
+                    video_html.width = 640;
+                    video_html.height = 264;
+                    video_html.loop = true;
+                    const source = document.createElement('source');
+                    source.src = 'scenes/t08g01/textures/oceans.mp4';
+                    source.type = 'video/mp4';
+
+                    // Append the source element to the video element
+                    video_html.appendChild(source);
+
+                    // Append the video element to the document body (or another desired location)
+                    document.body.appendChild(video_html);
+                    const video = document.getElementById('some-video');
+                    if (video === null) {
+                        console.error("Video element not found")
+                    }
+                    texture = new THREE.VideoTexture(video);
+                    console.log(texture)
+                    texture.colorSpace = THREE.SRGBColorSpace;
                 }
                 else {
                     texture = new THREE.TextureLoader().load(texture_el.filepath)
+                    texture.anisotropy = texture_el.anisotropy
+                    texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
+                    texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
+                    texture.mipmaps = texture_el.mipmaps
                 }
-                texture.anisotropy = texture_el.anisotropy
-                //texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
-                //texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
-                texture.mipmaps = texture_el.mipmaps
             }
             textures[texture_el.id] = texture
         }
@@ -171,7 +195,7 @@ class MyContents {
         this.app.initMaterials(materials);
     }
 
-    configureSkyBoxes(data){
+    configureSkyBoxes(data) {
         let skyboxes = {}
         for (var key in data) {
             let skybox_el = data[key]
@@ -202,7 +226,7 @@ class MyContents {
                 skybox.position.set(skybox_el.center[0], skybox_el.center[1], skybox_el.center[2])
             }
             skyboxes[skybox_el.id] = skybox
-            
+
         }
         for (var key in skyboxes) {
             this.app.scene.add(skyboxes[key])

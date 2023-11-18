@@ -32,7 +32,7 @@
     <textures>
         <texture id="barWallTex" filepath="scenes/t08g01/textures/barWall.avif" />
         <texture id="darkBlueWallTex" filepath="scenes/t08g01/textures/darkBlueWall.jpg" />
-        <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg" />        
+        <texture id="barFloorTex" filepath="scenes/t08g01/textures/oceans.mp4" isVideo="true"/>        
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
         <texture id="targetTex" filepath="scenes/t08g01/textures/target.webp" />
         <texture id="glassTex" filepath="scenes/t08g01/textures/glass.jpg" />
