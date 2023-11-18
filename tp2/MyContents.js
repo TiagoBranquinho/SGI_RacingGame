@@ -57,6 +57,8 @@ class MyContents {
 
         this.configureMaterials(data.materials);
 
+        this.configureSkyBoxes(data.skyboxes);
+
         this.createNodes(data.nodes.scene.children);
 
     }
@@ -167,6 +169,39 @@ class MyContents {
             materials[material_el.id] = material
         }
         this.app.initMaterials(materials);
+    }
+
+    configureSkyBoxes(data){
+        let skyboxes = {}
+        for (var key in data) {
+            let skybox_el = data[key]
+            let skybox = null
+            if (skybox_el.type === "skybox") {
+                const cubeMapTexture = new THREE.CubeTextureLoader()
+                    .setPath('scenes/t08g01/textures/') // Replace with the path to your skybox textures
+                    .load([skybox_el.right, skybox_el.left, skybox_el.up, skybox_el.down, skybox_el.front, skybox_el.back]);
+
+                const geometry = new THREE.BoxGeometry(
+                    skybox_el.size[0],
+                    skybox_el.size[1],
+                    skybox_el.size[2]
+                );
+                const colorData = skybox_el.emissive;
+                let color = null;
+                if (colorData.isColor) {
+                    color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+                }
+                const material = new THREE.MeshPhongMaterial({
+                    color: color,
+                    emissiveIntensity: skybox_el.intensity,
+                });
+
+                skybox = new THREE.Mesh(geometry, material);
+                skybox.position.set(skybox_el.center[0], skybox_el.center[1], skybox_el.center[2])
+            }
+            skyboxes[skybox_el.id] = skybox
+        }
+        this.app.scene.add(skyboxes);
     }
 
     createNodes(data) {
@@ -308,26 +343,6 @@ class MyContents {
                 //case "model3d":
                 //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
 
-                case "skybox":
-                    const cubeMapTexture = new THREE.CubeTextureLoader()
-                        .setPath('scenes/demo/textures/') // Replace with the path to your skybox textures
-                        .load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png']);
-
-                    geometry = new THREE.BoxGeometry(
-                        representation.width,
-                        representation.height,
-                        representation.depth
-                    );
-
-                    const material = new THREE.MeshBasicMaterial({
-                        envMap: cubeMapTexture,
-                        side: THREE.BackSide // Make the cube visible from the inside DoubleSide//FrontSide
-                    });
-
-                    mesh = new THREE.Mesh(geometry, material);
-
-
-                    return mesh;
 
                 default:
                     console.error("Invalid primitive subtype: " + node.subtype)
