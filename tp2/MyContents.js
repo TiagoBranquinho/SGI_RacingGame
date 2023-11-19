@@ -120,7 +120,7 @@ class MyContents {
                 if (texture_el.isVideo) {
                     const video_html = document.createElement('video');
                     video_html.style.display = 'none';
-                    video_html.id = 'some-video';
+                    video_html.id = texture_el.id;
                     video_html.autoplay = true;
                     video_html.muted = true;
                     video_html.preload = 'auto';
@@ -136,7 +136,7 @@ class MyContents {
 
                     // Append the video element to the document body (or another desired location)
                     document.body.appendChild(video_html);
-                    const video = document.getElementById('some-video');
+                    const video = document.getElementById(texture_el.id);
                     if (video === null) {
                         console.error("Video element not found")
                     }
@@ -146,11 +146,14 @@ class MyContents {
                 }
                 else {
                     texture = new THREE.TextureLoader().load(texture_el.filepath)
-                    texture.anisotropy = texture_el.anisotropy
-                    texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
                     texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
-                    texture.mipmaps = texture_el.mipmaps
                 }
+                texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
+
+                texture.mipmaps = texture_el.mipmaps
+
+                texture.anisotropy = texture_el.anisotropy
+
             }
             textures[texture_el.id] = texture
         }
