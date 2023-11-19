@@ -128,7 +128,7 @@ class MyContents {
                     video_html.height = 264;
                     video_html.loop = true;
                     const source = document.createElement('source');
-                    source.src = 'scenes/t08g01/textures/oceans.mp4';
+                    source.src = texture_el.filepath;
                     source.type = 'video/mp4';
 
                     // Append the source element to the video element
