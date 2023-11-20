@@ -172,6 +172,7 @@
                 <noderef id="bottle2" />
                 <noderef id="bottle3" />
                 <noderef id="bottle4" />
+                <noderef id="test" />
 
                 <pointlight id="chandelier1" enabled="true" 
                     color="0.8 0.8 1.0 1" 
@@ -203,6 +204,19 @@
             <children>   
                 <primitive>          
                     <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive> 
+            </children> 
+        </node>
+
+        <node id="triangle1"> 
+
+            <transforms>
+				<translate value3="0 0 -0.5" />
+            </transforms> 
+
+            <children>   
+                <primitive>          
+                    <triangle xyz1="0 0 0" xyz2="5 0 0" xyz3="5 5 0"/>
                 </primitive> 
             </children> 
         </node>
@@ -445,6 +459,21 @@
                 <noderef id="unitCube" />
             </children> 
         </node>
+
+        <node id="test">
+			<transforms>
+                <translate value3="0 1.5 0" />
+				<scale value3="2.5 3.0 10.0" />
+            </transforms> 
+
+            <materialref id="blackMetal" />
+
+            <children>             
+                <noderef id="triangle1" />
+            </children> 
+        </node>
+
+        
 
         <node id="counterTop">
 			<transforms>

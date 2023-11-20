@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
+import { MyTriangle } from './MyTriangle.js';
 
 /**
  *  This class contains the contents of out application
@@ -250,6 +251,21 @@ class MyContents {
         return new THREE.Mesh(geometry, this.app.materials[materialref])
     }
 
+    /*getPrimitiveMesh(geometry, materialref) {
+        const originalMaterial = this.app.materials[materialref];
+    
+        // Clone the material to avoid modifying the original material
+        const clonedMaterial = originalMaterial.clone();
+    
+        // Check if the material has a texture, and clone it if it does
+        if (clonedMaterial.map) {
+            clonedMaterial.map = clonedMaterial.map.clone();
+        }
+    
+        return new THREE.Mesh(geometry, clonedMaterial);
+    }*/
+
+
     retrieveNode(node, materialref = undefined) {
         if (node.type === "node") {
             let group = new THREE.Group()
@@ -306,16 +322,10 @@ class MyContents {
                     return mesh;
 
 
-                /*case "triangle":
-                    geometry = new THREE.Geometry();
-                    geometry.vertices = [
-                        representation.xyz1,
-                        representation.xyz2,
-                        representation.xyz3,
-                    ];
-                    const face = new THREE.Face3(0, 1, 2);
-                    geometry.faces.push(face);
-                    return this.getPrimitiveMesh(geometry, materialref);*/
+                case "triangle":
+                    geometry = new MyTriangle(representation.xyz1, representation.xyz2, representation.xyz3);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    return mesh; 
 
                 case "cylinder":
                     geometry = new THREE.CylinderGeometry(
