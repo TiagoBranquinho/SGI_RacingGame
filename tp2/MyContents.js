@@ -60,7 +60,7 @@ class MyContents {
 
         this.configureSkyBoxes(data.skyboxes);
 
-        this.createNodes(data.nodes.scene.children);
+        this.createNodes(data.nodes.scene.children, data.nodes.scene.materialIds[0], data.nodes.scene.castShadows, data.nodes.scene.receiveShadows);
 
     }
 
@@ -237,11 +237,12 @@ class MyContents {
         }
     }
 
-    createNodes(data) {
+    createNodes(data, materialref = undefined, castShadow = undefined, receiveShadow = undefined) {
         let nodes = []
         for (var key in data) {
-            nodes.push(this.retrieveNode(data[key]))
+            nodes.push(this.retrieveNode(data[key], materialref, castShadow, receiveShadow))
         }
+        console.log(nodes)
         for (var key in nodes) {
             this.app.scene.add(nodes[key])
         }
@@ -266,11 +267,14 @@ class MyContents {
     }*/
 
 
-    retrieveNode(node, materialref = undefined) {
+    retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false) {
+
+
         if (node.type === "node") {
+            
             let group = new THREE.Group()
             for (var child in node.children) {
-                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0]))
+                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0], node.castShadows === false ? castShadow : node.castShadows, node.receiveShadows === false ? receiveShadow : node.receiveShadows))
             }
             for (var el in node.transformations) {
                 const transformation = node.transformations[el]
@@ -318,6 +322,9 @@ class MyContents {
 
                     mesh = this.getPrimitiveMesh(geometry, materialref);
 
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
                     mesh.position.set((representation.xy2[0] + representation.xy1[0]) / 2, (representation.xy2[1] + representation.xy1[1]) / 2)
                     return mesh;
 
@@ -325,7 +332,9 @@ class MyContents {
                 case "triangle":
                     geometry = new MyTriangle(representation.xyz1, representation.xyz2, representation.xyz3);
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-                    return mesh; 
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+                    return mesh;
 
                 case "cylinder":
                     geometry = new THREE.CylinderGeometry(
@@ -338,7 +347,10 @@ class MyContents {
                         representation.thetastart,
                         representation.thetalength
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+                    return mesh;
 
                 case "sphere":
                     geometry = new THREE.SphereGeometry(
@@ -350,8 +362,10 @@ class MyContents {
                         representation.phistart,
                         representation.philength
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
-
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+                    return mesh;
                 case "nurbs":
                     let controlPoints = []
                     for (let i = 0; i <= representation.degree_u; i++) {
@@ -368,8 +382,10 @@ class MyContents {
                         representation.parts_u,
                         representation.parts_v
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
-                    break;
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+                    return mesh;
 
                 case "box":
                     geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz1[0],
@@ -379,6 +395,8 @@ class MyContents {
                         representation.parts_z);
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     mesh.position.set((representation.xyz2[0] + representation.xyz1[0]) / 2, (representation.xyz2[1] + representation.xyz1[1]) / 2, (representation.xyz2[2] + representation.xyz1[2]) / 2)
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
                     return mesh;
 
 
@@ -393,6 +411,7 @@ class MyContents {
             }
         }
         else if (node.type === "spotlight") {
+            console.log(node)
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -414,6 +433,8 @@ class MyContents {
             return lightGroup;
         }
         else if (node.type === "pointlight") {
+            console.log(node)
+
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {

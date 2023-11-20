@@ -179,7 +179,7 @@
                     intensity="90.0"
                     distance="1000"
                     decay="2.0"
-                    castshadow="false"
+                    castshadow="true"
                     position="8.33 10 10"  
                 />
 
@@ -188,7 +188,7 @@
                     intensity="90.0"
                     distance="1000"
                     decay="2.0"
-                    castshadow="false"
+                    castshadow="true"
                     position="16.66 10 10"  
                 />  
             </children> 
@@ -367,7 +367,7 @@
             </children> 
         </node>
 		
-		<node id="table">
+		<node id="table" castshadows="true" receiveshadows="true">
 			<transforms>
 				<translate value3="0 1.2 0" />
 				<rotate value3="0.0 90.0 0.0" />
@@ -584,7 +584,7 @@
             </children> 
         </node>
 
-        <node id="cup">
+        <node id="cup" castshadows="true">
 			<materialref id="glassApp" />
 			
             <children>             
