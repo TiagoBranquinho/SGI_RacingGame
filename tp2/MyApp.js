@@ -49,7 +49,6 @@ class MyApp  {
         perspective1.position.set(10,10,3)
         this.cameras['default'] = perspective1
 
-        this.setActiveCamera('default')
 
         // Create a renderer with Antialiasing
         this.renderer = new THREE.WebGLRenderer({antialias:true});
@@ -89,6 +88,8 @@ class MyApp  {
     setActiveCamera(cameraName) {   
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
+        this.gui.updateCameraFolder()
+        this.updateCameraIfRequired()
     }
 
     /**
@@ -98,8 +99,8 @@ class MyApp  {
         for (var key in cameras) {
             this.cameraNames.push(key)
         }
-        this.gui.init()
         this.cameras = cameras
+        console.log(this.cameras)
         this.setActiveCamera(activeCameraName)
     }
 

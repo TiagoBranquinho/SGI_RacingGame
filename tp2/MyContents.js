@@ -3,6 +3,7 @@ import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyTriangle } from './MyTriangle.js';
+import { Model3D } from './Model3d.js';
 
 /**
  *  This class contains the contents of out application
@@ -18,7 +19,7 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.reader.open("scenes/t08g01/scene.xml");
+        this.reader.open("scenes/t08g01/demo.xml");
 
 
     }
@@ -99,6 +100,7 @@ class MyContents {
             let camera = null
             if (camera_el.type == "perspective") {
                 camera = new THREE.PerspectiveCamera(camera_el.angle)
+                camera.target = {x: camera_el.target[0], y: camera_el.target[1], z: camera_el.target[2]}
             }
             else if (camera_el.type == "orthogonal") {
                 camera = new THREE.OrthographicCamera(camera_el.left, camera_el.right, camera_el.top, camera_el.bottom)
@@ -400,8 +402,12 @@ class MyContents {
                     return mesh;
 
 
-                //case "model3d":
-                //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
+                case "model3d":
+                geometry = new Model3D(representation.filepath);
+                mesh = this.getPrimitiveMesh(geometry, materialref);
+                mesh.castShadow = castShadow;
+                mesh.receiveShadow = receiveShadow;
+                return mesh;
 
 
                 default:
