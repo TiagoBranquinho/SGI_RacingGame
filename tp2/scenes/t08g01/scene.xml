@@ -3,7 +3,7 @@
 
 	<!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014, FEUP, University of Porto -->
 	
-    <globals background="0 0 0 1" ambient="0.5 0.5 0.5 1" /> 
+    <globals background="0 0 0 1" ambient="1 1 1 1" /> 
 
     <fog color="0.66 0.66 0.66 0.0" near="0.0" far="100.0" />
 
@@ -26,7 +26,18 @@
             top="5" /> 
     </cameras> 
 
-    <skybox size="100 100 100" center="0 0 0" emissive="1.0 1.0 1.0 1.0" intensity="1.0" up="./textures/pine.jpg" down="./textures/pine.jpg" left="./textures/pine.jpg" right="./textures/pine.jpg" front="./textures/pine.jpg" back="./textures/pine.jpg"/>
+    <skybox 
+        size="100 100 100" 
+        center="0 0 0" 
+        emissive="1.0 1.0 1.0 1.0" 
+        intensity="1.0" 
+        up="./textures/pine.jpg" 
+        down="./textures/pine.jpg" 
+        left="./textures/pine.jpg" 
+        right="./textures/pine.jpg" 
+        front="./textures/pine.jpg" 
+        back="./textures/pine.jpg"
+    />
 
     <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas --> 
     <textures>
@@ -40,6 +51,7 @@
         <texture id="bottleTex1" filepath="scenes/t08g01/textures/bottle1.jpg" />
         <texture id="bottleTex2" filepath="scenes/t08g01/textures/bottle2.jpg" />
         <texture id="bottleTex3" filepath="scenes/t08g01/textures/bottle3.jpg" />
+        <texture id="discoballTex" filepath="scenes/t08g01/textures/discoball.gif" isVideo="false" />
     </textures> 
 
     <materials> 
@@ -142,6 +154,16 @@
             texlength_t="1" 
             twosided = "true" />
 
+        <material id="discoballApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="0.9 0.9 0.9 1.0" 
+            specular="0.9 0.9 0.9 1.0" 
+            shininess="0" 
+            textureref="discoballTex" 
+            texlength_s="1" 
+            texlength_t="1" 
+            twosided = "true" />
+
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 
             color="0.1 0.1 0.1 1.0"  
@@ -172,13 +194,14 @@
                 <noderef id="bottle2" />
                 <noderef id="bottle3" />
                 <noderef id="bottle4" />
+                <noderef id="discoBall" />
 
                 <pointlight id="chandelier1" enabled="true" 
                     color="0.8 0.8 1.0 1" 
                     intensity="90.0"
                     distance="1000"
                     decay="2.0"
-                    castshadow="false"
+                    castshadow="true"
                     position="8.33 10 10"  
                 />
 
@@ -187,7 +210,7 @@
                     intensity="90.0"
                     distance="1000"
                     decay="2.0"
-                    castshadow="false"
+                    castshadow="true"
                     position="16.66 10 10"  
                 />  
             </children> 
@@ -730,6 +753,42 @@
             <children>             
                 <noderef id="bottle" />
             </children> 
+        </node>
+        <node id="ball">
+			<transforms>
+                <translate value3="0.0 0.0 0.0" />
+            </transforms>
+
+            <materialref id="discoballApp" />
+			
+            <children>             
+                <primitive>
+                    <sphere radius="0.7" slices="32" stacks="32" />
+                </primitive>
+            </children> 
+        </node>
+        <node id="line">
+			<transforms>
+                <translate value3="0.0 0.7 0.0" />
+            </transforms>
+
+            <materialref id="blackMetal" /> 
+			
+            <children>             
+                <primitive>
+                    <cylinder base="0.03" top="0.03" height="1" slices="32" stacks="32" />
+                </primitive>
+            </children> 
+        </node>
+        <node id="discoBall">
+			<transforms>
+                <translate value3="12.5 7.0 10" />
+            </transforms>
+			
+            <children>             
+                <noderef id="ball" />
+                <noderef id="line" />
+            </children>
         </node>
     </graph> 
 </yaf> 
