@@ -40,15 +40,15 @@
 		<texture id="tapeSupportTex" filepath="scenes/t08g01/textures/lamp.png" />
 		<texture id="pineTex" filepath="scenes/t08g01/textures/pine.png" />
 		<texture id="vaseTex" filepath="scenes/t08g01/textures/vase.png" />
-        <texture id="demo" filepath="scenes/t08g01/textures/demo.png" 
-            mipmap0="scenes/t08g01/textures/demo1024.png"
-            mipmap1="scenes/t08g01/textures/demo512.png"
-            mipmap2="scenes/t08g01/textures/demo256.png"
-            mipmap3="scenes/t08g01/textures/demo128.png"
-            mipmap4="scenes/t08g01/textures/demo64.png"
-            mipmap5="scenes/t08g01/textures/demo32.png"
-            mipmap6="scenes/t08g01/textures/demo16.png"
-            mipmap7="scenes/t08g01/textures/demo8.png"
+        <texture id="demo" filepath="scenes/t08g01/textures/bloodyWall.jpg" mipmaps="true"
+            mipmap0="scenes/t08g01/textures/bloodyWall.1024.jpg"
+            mipmap1="scenes/t08g01/textures/bloodyWall.512.jpg"
+            mipmap2="scenes/t08g01/textures/bloodyWall.256.jpg"
+            mipmap3="scenes/t08g01/textures/bloodyWall.128.jpg"
+            mipmap4="scenes/t08g01/textures/bloodyWall.64.jpg"
+            mipmap5="scenes/t08g01/textures/bloodyWall.32.jpg"
+            mipmap6="scenes/t08g01/textures/bloodyWall.16.jpg"
+            mipmap7="scenes/t08g01/textures/bloodyWall.8.jpg"
         />
     </textures> 
 
@@ -81,7 +81,7 @@
             color="0.8 0.8 0.8 1.0" 
             specular="0 0 0 0" 
             shininess="0" 
-            textureref="rightWallTex" 
+            textureref="demo" 
             texlength_s="15" 
             texlength_t="8"
             twosided = "true" />

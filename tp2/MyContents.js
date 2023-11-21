@@ -101,7 +101,7 @@ class MyContents {
             let camera = null
             if (camera_el.type == "perspective") {
                 camera = new THREE.PerspectiveCamera(camera_el.angle)
-                camera.target = {x: camera_el.target[0], y: camera_el.target[1], z: camera_el.target[2]}
+                camera.target = { x: camera_el.target[0], y: camera_el.target[1], z: camera_el.target[2] }
             }
             else if (camera_el.type == "orthogonal") {
                 camera = new THREE.OrthographicCamera(camera_el.left, camera_el.right, camera_el.top, camera_el.bottom)
@@ -145,17 +145,25 @@ class MyContents {
                         console.error("Video element not found")
                     }
                     texture = new THREE.VideoTexture(video);
-                    console.log(texture)
                     texture.colorSpace = THREE.SRGBColorSpace;
                 }
                 else {
-                    texture = new THREE.TextureLoader().load(texture_el.filepath)
-                    texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
+                    texture = new THREE.TextureLoader().load(texture_el.filepath);
+                    if (texture_el.mipmaps) {
+                        console.log("mipmaps")
+                        console.log(texture_el)
+                        texture.generateMipMaps = false
+
+                        for (let i = 0; i < 8; i++) {
+                            this.loadMipmap(texture, i, texture_el[`mipmap${i}`]);
+                        }
+                    }
+                    else {
+                        texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
+                        texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
+                    }
+
                 }
-                texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
-
-                texture.mipmaps = texture_el.mipmaps
-
                 texture.anisotropy = texture_el.anisotropy
 
             }
@@ -269,14 +277,14 @@ class MyContents {
     }*/
 
 
-    retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false, name="") {
+    retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false, name = "") {
 
 
         if (node.type === "node") {
             let group = new THREE.Group()
             group.name = name
             for (var child in node.children) {
-                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0], node.castShadows === false ? castShadow : node.castShadows, node.receiveShadows === false ? receiveShadow : node.receiveShadows, name + '&'  + node.id))
+                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0], node.castShadows === false ? castShadow : node.castShadows, node.receiveShadows === false ? receiveShadow : node.receiveShadows, name + '&' + node.id))
             }
             for (var el in node.transformations) {
                 const transformation = node.transformations[el]
@@ -409,12 +417,12 @@ class MyContents {
 
 
                 case "model3d":
-                geometry = new Model3D(representation.filepath);
-                mesh = this.getPrimitiveMesh(geometry, materialref);
-                mesh.castShadow = castShadow;
-                mesh.receiveShadow = receiveShadow;
+                    geometry = new Model3D(representation.filepath);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
 
-                return mesh;
+                    return mesh;
 
 
                 default:
@@ -496,6 +504,34 @@ class MyContents {
             this.app.lights.push(lightGroup);
             return lightGroup;
         }
+    }
+
+    loadMipmap(parentTexture, level, path) {
+        // load texture. On loaded call the function to create the mipmap for the specified level 
+        new THREE.TextureLoader().load(path,
+            function (mipmapTexture)  // onLoad callback
+            {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+                ctx.scale(1, 1);
+
+                // const fontSize = 48
+                const img = mipmapTexture.image
+                canvas.width = img.width;
+                canvas.height = img.height
+
+                // first draw the image
+                ctx.drawImage(img, 0, 0)
+
+                // set the mipmap image in the parent texture in the appropriate level
+                parentTexture.mipmaps[level] = canvas
+                parentTexture.needsUpdate = true
+            },
+            undefined, // onProgress callback currently not supported
+            function (err) {
+                console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
+            }
+        )
     }
 
     update() {
