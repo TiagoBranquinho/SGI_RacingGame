@@ -97,7 +97,7 @@
             texlength_t="8" 
             twosided = "true"
             bumpref="darkBlueWallBump"
-            bumpscale="0.005" />
+            bumpscale="0.02" />
 
         <material id="barFloorApp" 
             emissive="0.0 0.0 0.0 1" 
