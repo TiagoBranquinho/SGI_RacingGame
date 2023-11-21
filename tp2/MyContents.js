@@ -53,8 +53,6 @@ class MyContents {
 
         this.configureFog(data.fog);
 
-        this.configureCameras(data.cameras, data.activeCameraId);
-
         this.configureTextures(data.textures);
 
         this.configureMaterials(data.materials);
@@ -62,6 +60,9 @@ class MyContents {
         this.configureSkyBoxes(data.skyboxes);
 
         this.createNodes(data.nodes.scene.children, data.nodes.scene.materialIds[0], data.nodes.scene.castShadows, data.nodes.scene.receiveShadows);
+
+        this.configureCameras(data.cameras, data.activeCameraId);
+
 
     }
 
@@ -244,7 +245,6 @@ class MyContents {
         for (var key in data) {
             nodes.push(this.retrieveNode(data[key], materialref, castShadow, receiveShadow))
         }
-        console.log(nodes)
         for (var key in nodes) {
             this.app.scene.add(nodes[key])
         }
@@ -269,14 +269,14 @@ class MyContents {
     }*/
 
 
-    retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false) {
+    retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false, name="") {
 
 
         if (node.type === "node") {
-            
             let group = new THREE.Group()
+            group.name = name
             for (var child in node.children) {
-                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0], node.castShadows === false ? castShadow : node.castShadows, node.receiveShadows === false ? receiveShadow : node.receiveShadows))
+                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0], node.castShadows === false ? castShadow : node.castShadows, node.receiveShadows === false ? receiveShadow : node.receiveShadows, name + '&'  + node.id))
             }
             for (var el in node.transformations) {
                 const transformation = node.transformations[el]
@@ -328,6 +328,7 @@ class MyContents {
                     mesh.receiveShadow = receiveShadow;
 
                     mesh.position.set((representation.xy2[0] + representation.xy1[0]) / 2, (representation.xy2[1] + representation.xy1[1]) / 2)
+
                     return mesh;
 
 
@@ -336,6 +337,7 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
+
                     return mesh;
 
                 case "cylinder":
@@ -352,6 +354,7 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
+
                     return mesh;
 
                 case "sphere":
@@ -367,6 +370,7 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
+
                     return mesh;
                 case "nurbs":
                     let controlPoints = []
@@ -387,6 +391,7 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
+
                     return mesh;
 
                 case "box":
@@ -399,6 +404,7 @@ class MyContents {
                     mesh.position.set((representation.xyz2[0] + representation.xyz1[0]) / 2, (representation.xyz2[1] + representation.xyz1[1]) / 2, (representation.xyz2[2] + representation.xyz1[2]) / 2)
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
+
                     return mesh;
 
 
@@ -407,6 +413,7 @@ class MyContents {
                 mesh = this.getPrimitiveMesh(geometry, materialref);
                 mesh.castShadow = castShadow;
                 mesh.receiveShadow = receiveShadow;
+
                 return mesh;
 
 
@@ -417,7 +424,7 @@ class MyContents {
             }
         }
         else if (node.type === "spotlight") {
-            console.log(node)
+            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -433,14 +440,15 @@ class MyContents {
             light.shadow.mapSize.width = node.shadowmapsize;
             light.shadow.mapSize.height = node.shadowmapsize;
             light.shadow.camera.far = node.shadowfar;
+            light.name = node.id;
             lightGroup.add(light);
-            const helper = new THREE.SpotLightHelper(light);
+            let helper = new THREE.SpotLightHelper(light);
             lightGroup.add(helper);
+            this.app.lights.push(lightGroup);
             return lightGroup;
         }
         else if (node.type === "pointlight") {
-            console.log(node)
-
+            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -455,12 +463,15 @@ class MyContents {
             light.shadow.mapSize.width = node.shadowmapsize;
             light.shadow.mapSize.height = node.shadowmapsize;
             light.shadow.camera.far = node.shadowfar;
+            light.name = node.id;
             lightGroup.add(light);
-            const helper = new THREE.PointLightHelper(light);
+            let helper = new THREE.PointLightHelper(light);
             lightGroup.add(helper);
+            this.app.lights.push(lightGroup);
             return lightGroup;
         }
         else if (node.type === "directionallight") {
+            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -478,9 +489,11 @@ class MyContents {
             light.shadow.mapSize.width = node.shadowmapsize;
             light.shadow.mapSize.height = node.shadowmapsize;
             light.shadow.camera.far = node.shadowfar;
+            light.name = node.id;
             lightGroup.add(light);
-            const helper = new THREE.DirectionalLightHelper(light);
+            let helper = new THREE.DirectionalLightHelper(light);
             lightGroup.add(helper);
+            this.app.lights.push(lightGroup);
             return lightGroup;
         }
     }

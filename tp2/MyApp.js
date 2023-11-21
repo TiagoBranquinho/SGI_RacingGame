@@ -29,7 +29,8 @@ class MyApp  {
         this.gui = null
         this.axis = null
         this.contents = null
-        this.cameraNames = []
+        this.cameraNames = [];
+        this.lights = [];
     }
     /**
      * initializes the application
@@ -88,8 +89,8 @@ class MyApp  {
     setActiveCamera(cameraName) {   
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
-        this.gui.updateCameraFolder()
         this.updateCameraIfRequired()
+        this.gui.reset()
     }
 
     /**
