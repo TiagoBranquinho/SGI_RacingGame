@@ -149,7 +149,7 @@ class MyContents {
                 }
                 else {
                     texture = new THREE.TextureLoader().load(texture_el.filepath);
-                    if (texture_el.mipmaps) {
+                    if (texture_el.mipmaps === false) {
                         console.log("mipmaps")
                         console.log(texture_el)
                         texture.generateMipMaps = false
@@ -185,7 +185,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                const bumpMap = null
+                
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
@@ -193,6 +193,8 @@ class MyContents {
                 //missing texlenght_t and s
                 const texlength_t = 1 //material_el.texlength_t
                 const texlength_s = 1 //material_el.texlength_s
+
+                let bumpMap = material_el.bumpref !== null ? this.app.textures[material_el.bumpref] : null
 
                 material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe })
                 if (material_el.textureref !== null) {

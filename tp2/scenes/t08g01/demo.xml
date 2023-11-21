@@ -33,6 +33,7 @@
     <textures>        
         <texture id="leftWallTex" filepath="scenes/t08g01/textures/scratchedWall.jpg" />
 		<texture id="rightWallTex" filepath="scenes/t08g01/textures/bloodyWall.jpg" />
+        <texture id="bump16k" filepath="scenes/t08g01/textures/elev_bump_16k.jpg" />
 		<texture id="floorTex" filepath="scenes/t08g01/textures/test1.jpg" />
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
 		<texture id="crimeWeaponTex" filepath="scenes/t08g01/textures/bloodyPrints.jpg" />
@@ -40,7 +41,7 @@
 		<texture id="tapeSupportTex" filepath="scenes/t08g01/textures/lamp.png" />
 		<texture id="pineTex" filepath="scenes/t08g01/textures/pine.png" />
 		<texture id="vaseTex" filepath="scenes/t08g01/textures/vase.png" />
-        <texture id="demo" filepath="scenes/t08g01/textures/bloodyWall.jpg" mipmaps="true"
+        <texture id="demo" filepath="scenes/t08g01/textures/bloodyWall.jpg" mipmaps="false"
             mipmap0="scenes/t08g01/textures/bloodyWall.1024.jpg"
             mipmap1="scenes/t08g01/textures/bloodyWall.512.jpg"
             mipmap2="scenes/t08g01/textures/bloodyWall.256.jpg"
@@ -72,8 +73,8 @@
             texlength_s="15" 
             texlength_t="8" 
             twosided = "true"
-            bumpref = "demo"
-            bumpscale = "0.5"
+            bumpref = "bump16k"
+            bumpscale = "3"
             specularref = "demo" />
 		
 		<material id="rightWallApp" 
