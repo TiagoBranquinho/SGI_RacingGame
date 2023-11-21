@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
+import { MyTriangle } from './MyTriangle.js';
+import { Model3D } from './Model3d.js';
 
 /**
  *  This class contains the contents of out application
@@ -18,7 +20,7 @@ class MyContents {
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
         this.reader.open("scenes/t08g01/scene.xml");
-        
+
 
     }
 
@@ -51,13 +53,16 @@ class MyContents {
 
         this.configureFog(data.fog);
 
-        this.configureCameras(data.cameras, data.activeCameraId);
-
         this.configureTextures(data.textures);
 
         this.configureMaterials(data.materials);
 
-        this.createNodes(data.nodes.scene.children);
+        this.configureSkyBoxes(data.skyboxes);
+
+        this.createNodes(data.nodes.scene.children, data.nodes.scene.materialIds[0], data.nodes.scene.castShadows, data.nodes.scene.receiveShadows);
+
+        this.configureCameras(data.cameras, data.activeCameraId);
+
 
     }
 
@@ -96,6 +101,7 @@ class MyContents {
             let camera = null
             if (camera_el.type == "perspective") {
                 camera = new THREE.PerspectiveCamera(camera_el.angle)
+                camera.target = { x: camera_el.target[0], y: camera_el.target[1], z: camera_el.target[2] }
             }
             else if (camera_el.type == "orthogonal") {
                 camera = new THREE.OrthographicCamera(camera_el.left, camera_el.right, camera_el.top, camera_el.bottom)
@@ -116,15 +122,50 @@ class MyContents {
             let texture = null
             if (texture_el.type === "texture") {
                 if (texture_el.isVideo) {
-                    texture = new THREE.VideoTexture(texture_el.filepath)
+                    const video_html = document.createElement('video');
+                    video_html.style.display = 'none';
+                    video_html.id = texture_el.id;
+                    video_html.autoplay = true;
+                    video_html.muted = true;
+                    video_html.preload = 'auto';
+                    video_html.width = 640;
+                    video_html.height = 264;
+                    video_html.loop = true;
+                    const source = document.createElement('source');
+                    source.src = texture_el.filepath;
+                    source.type = 'video/mp4';
+
+                    // Append the source element to the video element
+                    video_html.appendChild(source);
+
+                    // Append the video element to the document body (or another desired location)
+                    document.body.appendChild(video_html);
+                    const video = document.getElementById(texture_el.id);
+                    if (video === null) {
+                        console.error("Video element not found")
+                    }
+                    texture = new THREE.VideoTexture(video);
+                    texture.colorSpace = THREE.SRGBColorSpace;
                 }
                 else {
-                    texture = new THREE.TextureLoader().load(texture_el.filepath)
+                    texture = new THREE.TextureLoader().load(texture_el.filepath);
+                    if (texture_el.mipmaps === false) {
+                        console.log("mipmaps")
+                        console.log(texture_el)
+                        texture.generateMipMaps = false
+
+                        for (let i = 0; i < 8; i++) {
+                            this.loadMipmap(texture, i, texture_el[`mipmap${i}`]);
+                        }
+                    }
+                    else {
+                        texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
+                        texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
+                    }
+
                 }
                 texture.anisotropy = texture_el.anisotropy
-                //texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
-                //texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
-                texture.mipmaps = texture_el.mipmaps
+
             }
             textures[texture_el.id] = texture
         }
@@ -144,7 +185,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                const bumpMap = null
+                
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
@@ -152,6 +193,8 @@ class MyContents {
                 //missing texlenght_t and s
                 const texlength_t = 1 //material_el.texlength_t
                 const texlength_s = 1 //material_el.texlength_s
+
+                let bumpMap = material_el.bumpref !== null ? this.app.textures[material_el.bumpref] : null
 
                 material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe })
                 if (material_el.textureref !== null) {
@@ -169,10 +212,48 @@ class MyContents {
         this.app.initMaterials(materials);
     }
 
-    createNodes(data) {
+    configureSkyBoxes(data) {
+        let skyboxes = {}
+        for (var key in data) {
+            let skybox_el = data[key]
+            let skybox = null
+            if (skybox_el.type === "skybox") {
+                const cubeMapTexture = new THREE.CubeTextureLoader()
+                    .setPath('scenes/t08g01/textures/') // Replace with the path to your skybox textures
+                    .load([skybox_el.right, skybox_el.left, skybox_el.up, skybox_el.down, skybox_el.front, skybox_el.back]);
+
+                const geometry = new THREE.BoxGeometry(
+                    skybox_el.size[0],
+                    skybox_el.size[1],
+                    skybox_el.size[2]
+                );
+                const colorData = skybox_el.emissive;
+                let color = null;
+                if (colorData.isColor) {
+                    color = new THREE.Color(colorData.r, colorData.g, colorData.b)
+                }
+                const material = new THREE.MeshPhongMaterial({
+                    color: color,
+                    emissiveIntensity: skybox_el.intensity,
+                    envMap: cubeMapTexture,
+                    side: THREE.BackSide
+                });
+
+                skybox = new THREE.Mesh(geometry, material);
+                skybox.position.set(skybox_el.center[0], skybox_el.center[1], skybox_el.center[2])
+            }
+            skyboxes[skybox_el.id] = skybox
+
+        }
+        for (var key in skyboxes) {
+            this.app.scene.add(skyboxes[key])
+        }
+    }
+
+    createNodes(data, materialref = undefined, castShadow = undefined, receiveShadow = undefined) {
         let nodes = []
         for (var key in data) {
-            nodes.push(this.retrieveNode(data[key]))
+            nodes.push(this.retrieveNode(data[key], materialref, castShadow, receiveShadow))
         }
         for (var key in nodes) {
             this.app.scene.add(nodes[key])
@@ -183,11 +264,29 @@ class MyContents {
         return new THREE.Mesh(geometry, this.app.materials[materialref])
     }
 
-    retrieveNode(node, materialref = undefined) {
+    /*getPrimitiveMesh(geometry, materialref) {
+        const originalMaterial = this.app.materials[materialref];
+    
+        // Clone the material to avoid modifying the original material
+        const clonedMaterial = originalMaterial.clone();
+    
+        // Check if the material has a texture, and clone it if it does
+        if (clonedMaterial.map) {
+            clonedMaterial.map = clonedMaterial.map.clone();
+        }
+    
+        return new THREE.Mesh(geometry, clonedMaterial);
+    }*/
+
+
+    retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false, name = "") {
+
+
         if (node.type === "node") {
             let group = new THREE.Group()
+            group.name = name
             for (var child in node.children) {
-                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0]))
+                group.add(this.retrieveNode(node.children[child], node.materialIds[0] === undefined ? materialref : node.materialIds[0], node.castShadows === false ? castShadow : node.castShadows, node.receiveShadows === false ? receiveShadow : node.receiveShadows, name + '&' + node.id))
             }
             for (var el in node.transformations) {
                 const transformation = node.transformations[el]
@@ -235,20 +334,21 @@ class MyContents {
 
                     mesh = this.getPrimitiveMesh(geometry, materialref);
 
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
                     mesh.position.set((representation.xy2[0] + representation.xy1[0]) / 2, (representation.xy2[1] + representation.xy1[1]) / 2)
+
                     return mesh;
 
 
-                /*case "triangle":
-                    geometry = new THREE.Geometry();
-                    geometry.vertices = [
-                        representation.xyz1,
-                        representation.xyz2,
-                        representation.xyz3,
-                    ];
-                    const face = new THREE.Face3(0, 1, 2);
-                    geometry.faces.push(face);
-                    return this.getPrimitiveMesh(geometry, materialref);*/
+                case "triangle":
+                    geometry = new MyTriangle(representation.xyz1, representation.xyz2, representation.xyz3);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
+                    return mesh;
 
                 case "cylinder":
                     geometry = new THREE.CylinderGeometry(
@@ -261,7 +361,11 @@ class MyContents {
                         representation.thetastart,
                         representation.thetalength
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
+                    return mesh;
 
                 case "sphere":
                     geometry = new THREE.SphereGeometry(
@@ -273,8 +377,11 @@ class MyContents {
                         representation.phistart,
                         representation.philength
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
 
+                    return mesh;
                 case "nurbs":
                     let controlPoints = []
                     for (let i = 0; i <= representation.degree_u; i++) {
@@ -291,8 +398,11 @@ class MyContents {
                         representation.parts_u,
                         representation.parts_v
                     );
-                    return this.getPrimitiveMesh(geometry, materialref);
-                    break;
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
+                    return mesh;
 
                 case "box":
                     geometry = new THREE.BoxGeometry(representation.xyz2[0] - representation.xyz1[0],
@@ -302,32 +412,20 @@ class MyContents {
                         representation.parts_z);
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     mesh.position.set((representation.xyz2[0] + representation.xyz1[0]) / 2, (representation.xyz2[1] + representation.xyz1[1]) / 2, (representation.xyz2[2] + representation.xyz1[2]) / 2)
-                    return mesh;
-
-
-                //case "model3d":
-                //return new THREE.Mesh(new THREE.BoxGeometry(node.x1 - node.x0, node.y1 - node.y0, node.z1 - node.z0), this.app.materials[node.materialref])
-
-                case "skybox":
-                    const cubeMapTexture = new THREE.CubeTextureLoader()
-                        .setPath('scenes/demo/textures/') // Replace with the path to your skybox textures
-                        .load(['right.png', 'left.png', 'top.png', 'bottom.png', 'front.png', 'back.png']);
-
-                    geometry = new THREE.BoxGeometry(
-                        representation.width,
-                        representation.height,
-                        representation.depth
-                    );
-
-                    const material = new THREE.MeshBasicMaterial({
-                        envMap: cubeMapTexture,
-                        side: THREE.BackSide // Make the cube visible from the inside DoubleSide//FrontSide
-                    });
-
-                    mesh = new THREE.Mesh(geometry, material);
-
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
 
                     return mesh;
+
+
+                case "model3d":
+                    geometry = new Model3D(representation.filepath);
+                    mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
+                    return mesh;
+
 
                 default:
                     console.error("Invalid primitive subtype: " + node.subtype)
@@ -336,6 +434,7 @@ class MyContents {
             }
         }
         else if (node.type === "spotlight") {
+            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -351,12 +450,15 @@ class MyContents {
             light.shadow.mapSize.width = node.shadowmapsize;
             light.shadow.mapSize.height = node.shadowmapsize;
             light.shadow.camera.far = node.shadowfar;
+            light.name = node.id;
             lightGroup.add(light);
-            const helper = new THREE.SpotLightHelper(light);
+            let helper = new THREE.SpotLightHelper(light);
             lightGroup.add(helper);
+            this.app.lights.push(lightGroup);
             return lightGroup;
         }
         else if (node.type === "pointlight") {
+            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -371,12 +473,15 @@ class MyContents {
             light.shadow.mapSize.width = node.shadowmapsize;
             light.shadow.mapSize.height = node.shadowmapsize;
             light.shadow.camera.far = node.shadowfar;
+            light.name = node.id;
             lightGroup.add(light);
-            const helper = new THREE.PointLightHelper(light);
+            let helper = new THREE.PointLightHelper(light);
             lightGroup.add(helper);
+            this.app.lights.push(lightGroup);
             return lightGroup;
         }
         else if (node.type === "directionallight") {
+            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -394,11 +499,41 @@ class MyContents {
             light.shadow.mapSize.width = node.shadowmapsize;
             light.shadow.mapSize.height = node.shadowmapsize;
             light.shadow.camera.far = node.shadowfar;
+            light.name = node.id;
             lightGroup.add(light);
-            const helper = new THREE.DirectionalLightHelper(light);
+            let helper = new THREE.DirectionalLightHelper(light);
             lightGroup.add(helper);
+            this.app.lights.push(lightGroup);
             return lightGroup;
         }
+    }
+
+    loadMipmap(parentTexture, level, path) {
+        // load texture. On loaded call the function to create the mipmap for the specified level 
+        new THREE.TextureLoader().load(path,
+            function (mipmapTexture)  // onLoad callback
+            {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+                ctx.scale(1, 1);
+
+                // const fontSize = 48
+                const img = mipmapTexture.image
+                canvas.width = img.width;
+                canvas.height = img.height
+
+                // first draw the image
+                ctx.drawImage(img, 0, 0)
+
+                // set the mipmap image in the parent texture in the appropriate level
+                parentTexture.mipmaps[level] = canvas
+                parentTexture.needsUpdate = true
+            },
+            undefined, // onProgress callback currently not supported
+            function (err) {
+                console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
+            }
+        )
     }
 
     update() {

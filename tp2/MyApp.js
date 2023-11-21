@@ -29,7 +29,8 @@ class MyApp  {
         this.gui = null
         this.axis = null
         this.contents = null
-        this.cameraNames = []
+        this.cameraNames = [];
+        this.lights = [];
     }
     /**
      * initializes the application
@@ -49,12 +50,13 @@ class MyApp  {
         perspective1.position.set(10,10,3)
         this.cameras['default'] = perspective1
 
-        this.setActiveCamera('default')
 
         // Create a renderer with Antialiasing
         this.renderer = new THREE.WebGLRenderer({antialias:true});
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setClearColor("#000000");
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // Configure renderer size
         this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -87,6 +89,8 @@ class MyApp  {
     setActiveCamera(cameraName) {   
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
+        this.updateCameraIfRequired()
+        this.gui.reset()
     }
 
     /**
@@ -96,8 +100,8 @@ class MyApp  {
         for (var key in cameras) {
             this.cameraNames.push(key)
         }
-        this.gui.init()
         this.cameras = cameras
+        console.log(this.cameras)
         this.setActiveCamera(activeCameraName)
     }
 

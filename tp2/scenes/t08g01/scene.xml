@@ -3,9 +3,9 @@
 
 	<!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014, FEUP, University of Porto -->
 	
-    <globals background="0 0 0 1" ambient="1 1 1 1" /> 
+    <globals background="0 0 0 1" ambient="0 0 0 1" /> 
 
-    <fog color="0.66 0.66 0.66 0.0" near="0.0" far="100.0" />
+    <fog color="0.66 0.66 0.66 1.0" near="0.0" far="300.0" />
 
     <cameras initial="cam1" > 
         <perspective id="cam1" 
@@ -26,33 +26,42 @@
             top="5" /> 
     </cameras> 
 
-    <skybox 
-        size="100 100 100" 
+    <skybox size="100 100 100" 
         center="0 0 0" 
         emissive="1.0 1.0 1.0 1.0" 
         intensity="1.0" 
-        up="./textures/pine.jpg" 
-        down="./textures/pine.jpg" 
-        left="./textures/pine.jpg" 
-        right="./textures/pine.jpg" 
-        front="./textures/pine.jpg" 
-        back="./textures/pine.jpg"
-    />
+        up="./nightSky.jpg"
+        down="./nightSky.jpg"
+        left="./nightSky.jpg"
+        right="./nightSky.jpg"
+        front="./nightSky.jpg"
+        back="./nightSky.jpg"/>
 
     <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas --> 
     <textures>
         <texture id="barWallTex" filepath="scenes/t08g01/textures/barWall.avif" />
+        <texture id="barWallBump" filepath="scenes/t08g01/textures/barWallBump.png" />
         <texture id="darkBlueWallTex" filepath="scenes/t08g01/textures/darkBlueWall.jpg" />
-        <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg" />        
+        <texture id="darkBlueWallBump" filepath="scenes/t08g01/textures/darkBlueWallBump.png" />
+        <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg"/>        
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
-        <texture id="targetTex" filepath="scenes/t08g01/textures/target.webp" />
+        <texture id="targetTex" filepath="scenes/t08g01/textures/target.webp" 
+            mipmap0="scenes/t08g01/textures/target.1024.webp"
+            mipmap1="scenes/t08g01/textures/target.512.webp"
+            mipmap2="scenes/t08g01/textures/target.256.webp"
+            mipmap3="scenes/t08g01/textures/target.128.webp"
+            mipmap4="scenes/t08g01/textures/target.64.webp"
+            mipmap5="scenes/t08g01/textures/target.32.webp"
+            mipmap6="scenes/t08g01/textures/target.16.webp"
+            mipmap7="scenes/t08g01/textures/target.8.webp"/>
+        <texture id="targetBump" filepath="scenes/t08g01/textures/targetBump.png" />
         <texture id="glassTex" filepath="scenes/t08g01/textures/glass.jpg" />
         <texture id="bottleTex" filepath="scenes/t08g01/textures/bottle.jpg" />
         <texture id="bottleTex1" filepath="scenes/t08g01/textures/bottle1.jpg" />
         <texture id="bottleTex2" filepath="scenes/t08g01/textures/bottle2.jpg" />
         <texture id="bottleTex3" filepath="scenes/t08g01/textures/bottle3.jpg" />
-        <texture id="discoballTex" filepath="scenes/t08g01/textures/discoball.gif" isVideo="false" />
-    </textures> 
+        <texture id="discoballTex" filepath="scenes/t08g01/textures/discoball.mp4" isVideo="true" />
+    </textures>
 
     <materials> 
 
@@ -74,7 +83,9 @@
             textureref="barWallTex" 
             texlength_s="20" 
             texlength_t="8" 
-            twosided = "true" />
+            twosided = "true"
+            bumpref="barWallBump"
+            bumpscale="0.1" />
 
         <material id="darkBlueWallApp" 
             emissive="0.0 0.0 0.0 1" 
@@ -84,7 +95,9 @@
             textureref="darkBlueWallTex" 
             texlength_s="25" 
             texlength_t="8" 
-            twosided = "true" />
+            twosided = "true"
+            bumpref="darkBlueWallBump"
+            bumpscale="0.005" />
 
         <material id="barFloorApp" 
             emissive="0.0 0.0 0.0 1" 
@@ -103,7 +116,9 @@
             shininess="0" 
             textureref="targetTex" 
             texlength_s="2" 
-            texlength_t="2" />
+            texlength_t="2" 
+            bumpref="targetBump"
+            bumpscale="2" />
 
         <material id="glassApp" 
             emissive="0.0 0.0 0.0 1" 
@@ -162,7 +177,7 @@
             textureref="discoballTex" 
             texlength_s="1" 
             texlength_t="1" 
-            twosided = "true" />
+            wireframe='true' />
 
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 
@@ -173,8 +188,14 @@
     </materials> 
 
     <graph rootid="scene"> 
+
+        <lod id="lodDemo">
+            <noderef id="sceneDist0" mindist="0"/>
+            <noderef id="sceneDist60" mindist="60"/>
+            <noderef id="sceneDist100" mindist="100"/>
+        </lod>
 		
-		<node id="scene"> 
+		<node id="sceneDist0"> 
             <children> 
                 <noderef id="leftWall" /> 
 				<noderef id="rightWall" />
@@ -194,7 +215,49 @@
                 <noderef id="bottle2" />
                 <noderef id="bottle3" />
                 <noderef id="bottle4" />
-                <noderef id="discoBall" />
+                <noderef id="discoBall" />  
+            </children> 
+        </node>
+
+        <node id="sceneDist60"> 
+            <children> 
+                <noderef id="leftWall" /> 
+				<noderef id="rightWall" />
+                <noderef id="backWall" /> 
+				<noderef id="frontWall" />  
+				<noderef id="floor" /> 
+				<noderef id="table1" /> 
+                <noderef id="bench1" />
+                <noderef id="bench2" />
+                <noderef id="counter" />
+                <noderef id="target" />
+                <noderef id="shelf1" />
+                <noderef id="bottle1Dist60" />
+                <noderef id="bottle2Dist60" />
+                <noderef id="bottle3Dist60" />
+                <noderef id="bottle4Dist60" />
+                <noderef id="discoBall" /> 
+            </children> 
+        </node>
+
+        <node id="sceneDist100"> 
+            <children> 
+                <noderef id="leftWall" /> 
+				<noderef id="rightWall" />
+                <noderef id="backWall" /> 
+				<noderef id="frontWall" />  
+				<noderef id="floor" /> 
+				<noderef id="table1" /> 
+                <noderef id="bench1" />
+                <noderef id="bench2" />
+                <noderef id="counter" />
+                <noderef id="shelf1" />
+            </children> 
+        </node>
+
+        <node id="scene"> 
+            <children> 
+                <lodref id="lodDemo"/>
 
                 <pointlight id="chandelier1" enabled="true" 
                     color="0.8 0.8 1.0 1" 
@@ -212,6 +275,18 @@
                     decay="2.0"
                     castshadow="true"
                     position="16.66 10 10"  
+                />
+
+                <spotlight id="light4" enabled="true"
+                           color="0 0 0.78 1"
+                           intensity="10.0"
+                           distance="100"
+                           decay="1.0"
+                           castshadow="true"
+                           position="0 4 10"
+                           target="12.5 4 10"
+                           penumbra="0.8"
+                           angle="1.0471975511965976"
                 />  
             </children> 
         </node>
@@ -226,6 +301,19 @@
             <children>   
                 <primitive>          
                     <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive> 
+            </children> 
+        </node>
+
+        <node id="triangle1"> 
+
+            <transforms>
+				<translate value3="0 0 -0.5" />
+            </transforms> 
+
+            <children>   
+                <primitive>          
+                    <triangle xyz1="0 0 0" xyz2="5 0 0" xyz3="5 5 0"/>
                 </primitive> 
             </children> 
         </node>
@@ -394,7 +482,7 @@
             </children> 
         </node>
 
-        <node id="table1">
+        <node id="table1" castshadows="true" receiveshadows="true">
 			<transforms>
 				<translate value3="20 0 16.99" />
             </transforms> 
@@ -435,9 +523,9 @@
             </children> 
         </node>
 
-        <node id="bench1"> 
+        <node id="bench1" castshadows="true" receiveshadows="true"> 
 			<transforms>
-                <translate value3="22.49 0 13.99" />
+                <translate value3="22.49 0.01 13.99" />
             </transforms>
 
             <children>             
@@ -445,9 +533,9 @@
             </children> 
         </node>
 
-        <node id="bench2">
+        <node id="bench2" castshadows="true" receiveshadows="true">
             <transforms>
-                <translate value3="17.49 0 19.99" />
+                <translate value3="17.49 0.01 19.99" />
                 <rotate value3="0.0 180.0 0.0" />
             </transforms> 
 			
@@ -469,6 +557,21 @@
             </children> 
         </node>
 
+        <node id="test">
+			<transforms>
+                <translate value3="0 1.5 0" />
+				<scale value3="2.5 3.0 10.0" />
+            </transforms> 
+
+            <materialref id="blackMetal" />
+
+            <children>             
+                <noderef id="triangle1" />
+            </children> 
+        </node>
+
+        
+
         <node id="counterTop">
 			<transforms>
                 <translate value3="0.0 3.5 0.0" />
@@ -482,9 +585,9 @@
             </children> 
         </node>
 
-        <node id="counter">
+        <node id="counter" castshadows="true" receiveshadows="true">
             <transforms>
-                <translate value3="6.0 0.0 5.25" />
+                <translate value3="6.0 0.01 5.26" />
             </transforms>  
 
             <children>             
@@ -493,7 +596,7 @@
             </children> 
         </node>
 		
-		<node id="floor">
+		<node id="floor" receiveshadows="true">
 			<transforms>
 				<translate value3="0 0 20" />
 				<rotate value3="-90 0.0 0.0" />
@@ -508,7 +611,7 @@
             </children> 
         </node>
 		
-		<node id="leftWall">
+		<node id="leftWall" receiveshadows="true">
 			<transforms>
 				<translate value3="0 0 20" />
 				<rotate value3="0.0 90 0.0" />
@@ -523,7 +626,7 @@
             </children> 
         </node>
 		
-		<node id="backWall">
+		<node id="backWall" receiveshadows="true">
 			<materialref id="darkBlueWallApp" />
 			
             <children>             
@@ -533,7 +636,7 @@
             </children> 
         </node>
 
-        <node id="rightWall">
+        <node id="rightWall" receiveshadows="true">
 			<transforms>
 				<translate value3="25 0 0" />
 				<rotate value3="0.0 -90 0.0" />
@@ -548,7 +651,7 @@
             </children> 
         </node>
 
-        <node id="frontWall">
+        <node id="frontWall" receiveshadows="true">
 			<transforms>
 				<translate value3="0 0 20" />
 				<rotate value3="0.0 0 0.0" />
@@ -563,9 +666,9 @@
             </children> 
         </node>
 
-        <node id="target">
+        <node id="target" receiveshadows="true">
             <transforms>
-				<translate value3="16 5 0.05" />
+				<translate value3="16 5 0.06" />
 				<rotate value3="90.0 100.0 0.0" />
             </transforms> 
 
@@ -588,7 +691,7 @@
             </children> 
         </node>
 
-        <node id="cup1">
+        <node id="cup1" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="7 4.4 4.9" />
             </transforms>
@@ -598,7 +701,7 @@
             </children> 
         </node>
 
-        <node id="cup2">
+        <node id="cup2" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="6.4 4.4 2" />
             </transforms>
@@ -608,7 +711,7 @@
             </children> 
         </node>
 
-        <node id="cup3">
+        <node id="cup3" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="6.5 4.4 8" />
             </transforms>
@@ -631,7 +734,7 @@
             </children> 
         </node>
 
-        <node id="shelf1">
+        <node id="shelf1" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="0.76 6.0 5.26" />
             </transforms>
@@ -710,7 +813,21 @@
             </children>     
         </node>
 
-        <node id="bottle1">
+        <node id="bottleDist60">
+			<transforms>
+				<translate value3="1.0 1.0 1.0" />
+                <scale value3="0.5 0.5 0.5" />
+                <rotate value3="0.0 -90 0.0" />
+            </transforms>
+			
+            <children>             
+                <primitive>
+                    <cylinder base="1.0" top="0.1" height="4.0" slices="32" stacks="32" />
+                </primitive>
+            </children>     
+        </node>
+
+        <node id="bottle1" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="-0.2 6.25 5.25" />
             </transforms>
@@ -721,7 +838,7 @@
                 <noderef id="bottle" />
             </children> 
         </node>
-        <node id="bottle2">
+        <node id="bottle2" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="-0.2 6.25 1.00" />
             </transforms>
@@ -732,7 +849,7 @@
                 <noderef id="bottle" />
             </children> 
         </node>
-        <node id="bottle3">
+        <node id="bottle3" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="-0.2 6.25 3.10" />
             </transforms>
@@ -743,7 +860,7 @@
                 <noderef id="bottle" />
             </children> 
         </node>
-        <node id="bottle4">
+        <node id="bottle4" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="-0.2 6.25 7.10" />
             </transforms>
@@ -754,6 +871,52 @@
                 <noderef id="bottle" />
             </children> 
         </node>
+
+        <node id="bottle1Dist60" castshadows="true" receiveshadows="true">
+			<transforms>
+                <translate value3="-0.2 6.25 5.25" />
+            </transforms>
+
+            <materialref id="bottleApp" /> 
+			
+            <children>             
+                <noderef id="bottleDist60" />
+            </children> 
+        </node>
+        <node id="bottle2Dist60" castshadows="true" receiveshadows="true">
+			<transforms>
+                <translate value3="-0.2 6.25 1.00" />
+            </transforms>
+
+            <materialref id="bottleApp1" /> 
+			
+            <children>             
+                <noderef id="bottleDist60" />
+            </children> 
+        </node>
+        <node id="bottle3Dist60" castshadows="true" receiveshadows="true">
+			<transforms>
+                <translate value3="-0.2 6.25 3.10" />
+            </transforms>
+
+            <materialref id="bottleApp2" /> 
+			
+            <children>             
+                <noderef id="bottleDist60" />
+            </children> 
+        </node>
+        <node id="bottle4Dist60" castshadows="true" receiveshadows="true">
+			<transforms>
+                <translate value3="-0.2 6.25 7.10" />
+            </transforms>
+
+            <materialref id="bottleApp3" /> 
+			
+            <children>             
+                <noderef id="bottleDist60" />
+            </children> 
+        </node>
+
         <node id="ball">
 			<transforms>
                 <translate value3="0.0 0.0 0.0" />
@@ -780,7 +943,7 @@
                 </primitive>
             </children> 
         </node>
-        <node id="discoBall">
+        <node id="discoBall" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="12.5 7.0 10" />
             </transforms>
