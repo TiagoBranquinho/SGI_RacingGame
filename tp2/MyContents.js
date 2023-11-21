@@ -195,8 +195,9 @@ class MyContents {
                 const texlength_s = 1 //material_el.texlength_s
 
                 let bumpMap = material_el.bumpref !== null ? this.app.textures[material_el.bumpref] : null
+                let specularMap = material_el.specularref !== null ? this.app.textures[material_el.specularref] : null
 
-                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe })
+                material = new THREE.MeshPhongMaterial({ color: color, emissive: emissive, specular: specular, shininess: shininess, bumpMap: bumpMap, specularMap: specularMap, bumpScale: bumpScale, flatShading: flatShading, side: twosided, wireframe: wireframe })
                 if (material_el.textureref !== null) {
                     const map = this.app.textures[material_el.textureref]
                     material.map = map
