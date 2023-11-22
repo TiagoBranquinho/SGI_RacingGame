@@ -175,9 +175,9 @@
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="discoballTex" 
-            texlength_s="1" 
-            texlength_t="1" 
-            wireframe='true' />
+            texlength_s="0.7" 
+            texlength_t="0.7" 
+            twosided='true' />
 
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 

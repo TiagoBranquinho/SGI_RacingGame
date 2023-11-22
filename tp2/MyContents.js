@@ -185,7 +185,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                
+
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
@@ -263,15 +263,11 @@ class MyContents {
 
     getPrimitiveMesh(geometry, materialref) {
         let material = this.app.materials[materialref]
-        console.log(material)
-        if(material.map === null){
+        if (material.map === null) {
             let texture = new THREE.TextureLoader().load("scenes/t08g01/textures/bottle.jpg");
             material.map = texture;
-            console.log("ENTROU")
         }
-        console.log(material)
         let mesh = new THREE.Mesh(geometry, material)
-        console.log(mesh)
         return mesh
     }
 
@@ -383,21 +379,28 @@ class MyContents {
 
                 case "sphere":
                     geometry = new THREE.SphereGeometry(
-                        representation.radius,
-                        representation.slices,
-                        representation.stacks,
-                        representation.thetastart,
-                        representation.thetalength,
+                        representation.radius, 
+                        representation.stacks, 
+                        representation.slices, 
                         representation.phistart,
-                        representation.philength
+                        representation.philength,
+                        representation.thetastart, 
+                        representation.thetalength
                     );
+
                     mesh = this.getPrimitiveMesh(geometry, materialref);
+                    // Adjust the texture to the sphere
                     mesh.material.map.repeat.x = representation.radius / mesh.material.map.repeat.x;
                     mesh.material.map.repeat.y = representation.radius / mesh.material.map.repeat.y;
+                    console.log(mesh.material.map.repeat.x)
+
+
+
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
                     return mesh;
+
                 case "nurbs":
                     let controlPoints = []
                     for (let i = 0; i <= representation.degree_u; i++) {
