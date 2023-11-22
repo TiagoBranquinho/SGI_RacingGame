@@ -119,7 +119,7 @@ class MyGuiInterface {
 
     updateLightFolder() {
         let lightFolder = this.datgui.addFolder('Lights');
-
+        console.log(this.app);
         // Controls for the light
         // Iterate through all the lights and create folders for each type of light
 

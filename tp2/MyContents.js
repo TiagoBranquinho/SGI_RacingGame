@@ -191,8 +191,8 @@ class MyContents {
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
                 const wireframe = material_el.wireframe
                 //missing texlenght_t and s
-                const texlength_t = 1 //material_el.texlength_t
-                const texlength_s = 1 //material_el.texlength_s
+                const texlength_t = material_el.texlength_t
+                const texlength_s = material_el.texlength_s
 
                 let bumpMap = material_el.bumpref !== null ? this.app.textures[material_el.bumpref] : null
                 let specularMap = material_el.specularref !== null ? this.app.textures[material_el.specularref] : null
@@ -254,7 +254,7 @@ class MyContents {
     createNodes(data, materialref = undefined, castShadow = undefined, receiveShadow = undefined) {
         let nodes = []
         for (var key in data) {
-            nodes.push(this.retrieveNode(data[key], materialref, castShadow, receiveShadow))
+            nodes.push(this.retrieveNode(data[key], materialref, castShadow, receiveShadow, "scene&"))
         }
         for (var key in nodes) {
             this.app.scene.add(nodes[key])
@@ -334,7 +334,8 @@ class MyContents {
                     );
 
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-
+                    mesh.map.repeat.x = width / mesh.map.repeat.x;
+                    mesh.map.repeat.y = height / mesh.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -358,11 +359,13 @@ class MyContents {
                         representation.height,
                         representation.slices,
                         representation.stacks,
-                        representation.capsclose,
+                        !representation.capsclose,
                         representation.thetastart,
                         representation.thetalength
                     );
                     mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.map.repeat.x = representation.base / mesh.map.repeat.x;
+                    mesh.map.repeat.y = representation.height / mesh.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -379,6 +382,8 @@ class MyContents {
                         representation.philength
                     );
                     mesh = this.getPrimitiveMesh(geometry, materialref);
+                    mesh.map.repeat.x = radius / mesh.map.repeat.x;
+                    mesh.map.repeat.y = radius / mesh.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
