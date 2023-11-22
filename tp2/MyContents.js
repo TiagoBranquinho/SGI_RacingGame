@@ -150,8 +150,6 @@ class MyContents {
                 else {
                     texture = new THREE.TextureLoader().load(texture_el.filepath);
                     if (texture_el.mipmaps === false) {
-                        console.log("mipmaps")
-                        console.log(texture_el)
                         texture.generateMipMaps = false
 
                         for (let i = 0; i < 8; i++) {
@@ -392,7 +390,6 @@ class MyContents {
                     // Adjust the texture to the sphere
                     mesh.material.map.repeat.x = representation.radius / mesh.material.map.repeat.x;
                     mesh.material.map.repeat.y = representation.radius / mesh.material.map.repeat.y;
-                    console.log(mesh.material.map.repeat.x)
 
 
 
@@ -453,7 +450,6 @@ class MyContents {
             }
         }
         else if (node.type === "spotlight") {
-            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -477,7 +473,6 @@ class MyContents {
             return lightGroup;
         }
         else if (node.type === "pointlight") {
-            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -500,7 +495,6 @@ class MyContents {
             return lightGroup;
         }
         else if (node.type === "directionallight") {
-            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
