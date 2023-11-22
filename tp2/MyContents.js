@@ -262,7 +262,7 @@ class MyContents {
     }
 
     getPrimitiveMesh(geometry, materialref) {
-        let material = this.app.materials[materialref]
+        let material = this.app.materials[materialref].clone()
         console.log(material)
         if(material.map === null){
             let texture = new THREE.TextureLoader().load("scenes/t08g01/textures/bottle.jpg");

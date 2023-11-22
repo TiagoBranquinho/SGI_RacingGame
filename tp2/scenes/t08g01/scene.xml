@@ -15,15 +15,12 @@
             location="15 15 15" 
             target="0 0.0 0" /> 
 
-        <orthogonal id="cam2" 
+        <perspective id="pov" 
+            angle="60" 
             near="0.1" 
             far="1000" 
-            location="0 15 15" 
-            target="0.0 15 0.0" 
-            left="-5" 
-            right="5" 
-            bottom="-5" 
-            top="5" /> 
+            location="23 5 18" 
+            target="10 2 0" />
     </cameras> 
 
     <skybox size="100 100 100" 
@@ -45,15 +42,15 @@
         <texture id="darkBlueWallBump" filepath="scenes/t08g01/textures/darkBlueWallBump.png" />
         <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg"/>        
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
-        <texture id="targetTex" filepath="scenes/t08g01/textures/target.webp" 
-            mipmap0="scenes/t08g01/textures/target.256.webp"
-            mipmap1="scenes/t08g01/textures/target.128.webp"
-            mipmap2="scenes/t08g01/textures/target.64.webp"
-            mipmap3="scenes/t08g01/textures/target.32.webp"
-            mipmap4="scenes/t08g01/textures/target.16.webp"
-            mipmap5="scenes/t08g01/textures/target.8.webp" 
-            mipmap6="scenes/t08g01/textures/target.4.webp" 
-            mipmap7="scenes/t08g01/textures/target.2.webp"/>
+        <texture id="targetTex" filepath="scenes/t08g01/textures/target.jpg"
+            mipmap0="scenes/t08g01/textures/target0.jpg"
+            mipmap1="scenes/t08g01/textures/target1.jpg"
+            mipmap2="scenes/t08g01/textures/target2.jpg"
+            mipmap3="scenes/t08g01/textures/target3.jpg"
+            mipmap4="scenes/t08g01/textures/target4.jpg"
+            mipmap5="scenes/t08g01/textures/target5.jpg" 
+            mipmap6="scenes/t08g01/textures/target6.jpg" 
+            mipmap7="scenes/t08g01/textures/target7.jpg"/>
         <texture id="targetBump" filepath="scenes/t08g01/textures/targetBump.png" />
         <texture id="glassTex" filepath="scenes/t08g01/textures/glass.jpg" />
         <texture id="bottleTex" filepath="scenes/t08g01/textures/bottle.jpg" />
@@ -61,6 +58,8 @@
         <texture id="bottleTex2" filepath="scenes/t08g01/textures/bottle2.jpg" />
         <texture id="bottleTex3" filepath="scenes/t08g01/textures/bottle3.jpg" />
         <texture id="discoballTex" filepath="scenes/t08g01/textures/discoball.mp4" isVideo="true" />
+        <texture id="beerTex" filepath="scenes/t08g01/textures/beer.mp4" isVideo="true" />
+        <texture id="beerFoamTex" filepath="scenes/t08g01/textures/beerFoam.jpg" />
     </textures>
 
     <materials> 
@@ -113,16 +112,23 @@
             emissive="0.0 0.0 0.0 1" 
 			color="0.1 0.1 0.1 1.0" 
             specular="0 0 0 0" 
-            shininess="0" 
+            shininess="10" 
             textureref="targetTex" 
-            texlength_s="2" 
-            texlength_t="2" 
-            bumpref="targetBump"
-            bumpscale="10" />
+            texlength_s="1" 
+            texlength_t="1" />
 
         <material id="glassApp" 
-            emissive="0.0 0.0 0.0 1" 
+            emissive="0.9 0.9 1.0 1" 
 			color="0.9 0.9 0.9 1.0" 
+            specular="0.9 0.9 0.9 1.0" 
+            shininess="0" 
+            textureref="glassTex" 
+            texlength_s="1" 
+            texlength_t="1" />
+        
+        <material id="glassApp2" 
+            emissive="0.9 0.5 1.0 1" 
+			color="0.9 0.9 0.5 1.0" 
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="glassTex" 
@@ -135,8 +141,8 @@
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="bottleTex" 
-            texlength_s="1" 
-            texlength_t="1" 
+            texlength_s="1.5" 
+            texlength_t="4" 
             twosided = "true" />
 
         <material id="bottleApp1" 
@@ -145,8 +151,8 @@
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="bottleTex1" 
-            texlength_s="1" 
-            texlength_t="1" 
+            texlength_s="1.5" 
+            texlength_t="4" 
             twosided = "true" />
 
         <material id="bottleApp2" 
@@ -155,8 +161,8 @@
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="bottleTex2" 
-            texlength_s="1" 
-            texlength_t="1" 
+            texlength_s="1.5" 
+            texlength_t="4" 
             twosided = "true" />
 
         <material id="bottleApp3" 
@@ -165,8 +171,8 @@
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="bottleTex3" 
-            texlength_s="1" 
-            texlength_t="1" 
+            texlength_s="1.5" 
+            texlength_t="4" 
             twosided = "true" />
 
         <material id="discoballApp" 
@@ -175,9 +181,28 @@
             specular="0.9 0.9 0.9 1.0" 
             shininess="0" 
             textureref="discoballTex" 
+            texlength_s="0.7" 
+            texlength_t="0.7" 
+            twosided = "false" 
+            wireframe="true" />
+
+        <material id="beerApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="0.95 0.56 0.11 1.0" 
+            specular="0.95 0.56 0.11 1.0" 
+            shininess="0" 
+            textureref="beerTex" 
+            texlength_s="0.15" 
+            texlength_t="0.8" />
+
+        <material id="beerFoamApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="0.8 0.8 0.8 1.0" 
+            specular="0.8 0.8 0.8 1.0" 
+            shininess="0" 
+            textureref="beerFoamTex" 
             texlength_s="1" 
-            texlength_t="1" 
-            wireframe='true' />
+            texlength_t="1" />
 
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 
@@ -215,7 +240,9 @@
                 <noderef id="bottle2" />
                 <noderef id="bottle3" />
                 <noderef id="bottle4" />
-                <noderef id="discoBall" />  
+                <noderef id="discoBall" /> 
+                <noderef id="fullSpotlight" /> 
+                <noderef id="dartsLight1" />
             </children> 
         </node>
 
@@ -236,7 +263,9 @@
                 <noderef id="bottle2Dist60" />
                 <noderef id="bottle3Dist60" />
                 <noderef id="bottle4Dist60" />
-                <noderef id="discoBall" /> 
+                <noderef id="discoBall" />
+                <noderef id="fullSpotlight" /> 
+                <noderef id="dartsLight1" /> 
             </children> 
         </node>
 
@@ -277,7 +306,7 @@
                     position="16.66 10 10"  
                 />
 
-                <spotlight id="light4" enabled="true"
+                <spotlight id="barLight" enabled="true"
                            color="0 0 0.78 1"
                            intensity="10.0"
                            distance="100"
@@ -287,7 +316,31 @@
                            target="12.5 4 10"
                            penumbra="0.8"
                            angle="1.0471975511965976"
-                />  
+                />
+
+                <spotlight id="spotLight" enabled="true"
+                           color="0.50 0.50 1.0 1"
+                           intensity="50.0"
+                           distance="100"
+                           decay="1.0"
+                           castshadow="true"
+                           position="23.6 7.0 1.3"
+                           target="15 5 8"
+                           penumbra="0.8"
+                           angle="1.0471975511965976"
+                />
+
+                <spotlight id="spotLight" enabled="true"
+                           color="0.90 0.50 1.0 1"
+                           intensity="10.0"
+                           distance="100"
+                           decay="1.0"
+                           castshadow="true"
+                           position="16 7.5 0.25"
+                           target="16 2 2"
+                           penumbra="0.8"
+                           angle="180"
+                /> 
             </children> 
         </node>
 		
@@ -676,18 +729,40 @@
 
             <children>             
                 <primitive>
-                    <cylinder base="2.0" top="2.0" height="0.1" slices="20" stacks="32" />
+                    <cylinder base="2.0" top="2.0" height="0.1" slices="20" stacks="32" capsclose='true' />
                 </primitive>
             </children> 
         </node>
 
-        <node id="cup">
-			<materialref id="glassApp" />
+        <node id="cupTop">
+            <transforms>
+				<translate value3="0.0 0.4 0.0" />
+            </transforms>
+
+            <materialref id="beerFoamApp" /> 
+			
+            <children>             
+                <primitive>
+                    <cylinder base="0.15" top="0.15" height="0.01" slices="32" stacks="32" capsclose='true'/>
+                </primitive>
+            </children> 
+        </node>
+
+        <node id="cupBottom">
+			<materialref id="beerApp" />
 			
             <children>             
                 <primitive>
                     <cylinder base="0.1" top="0.15" height="0.8" slices="32" stacks="32" />
                 </primitive>
+            </children> 
+        </node>
+
+        <node id="cup">
+			
+            <children>             
+                <noderef id="cupTop" />
+                <noderef id="cupBottom" />
             </children> 
         </node>
 
@@ -939,7 +1014,7 @@
 			
             <children>             
                 <primitive>
-                    <cylinder base="0.03" top="0.03" height="1" slices="32" stacks="32" />
+                    <cylinder base="0.03" top="0.03" height="1" slices="32" stacks="32" capsclose='true' />
                 </primitive>
             </children> 
         </node>
@@ -951,6 +1026,102 @@
             <children>             
                 <noderef id="ball" />
                 <noderef id="line" />
+            </children>
+        </node>
+        <node id="lightSupport">
+			<transforms>
+                <translate value3="-0.5 0.5 0.0" />
+                <rotate value3="0 0.0 45" />
+            </transforms>
+
+            <materialref id="blackMetal" /> 
+			
+            <children>             
+                <primitive>
+                    <cylinder base="0.1" top="0.1" height="1.2" slices="32" stacks="32" capsclose='true' />
+                </primitive>
+            </children> 
+        </node>
+        <node id="lightSupport1">
+			<transforms>
+                <translate value3="0.0 0.0 0.5" />
+            </transforms>
+			
+            <children>             
+                <noderef id="lightSupport" />
+            </children> 
+        </node>
+        <node id="lightSupport2">
+			<transforms>
+                <translate value3="0.0 0.0 -0.5" />
+            </transforms>
+			
+            <children>             
+                <noderef id="lightSupport" />
+            </children> 
+        </node>
+        <node id="spotlight">
+			<transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0 0.0 85" />
+            </transforms>
+
+            <materialref id="blackMetal" /> 
+			
+            <children>             
+                <primitive>
+                    <cylinder base="0.5" top="0.5" height="1.5" slices="32" stacks="32" capsclose='true' />
+                </primitive>
+            </children> 
+        </node>
+        <node id="spotlightLens">
+			<transforms>
+                <translate value3="0.75 -0.065 0.0" />
+                <rotate value3="0 0 85" />
+            </transforms>
+
+            <materialref id="glassApp" /> 
+			
+            <children>             
+                <primitive>
+                    <cylinder base="0.48" top="0.48" height="0.1" slices="32" stacks="32" capsclose='true' />
+                </primitive>
+            </children> 
+        </node>
+        <node id="fullSpotlight">
+			<transforms>
+                <translate value3="24.0 7.0 1.0" />
+                <rotate value3="0 -145 0" />
+            </transforms>
+			
+            <children>             
+                <noderef id="lightSupport1" />
+                <noderef id="lightSupport2" />
+                <noderef id="spotlightLens" />
+                <noderef id="spotlight" />
+            </children> 
+        </node>
+        <node id="dartsLight">
+            <transforms>
+                <translate value3="0 0 0"/>
+            </transforms>
+
+            <materialref id="glassApp2"/>
+
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="2" slices="64" stacks="1" capsclose="true" thetalength="3.14"/>
+                </primitive>
+            </children>
+        </node>
+        <node id="dartsLight1">
+            <transforms>
+                <translate value3="16 7.5 0.06"/>
+                <rotate value3="90 0 90"/>
+            </transforms>
+
+            <children>
+                <noderef id="dartsLight"/>
             </children>
         </node>
     </graph> 
