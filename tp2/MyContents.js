@@ -262,7 +262,17 @@ class MyContents {
     }
 
     getPrimitiveMesh(geometry, materialref) {
-        return new THREE.Mesh(geometry, this.app.materials[materialref])
+        let material = this.app.materials[materialref]
+        console.log(material)
+        if(material.map === null){
+            let texture = new THREE.TextureLoader().load("scenes/t08g01/textures/bottle.jpg");
+            material.map = texture;
+            console.log("ENTROU")
+        }
+        console.log(material)
+        let mesh = new THREE.Mesh(geometry, material)
+        console.log(mesh)
+        return mesh
     }
 
     /*getPrimitiveMesh(geometry, materialref) {
@@ -334,8 +344,8 @@ class MyContents {
                     );
 
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-                    mesh.map.repeat.x = width / mesh.map.repeat.x;
-                    mesh.map.repeat.y = height / mesh.map.repeat.y;
+                    mesh.material.map.repeat.x = width / mesh.material.map.repeat.x;
+                    mesh.material.map.repeat.y = height / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -364,8 +374,8 @@ class MyContents {
                         representation.thetalength
                     );
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-                    mesh.map.repeat.x = representation.base / mesh.map.repeat.x;
-                    mesh.map.repeat.y = representation.height / mesh.map.repeat.y;
+                    mesh.material.map.repeat.x = representation.base / mesh.material.map.repeat.x;
+                    mesh.material.map.repeat.y = representation.height / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -382,8 +392,8 @@ class MyContents {
                         representation.philength
                     );
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-                    mesh.map.repeat.x = radius / mesh.map.repeat.x;
-                    mesh.map.repeat.y = radius / mesh.map.repeat.y;
+                    mesh.material.map.repeat.x = representation.radius / mesh.material.map.repeat.x;
+                    mesh.material.map.repeat.y = representation.radius / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
