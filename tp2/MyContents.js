@@ -98,6 +98,7 @@ class MyContents {
         let cameras = {}
         for (var key in data) {
             let camera_el = data[key]
+            console.log(camera_el)
             let camera = null
             if (camera_el.type == "perspective") {
                 camera = new THREE.PerspectiveCamera(camera_el.angle)
@@ -108,8 +109,8 @@ class MyContents {
             }
             camera.near = camera_el.near
             camera.far = camera_el.far
-            camera.lookAt(camera_el.target[0], camera_el.target[1], camera_el.target[2])
             camera.position.set(camera_el.location[0], camera_el.location[1], camera_el.location[2])
+            camera.lookAt(new THREE.Vector3(camera_el.target[0], camera_el.target[1], camera_el.target[2]))
             cameras[camera_el.id] = camera
         }
         this.app.initCameras(cameras, activeCameraId);
