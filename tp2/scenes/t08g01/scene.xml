@@ -46,14 +46,14 @@
         <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg"/>        
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
         <texture id="targetTex" filepath="scenes/t08g01/textures/target.webp" 
-            mipmap0="scenes/t08g01/textures/target.1024.webp"
-            mipmap1="scenes/t08g01/textures/target.512.webp"
-            mipmap2="scenes/t08g01/textures/target.256.webp"
-            mipmap3="scenes/t08g01/textures/target.128.webp"
-            mipmap4="scenes/t08g01/textures/target.64.webp"
-            mipmap5="scenes/t08g01/textures/target.32.webp"
-            mipmap6="scenes/t08g01/textures/target.16.webp"
-            mipmap7="scenes/t08g01/textures/target.8.webp"/>
+            mipmap0="scenes/t08g01/textures/target.256.webp"
+            mipmap1="scenes/t08g01/textures/target.128.webp"
+            mipmap2="scenes/t08g01/textures/target.64.webp"
+            mipmap3="scenes/t08g01/textures/target.32.webp"
+            mipmap4="scenes/t08g01/textures/target.16.webp"
+            mipmap5="scenes/t08g01/textures/target.8.webp" 
+            mipmap6="scenes/t08g01/textures/target.4.webp" 
+            mipmap7="scenes/t08g01/textures/target.2.webp"/>
         <texture id="targetBump" filepath="scenes/t08g01/textures/targetBump.png" />
         <texture id="glassTex" filepath="scenes/t08g01/textures/glass.jpg" />
         <texture id="bottleTex" filepath="scenes/t08g01/textures/bottle.jpg" />
@@ -118,7 +118,7 @@
             texlength_s="2" 
             texlength_t="2" 
             bumpref="targetBump"
-            bumpscale="2" />
+            bumpscale="10" />
 
         <material id="glassApp" 
             emissive="0.0 0.0 0.0 1" 
