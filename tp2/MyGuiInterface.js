@@ -134,21 +134,20 @@ class MyGuiInterface {
                 this.reset()
             });
         const selectedLightGroup = lightsList.find(light => light.children[0].name === this.currentLightName.light);
-        console.log(this.currentLightName);
-        console.log(selectedLightGroup);
+
 
         // Add controls based on the type of the selected light
         if (selectedLightGroup) {
             let specificFolder = lightFolder.addFolder(this.currentLightName.light);
             let selectedLight = selectedLightGroup.children[0];
-            specificFolder.add(selectedLight, 'enabled').name('enabled');
+            specificFolder.add(selectedLightGroup, 'visible').name('on');
             let positionFolder = specificFolder.addFolder('Position');
             positionFolder.add(selectedLightGroup.position, 'x', -50, 50).name('x');
             positionFolder.add(selectedLightGroup.position, 'y', -50, 50).name('y');
             positionFolder.add(selectedLightGroup.position, 'z', -50, 50).name('z');
             specificFolder.addColor(selectedLight, 'color').name("color");
-            specificFolder.add(selectedLight, 'intensity', 0, 10).name("intensity");
-            specificFolder.add(selectedLight, 'castShadow').name('enabled');
+            specificFolder.add(selectedLight, 'intensity', 0, 100).name("intensity");
+            specificFolder.add(selectedLight, 'castShadow').name('cast shadow');
             specificFolder.add(selectedLight.shadow.camera, 'far', 200, 600).name('shadow far');
             specificFolder.add(selectedLight.shadow.mapSize, 'height', 256, 1024).name('shadow map size').onChange(() => {
                 selectedLight.shadow.mapSize.width = selectedLight.shadow.mapSize.height;

@@ -182,9 +182,7 @@
             shininess="0" 
             textureref="discoballTex" 
             texlength_s="0.7" 
-            texlength_t="0.7" 
-            twosided = "false" 
-            wireframe="true" />
+            texlength_t="0.7" />
 
         <material id="beerApp" 
             emissive="0.0 0.0 0.0 1" 

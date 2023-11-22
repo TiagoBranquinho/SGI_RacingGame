@@ -150,8 +150,6 @@ class MyContents {
                 else {
                     texture = new THREE.TextureLoader().load(texture_el.filepath);
                     if (texture_el.mipmaps === false) {
-                        console.log("mipmaps")
-                        console.log(texture_el)
                         texture.generateMipMaps = false
 
                         for (let i = 0; i < 8; i++) {
@@ -185,7 +183,7 @@ class MyContents {
                 const emissive = new THREE.Color(emissiveData.r, emissiveData.g, emissiveData.b)
                 const specular = new THREE.Color(specularData.r, specularData.g, specularData.b)
                 const shininess = material_el.shininess
-                
+
                 const bumpScale = material_el.bumpscale
                 const flatShading = material_el.shading === "flat" ? true : false
                 const twosided = material_el.twosided ? THREE.DoubleSide : THREE.FrontSide
@@ -262,16 +260,12 @@ class MyContents {
     }
 
     getPrimitiveMesh(geometry, materialref) {
-        let material = this.app.materials[materialref].clone()
-        console.log(material)
-        if(material.map === null){
+        let material = this.app.materials[materialref]
+        if (material.map === null) {
             let texture = new THREE.TextureLoader().load("scenes/t08g01/textures/bottle.jpg");
             material.map = texture;
-            console.log("ENTROU")
         }
-        console.log(material)
         let mesh = new THREE.Mesh(geometry, material)
-        console.log(mesh)
         return mesh
     }
 
@@ -383,21 +377,27 @@ class MyContents {
 
                 case "sphere":
                     geometry = new THREE.SphereGeometry(
-                        representation.radius,
-                        representation.slices,
-                        representation.stacks,
-                        representation.thetastart,
-                        representation.thetalength,
+                        representation.radius, 
+                        representation.stacks, 
+                        representation.slices, 
                         representation.phistart,
-                        representation.philength
+                        representation.philength,
+                        representation.thetastart, 
+                        representation.thetalength
                     );
+
                     mesh = this.getPrimitiveMesh(geometry, materialref);
+                    // Adjust the texture to the sphere
                     mesh.material.map.repeat.x = representation.radius / mesh.material.map.repeat.x;
                     mesh.material.map.repeat.y = representation.radius / mesh.material.map.repeat.y;
+
+
+
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
                     return mesh;
+
                 case "nurbs":
                     let controlPoints = []
                     for (let i = 0; i <= representation.degree_u; i++) {
@@ -450,7 +450,6 @@ class MyContents {
             }
         }
         else if (node.type === "spotlight") {
-            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -474,7 +473,6 @@ class MyContents {
             return lightGroup;
         }
         else if (node.type === "pointlight") {
-            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
@@ -497,7 +495,6 @@ class MyContents {
             return lightGroup;
         }
         else if (node.type === "directionallight") {
-            console.log(node);
             let colorData = node.color;
             let color = null;
             if (colorData.isColor) {
