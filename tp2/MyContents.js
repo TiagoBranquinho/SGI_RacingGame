@@ -150,17 +150,19 @@ class MyContents {
                 }
                 else {
                     texture = new THREE.TextureLoader().load(texture_el.filepath);
-                    if (texture_el.mipmaps === false) {
+                    texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
+                    texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
+                    if (!texture_el.mipmaps) {
                         texture.generateMipMaps = false
 
                         for (let i = 0; i < 8; i++) {
-                            this.loadMipmap(texture, i, texture_el[`mipmap${i}`]);
+                            if (texture_el["mipmap" + i] != null) {
+                                console.log(texture_el[`mipmap${i}`])
+                                this.loadMipmap(texture, i, texture_el[`mipmap${i}`]);
+                            }
                         }
                     }
-                    else {
-                        texture.minFilter = texture_el.minFilter === "LinearMipmapLinearFilter" ? THREE.LinearMipMapLinearFilter : THREE.NearestFilter
-                        texture.magFilter = texture_el.magFilter === "LinearFilter" ? THREE.LinearFilter : THREE.NearestFilter
-                    }
+                    
 
                 }
                 texture.anisotropy = texture_el.anisotropy
@@ -384,12 +386,12 @@ class MyContents {
 
                 case "sphere":
                     geometry = new THREE.SphereGeometry(
-                        representation.radius, 
-                        representation.stacks, 
-                        representation.slices, 
+                        representation.radius,
+                        representation.stacks,
+                        representation.slices,
                         representation.phistart,
                         representation.philength,
-                        representation.thetastart, 
+                        representation.thetastart,
                         representation.thetalength
                     );
 
@@ -546,7 +548,6 @@ class MyContents {
 
                 // set the mipmap image in the parent texture in the appropriate level
                 parentTexture.mipmaps[level] = canvas
-                parentTexture.needsUpdate = true
             },
             undefined, // onProgress callback currently not supported
             function (err) {

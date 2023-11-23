@@ -210,9 +210,9 @@ class MyGuiInterface {
             rotationFolder.add(selectedNode.rotation, 'y', -3.14, 3.14).name('y');
             rotationFolder.add(selectedNode.rotation, 'z', -3.14, 3.14).name('z');
             let scaleFolder = specificFolder.addFolder('Scale');
-            scaleFolder.add(selectedNode.scale, 'x', -5, 0).name('x');
-            scaleFolder.add(selectedNode.scale, 'y', -5, 5).name('y');
-            scaleFolder.add(selectedNode.scale, 'z', -5, 5).name('z');
+            scaleFolder.add(selectedNode.scale, 'x', 0.5, 5).name('x');
+            scaleFolder.add(selectedNode.scale, 'y', 0.5, 5).name('y');
+            scaleFolder.add(selectedNode.scale, 'z', 0.5, 5).name('z');
         }
     }
 
