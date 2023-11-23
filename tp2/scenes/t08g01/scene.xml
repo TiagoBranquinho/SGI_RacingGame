@@ -21,7 +21,7 @@
             near="0.1"
             far="1000"
             location="23 5 18"
-            target="10 2 0" />
+            target="10 2 -2" />
     </cameras>
 
     <skybox size="60 60 60" 
@@ -252,6 +252,9 @@
                 <noderef id="discoBall" />
                 <noderef id="fullSpotlight" />
                 <noderef id="dartsLight1" />
+                <noderef id="stool1" />
+                <noderef id="stool2" />
+                <noderef id="stool3" />
             </children>
         </node>
 
@@ -275,6 +278,9 @@
                 <noderef id="discoBall" />
                 <noderef id="fullSpotlight" />
                 <noderef id="dartsLight1" />
+                <noderef id="stool1" />
+                <noderef id="stool2" />
+                <noderef id="stool3" />
             </children>
         </node>
 
@@ -339,7 +345,7 @@
                     angle="1.0471975511965976"
                 />
 
-                <spotlight id="spotLight" enabled="true"
+                <spotlight id="targetLight" enabled="true"
                     color="0.90 0.50 1.0 1"
                     intensity="10.0"
                     distance="100"
@@ -1102,7 +1108,7 @@
                 </primitive>
             </children>
         </node>
-        <node id="fullSpotlight">
+        <node id="fullSpotlight" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="24.0 7.0 1.0" />
                 <rotate value3="0 -145 0" />
@@ -1129,7 +1135,7 @@
                 </primitive>
             </children>
         </node>
-        <node id="dartsLight1">
+        <node id="dartsLight1" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="16 7.5 0.06" />
                 <rotate value3="90 0 90" />
@@ -1137,6 +1143,46 @@
 
             <children>
                 <noderef id="dartsLight" />
+            </children>
+        </node>
+        <node id="stool">
+            <transforms>
+                <translate value3="0.0 1.85 0.0" />
+                <rotate value3="0 -90 0" />
+                <scale value3="3 4 3" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="scenes/t08g01/models/model.glb" />
+                </primitive>
+            </children>
+        </node>
+        <node id="stool1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="9.0 0.0 8.0" />
+            </transforms>
+
+            <children>
+                <noderef id="stool" />
+            </children>
+        </node>
+        <node id="stool2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="9.3 0.0 5.0" />
+            </transforms>
+
+            <children>
+                <noderef id="stool" />
+            </children>
+        </node>
+        <node id="stool3" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="8.5 0.0 2.0" />
+            </transforms>
+
+            <children>
+                <noderef id="stool" />
             </children>
         </node>
     </graph>
