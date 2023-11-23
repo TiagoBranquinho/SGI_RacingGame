@@ -66,7 +66,7 @@ class MyContents {
 
         let rootNode = data.rootId;
 
-        this.createNodes(data.nodes[rootId].children, data.nodes[rootId].materialIds[0], data.nodes[rootId].castShadows, data.nodes[rootId].receiveShadows);
+        this.createNodes(data.nodes[rootNode].children, data.nodes[rootNode].materialIds[0], data.nodes[rootNode].castShadows, data.nodes[rootNode].receiveShadows);
 
         this.configureCameras(data.cameras, data.activeCameraId);
 
