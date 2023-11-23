@@ -12,8 +12,8 @@
             angle="60" 
             near="0.1" 
             far="1000" 
-            location="15 15 15" 
-            target="0 0.0 0" /> 
+            location="15 10 15" 
+            target="0 15 0" /> 
 
         <perspective id="pov" 
             angle="60" 

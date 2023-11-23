@@ -98,6 +98,7 @@ class MyContents {
         let cameras = {}
         for (var key in data) {
             let camera_el = data[key]
+            console.log(camera_el)
             let camera = null
             if (camera_el.type == "perspective") {
                 camera = new THREE.PerspectiveCamera(camera_el.angle)
@@ -108,8 +109,8 @@ class MyContents {
             }
             camera.near = camera_el.near
             camera.far = camera_el.far
-            camera.lookAt(camera_el.target[0], camera_el.target[1], camera_el.target[2])
             camera.position.set(camera_el.location[0], camera_el.location[1], camera_el.location[2])
+            camera.lookAt(new THREE.Vector3(camera_el.target[0], camera_el.target[1], camera_el.target[2]))
             cameras[camera_el.id] = camera
         }
         this.app.initCameras(cameras, activeCameraId);
@@ -326,6 +327,8 @@ class MyContents {
             const representation = node.representations[0]
             let geometry = null;
             let mesh = null;
+            let texWidth = 0;
+            let texHeight = 0;
             switch (node.subtype) {
                 case "rectangle":
                     let width = representation.xy2[0] - representation.xy1[0];
@@ -338,8 +341,10 @@ class MyContents {
                     );
 
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-                    mesh.material.map.repeat.x = width / mesh.material.map.repeat.x;
-                    mesh.material.map.repeat.y = height / mesh.material.map.repeat.y;
+                    texWidth = width > 0 ? width : -width;
+                    texHeight = height > 0 ? height : -height;
+                    mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
+                    mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -368,8 +373,10 @@ class MyContents {
                         representation.thetalength
                     );
                     mesh = this.getPrimitiveMesh(geometry, materialref);
-                    mesh.material.map.repeat.x = representation.base / mesh.material.map.repeat.x;
-                    mesh.material.map.repeat.y = representation.height / mesh.material.map.repeat.y;
+                    texWidth = representation.base > 0 ? representation.base : -representation.base;
+                    texHeight = representation.height > 0 ? representation.height : -representation.height;
+                    mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
+                    mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -388,11 +395,10 @@ class MyContents {
 
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     // Adjust the texture to the sphere
-                    mesh.material.map.repeat.x = representation.radius / mesh.material.map.repeat.x;
-                    mesh.material.map.repeat.y = representation.radius / mesh.material.map.repeat.y;
-
-
-
+                    texWidth = representation.radius > 0 ? representation.radius : -representation.radius;
+                    texHeight = representation.radius > 0 ? representation.radius : -representation.radius;
+                    mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
+                    mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 

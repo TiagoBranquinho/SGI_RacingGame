@@ -101,8 +101,9 @@ class MyApp  {
             this.cameraNames.push(key)
         }
         this.cameras = cameras
-        console.log(this.cameras)
         this.setActiveCamera(activeCameraName)
+        let target = this.activeCamera.target
+        this.controls.target.set(target.x, target.y, target.z)
     }
 
     /**

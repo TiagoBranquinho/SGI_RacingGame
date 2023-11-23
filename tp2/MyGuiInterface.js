@@ -13,6 +13,9 @@ class MyGuiInterface {
         this.cameraControlFolder = null;
         this.cameraTargetFolder = null;
         this.currentLightName = { light: null };
+        this.nodeList = [];
+        this.currentNodeName = { node: null };
+
     }
     updateCameraFolder() {
         const camerasNames = Object.keys(this.app.cameras);
@@ -182,6 +185,64 @@ class MyGuiInterface {
         lightFolder.open();
     }
 
+    updateNodesFolder() {
+        for (let i = 0; i < this.app.scene.children.length; i++) {
+            this.dfs(this.app.scene.children[i]);
+        }
+        console.log(this.nodeList)
+        let nodesFolder = this.datgui.addFolder('Nodes');
+        const nodesNames = this.nodeList.map(node => node.name.slice(1));
+        nodesFolder.add(this.currentNodeName, 'node', nodesNames)
+            .name('Select Node')
+            .onChange(() => {
+                this.reset()
+            });
+        const selectedNode = this.nodeList.find(node => node.name.slice(1) === this.currentNodeName.node);
+        if (selectedNode) {
+            let specificFolder = nodesFolder.addFolder(this.currentNodeName.node);
+            specificFolder.add(selectedNode, 'visible').name('visible');
+            let positionFolder = specificFolder.addFolder('Position');
+            positionFolder.add(selectedNode.position, 'x', -10, 10).name('x');
+            positionFolder.add(selectedNode.position, 'y', -10, 10).name('y');
+            positionFolder.add(selectedNode.position, 'z', -10, 10).name('z');
+            let rotationFolder = specificFolder.addFolder('Rotation');
+            rotationFolder.add(selectedNode.rotation, 'x', -3.14, 3.14).name('x');
+            rotationFolder.add(selectedNode.rotation, 'y', -3.14, 3.14).name('y');
+            rotationFolder.add(selectedNode.rotation, 'z', -3.14, 3.14).name('z');
+            let scaleFolder = specificFolder.addFolder('Scale');
+            scaleFolder.add(selectedNode.scale, 'x', -5, 0).name('x');
+            scaleFolder.add(selectedNode.scale, 'y', -5, 5).name('y');
+            scaleFolder.add(selectedNode.scale, 'z', -5, 5).name('z');
+        }
+    }
+
+    dfs(node) {
+        // Perform some operation on the current node
+        // For example, storing it in the nodeList
+        if (node.name !== "") {
+            if (this.countOccurrences(node.name, '&') > 1 && this.countOccurrences(node.name, '&') < 4) {
+                this.nodeList.push(node);
+            }
+        }
+
+        // Recursively traverse the children of the current node
+        if (node.children && node.children.length > 0) {
+            for (let i = 0; i < node.children.length; i++) {
+                this.dfs(node.children[i]);
+            }
+        }
+    }
+    countOccurrences(str, char) {
+        let count = 0;
+
+        for (let i = 0; i < str.length; i++) {
+            if (str.charAt(i) === char) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     reset() {
         this.datgui.destroy();
         this.datgui = new GUI();
@@ -189,6 +250,7 @@ class MyGuiInterface {
         this.updateGlobalsFolder();
         this.updateFogFolder();
         this.updateLightFolder();
+        this.updateNodesFolder();
     }
 
     setContents(contents) {
