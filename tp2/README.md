@@ -9,65 +9,33 @@
 ----
 
 ### [TP2](tp2)
+ 
+#### Scene Graph
+
+The parsing approach can be seen as a mix between top-down and bottom-up processing. It starts by interpreting the XML file's structure from the root level, examining global settings, textures, materials, cameras, nodes, and lights. Then, when specific elements like textures, materials, or geometries for objects in the scene are encountered, it processes these elements individually, creating specific objects based on the data available. 
+The 3D scene is constructed by generating objects, applying materials, setting positions, and other attributes based on the parsed specifications in the XML file.
+
+#### Detail Level
+
+LODs, which allow to have multiple degrees of detail, are supported in the parser and implemented in the created XML scene.
+
+#### Advanced Textures
+
+The parser support all types of required textures, that is: sky boxes, mip-maps, bump-textures, video-textures. All of these are implemented in the XML scene.
+
+#### Visualization in Wireframe
+
+Wireframe materials are supported by the parser and is implemented in the XML in the line supporting the disco ball.
+
+#### Buffer Geometry
+
+#### GUI
+
+A GUI that allows to move and modify cameras, lights and different depth nodes was implemented.
+
+#### XML Scene
+
+The XML scene showcases a night bar, constructed by a wood floor and four brick walls with bump textures, one of them containing a neon sign emitting light. The bar is also lightened by two pointlights and two spotlights. Inside there can be seen two benches, a table, a counter and a shelf with wood textures, as well as four bottles constructed with nurbs, a disco ball with a video texture, a dart target with bump textures and mip-maps, three pints with video textures and bump textured foam, and three stools constructed using a 3D model. The bar is encapsulated by a sky box with a starry night and, when zooming out, objects with nurbs will be replaced with less detailed primitives, while objects of smaller dimensions will gradually disappear.   
 
 
-# sgi-tp2-base
-The starting point of the second assignment of SGI.
-
-
-# Getting started
-
-Considering a code block (for instance class A.js), to load an xml file (in the defined structure) call:
-
-    let reader = new MyFileReader(app, this, *this.onSceneLoaded*);
-    reader.open("<path to xml file>");	
-
-The last argument in the MyFileReader object call is the name of the method that is to be called when the xml file is loaded and parsed.
-
-Hence, In the same code block (for instance class A.js) add a function method with the following signature: 
-
-    onSceneLoaded(data) {
-        // do something with the data object
-    }
-
-This method is called once the xml file is loaded and parsed successfully. This method single input argument, *data*, is an object containing the entire scene data object. This document can be traversed according to the rules defined in the section on MySceneData class
-
-
-
-# MyFileServer
-File MyFileServer.js contains the class responsible for the XML parser general functionality. Most of the parsing process is derived from descriptors defined in MySceneData.js. A small part is hardcoded.
-
-> <span style="color: red;">**DO NOT CHANGE MyFileServer.js FILE. IT WILL BE MODIFIED OR REPLACED DURING EVALUATION**</span>
-
-# MySceneData
-File MySceneData.js contains a class with metadata description and, in the end of parsing, contains the full set of objects loaded from the xml scene file. This class has several important object attributes:
-- options: contains the scene options, from the globals section
-- fog: contains the scene fog options, from the fog section
-- materials: associative array/list with the scene described materials
-- textures: associative array/list with the scene described textures
-- cameras: associative array/list with all the cameras in the scene
-- activeCameraId: the id of the active camera
-- nodes: associative array/list with all the scene nodes.
-- rootId: the id of the root node
-
-NOTES: 
-1. for each entity type, there are no repeated ids. For instance, if there are two nodes with the same id, the parser will complain and the scene will not be loaded.
-2. For each loaded entity, the parser will check if all the required attributes are present. If not, the parser will complain and the scene will not be loaded.
-3. For each entity, a descriptor defined in the constructor defines the attribute's name, type, requiredness, default value.
-4. **DO NOT CHANGE MySceneData.js IT WILL BE MODIFIED OR REPLACED DURING EVALUATION**
-
-## Custom attributes
-Use  the custom attribute in the data objects to add further attributes:
-
-
-    let obj = {
-        id: "some id",
-        type: "some type",
-        custom: {
-            attr1: "value1",
-            attr2: "value2"
-        } 
-    }
-
-in the previous object, attr1 and attr2 are custom attributes that were added to the object by the programmer (student), in light its program specific needs.
 
