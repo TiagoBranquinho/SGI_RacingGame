@@ -31,6 +31,7 @@ class MyApp  {
         this.contents = null
         this.cameraNames = [];
         this.lights = [];
+        this.lightHelpersVisible = false;
     }
     /**
      * initializes the application

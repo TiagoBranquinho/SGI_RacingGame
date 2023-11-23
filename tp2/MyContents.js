@@ -544,6 +544,7 @@ class MyContents {
             light.name = node.id;
             lightGroup.add(light);
             let helper = new THREE.SpotLightHelper(light);
+            helper.visible = false;
             lightGroup.add(helper);
             this.app.lights.push(lightGroup);
             return lightGroup;
@@ -566,6 +567,7 @@ class MyContents {
             light.name = node.id;
             lightGroup.add(light);
             let helper = new THREE.PointLightHelper(light);
+            helper.visible = false;
             lightGroup.add(helper);
             this.app.lights.push(lightGroup);
             return lightGroup;
@@ -591,6 +593,7 @@ class MyContents {
             light.name = node.id;
             lightGroup.add(light);
             let helper = new THREE.DirectionalLightHelper(light);
+            helper.visible = false;
             lightGroup.add(helper);
             this.app.lights.push(lightGroup);
             return lightGroup;

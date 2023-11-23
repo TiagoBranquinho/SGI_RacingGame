@@ -129,7 +129,12 @@ class MyGuiInterface {
         const lightsList = Object.values(this.app.lights);
         const lightsNames = lightsList.map(light => light.children[0].name);
 
-
+        //make checkbox to make light helpers invisible
+        lightFolder.add(this.app, 'lightHelpersVisible').name('light helpers visible').onChange(() => {
+            for (let i = 0; i < lightsList.length; i++) {
+                lightsList[i].children[1].visible = this.app.lightHelpersVisible;
+            }
+        });
         // Add a dropdown to select the light
         lightFolder.add(this.currentLightName, 'light', lightsNames)
             .name('Select Light')
@@ -137,6 +142,8 @@ class MyGuiInterface {
                 this.reset()
             });
         const selectedLightGroup = lightsList.find(light => light.children[0].name === this.currentLightName.light);
+
+
 
 
         // Add controls based on the type of the selected light
