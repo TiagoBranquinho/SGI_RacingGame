@@ -125,8 +125,8 @@
             specular="0 0 0 0" 
             shininess="10" 
             textureref="targetTex" 
-            texlength_s="2" 
-            texlength_t="2" 
+            texlength_s="1" 
+            texlength_t="1" 
             bumpref="targetBump"
             bumpscale="1.0"/>
 
