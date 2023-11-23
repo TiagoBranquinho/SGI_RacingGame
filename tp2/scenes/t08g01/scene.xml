@@ -209,6 +209,13 @@
             specular="0.1 0.1 0.1 1.0" 
             shininess="0"  
             twosided = "true" />
+
+        <material id="wireApp" 
+            emissive="0.0 0.0 0.0 1" 
+            color="0.1 0.1 0.1 1.0"  
+            specular="0.1 0.1 0.1 1.0" 
+            shininess="0"  
+            wireframe="true"/>
     </materials> 
 
     <graph rootid="scene"> 
@@ -1010,7 +1017,7 @@
                 <translate value3="0.0 0.7 0.0" />
             </transforms>
 
-            <materialref id="blackMetal" /> 
+            <materialref id="wireApp" /> 
 			
             <children>             
                 <primitive>

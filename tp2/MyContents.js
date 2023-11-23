@@ -4,6 +4,7 @@ import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyTriangle } from './MyTriangle.js';
 import { Model3D } from './Model3d.js';
+import { MySceneData } from './parser/MySceneData.js';
 
 /**
  *  This class contains the contents of out application
@@ -47,6 +48,10 @@ class MyContents {
         console.log("" + new Array(indent * 4).join(' ') + " - " + obj.type + " " + (obj.id !== undefined ? "'" + obj.id + "'" : ""))
     }
 
+    /**  
+     * Creates the scene from the scene graph
+     * @param {MySceneData} data the data of the scene
+     */
     onAfterSceneLoadedAndBeforeRender(data) {
         console.log(data)
         this.configureGlobals(data.options);
@@ -66,6 +71,10 @@ class MyContents {
 
     }
 
+    /**  
+     * Creates the global settings from the scene graph
+     * @param {MySceneData} data the data of the global settings
+     */
     configureGlobals(data) {
         if (data.type === "globals") {
             let ambientData = data.ambient;
@@ -82,6 +91,10 @@ class MyContents {
 
     }
 
+    /**  
+     * Creates a fog from the scene graph
+     * @param {MySceneData} data the data of the fog
+     */
     configureFog(data) {
         if (data.type === "fog") {
             let colorData = data.color;
@@ -94,6 +107,11 @@ class MyContents {
         }
     }
 
+    /**  
+     * Creates a camera from the scene graph
+     * @param {MySceneData} data the data of the camera
+     * @param {string} activeCameraId the id of the active camera
+     */
     configureCameras(data, activeCameraId) {
         let cameras = {}
         for (var key in data) {
@@ -116,6 +134,10 @@ class MyContents {
         this.app.initCameras(cameras, activeCameraId);
     }
 
+    /**  
+     * Creates a texture from the scene graph
+     * @param {MySceneData} data the data of the texture
+     */
     configureTextures(data) {
         let textures = {}
         for (var key in data) {
@@ -173,6 +195,10 @@ class MyContents {
         this.app.initTextures(textures);
     }
 
+    /**  
+     * Creates a material from the scene graph
+     * @param {MySceneData} data the data of the material
+     */
     configureMaterials(data) {
         let materials = {}
         for (var key in data) {
@@ -214,6 +240,10 @@ class MyContents {
         this.app.initMaterials(materials);
     }
 
+    /**  
+     * Creates a skybox from the scene graph
+     * @param {MySceneData} data the data of the skybox
+     */
     configureSkyBoxes(data) {
         let skyboxes = {}
         for (var key in data) {
@@ -252,6 +282,13 @@ class MyContents {
         }
     }
 
+    /**  
+     * Creates a node from the scene graph
+     * @param {MySceneData} data the data of the node
+     * @param {string} materialref the material to use in the node
+     * @param {boolean} castShadow whether the node should cast shadows
+     * @param {boolean} receiveShadow whether the node should receive shadows
+     */
     createNodes(data, materialref = undefined, castShadow = undefined, receiveShadow = undefined) {
         let nodes = []
         for (var key in data) {
@@ -262,6 +299,12 @@ class MyContents {
         }
     }
 
+    /**  
+     * Retrieves a primitive mesh from the scene graph
+     * @param {Object} geometry the geometry of the mesh
+     * @param {string} materialref the material to use in the mesh
+     * @returns {THREE.Mesh} the mesh
+     */
     getPrimitiveMesh(geometry, materialref) {
         let material = this.app.materials[materialref]
         if (material.map === null) {
@@ -287,6 +330,15 @@ class MyContents {
     }*/
 
 
+    /**  
+     * Retrieves a node from the scene graph
+     * @param {Object} node the node to retrieve
+     * @param {string} materialref the material to use in the node
+     * @param {boolean} castShadow whether the node should cast shadows
+     * @param {boolean} receiveShadow whether the node should receive shadows
+     * @param {string} name the name of the node
+     * @returns {THREE.Group} the node
+     */
     retrieveNode(node, materialref = undefined, castShadow = false, receiveShadow = false, name = "") {
 
 
@@ -529,6 +581,12 @@ class MyContents {
         }
     }
 
+    /**  
+     * Loads a mipmap image and sets it in the parent texture in the specified level
+     * @param {THREE.TextureLoader} parentTexture the parent texture
+     * @param {number} level the mipmap level
+     * @param {string} path the path to the image
+     */
     loadMipmap(parentTexture, level, path) {
         // load texture. On loaded call the function to create the mipmap for the specified level 
         new THREE.TextureLoader().load(path,
