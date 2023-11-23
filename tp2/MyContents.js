@@ -138,8 +138,8 @@ class MyContents {
     }
 
     /**  
-     * Creates a texture from the scene graph
-     * @param {MySceneData} data the data of the texture
+     * Stores the textures in the scene graph
+     * @param {MySceneData} data the list of textures
      */
     configureTextures(data) {
         this.app.initTextures(data);
@@ -250,8 +250,8 @@ class MyContents {
 
 
     /**  
-     * Creates a material from the scene graph
-     * @param {MySceneData} data the data of the material
+     * Stores the materials in the scene graph
+     * @param {MySceneData} data the list of materials
      */
     configureMaterials(data) {
         this.app.initMaterials(data);
@@ -429,7 +429,8 @@ class MyContents {
                     );
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     texWidth = representation.base > 0 ? representation.base : -representation.base;
-                    texHeight = representation.height > 0 ? representation.height : -representation.height;
+                    texHeight = representation.top > 0 ? representation.top : -representation.top;
+                    console.log(texWidth, texHeight, mesh.material.map.repeat.x, mesh.material.map.repeat.y, materialref)
                     mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
                     mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;
