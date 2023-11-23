@@ -5,6 +5,7 @@ import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyTriangle } from './MyTriangle.js';
 import { MySceneData } from './parser/MySceneData.js';
 import { MyModel3D } from './Model3d.js';
+import { MyPolygon } from './MyPolygon.js';
 
 /**
  *  This class contains the contents of out application
@@ -502,6 +503,21 @@ class MyContents {
                         object.add(gltf.scene);
                     });
                     return object;
+                
+                case "polygon":
+                    console.log(representation)
+                    let polygon = new MyPolygon(representation.radius, 
+                        representation.stacks, 
+                        representation.slices, 
+                        new THREE.Color(representation.color_c.r, representation.color_c.g, representation.color_c.b),
+                        new THREE.Color(representation.color_p.r, representation.color_p.g, representation.color_p.b));
+                    mesh = new THREE.Mesh(polygon);
+                    mesh.material.vertexColors = true
+                    mesh.castShadow = castShadow;
+                    mesh.receiveShadow = receiveShadow;
+
+                    return mesh;
+
 
                 default:
                     console.error("Invalid primitive subtype: " + node.subtype)
