@@ -383,19 +383,6 @@
             </children>
         </node>
 
-        <node id="triangle1">
-
-            <transforms>
-                <translate value3="0 0 -0.5" />
-            </transforms>
-
-            <children>
-                <primitive>
-                    <triangle xyz1="0 0 0" xyz2="5 0 0" xyz3="5 5 0" />
-                </primitive>
-            </children>
-        </node>
-
         <node id="rectangle2">
 
             <transforms>
@@ -634,20 +621,6 @@
                 <noderef id="unitCube" />
             </children>
         </node>
-
-        <node id="test">
-            <transforms>
-                <translate value3="0 1.5 0" />
-                <scale value3="2.5 3.0 10.0" />
-            </transforms>
-
-            <materialref id="blackMetal" />
-
-            <children>
-                <noderef id="triangle1" />
-            </children>
-        </node>
-
 
         <node id="counterTop">
             <transforms>
@@ -1164,7 +1137,7 @@
 
             <children>
                 <primitive>
-                    <model3d filepath="scenes/t08g01/models/model.glb" />
+                    <model3d filepath="scenes/t08g01/models/stool.glb" />
                 </primitive>
             </children>
         </node>
