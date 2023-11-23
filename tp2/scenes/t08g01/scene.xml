@@ -13,7 +13,7 @@
             near="0.1" 
             far="1000" 
             location="15 10 15" 
-            target="0 15 0" /> 
+            target="5 5 5" /> 
 
         <perspective id="pov" 
             angle="60" 
@@ -199,8 +199,8 @@
             specular="0.8 0.8 0.8 1.0" 
             shininess="0" 
             textureref="beerFoamTex" 
-            texlength_s="1" 
-            texlength_t="1" />
+            texlength_s="0.18" 
+            texlength_t="0.017" />
 
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 
@@ -741,7 +741,7 @@
 			
             <children>             
                 <primitive>
-                    <cylinder base="0.15" top="0.15" height="0.01" slices="32" stacks="32" capsclose='true'/>
+                    <cylinder base="0.18" top="0.18" height="0.01" slices="32" stacks="32" capsclose='true'/>
                 </primitive>
             </children> 
         </node>
@@ -751,7 +751,7 @@
 			
             <children>             
                 <primitive>
-                    <cylinder base="0.1" top="0.15" height="0.8" slices="32" stacks="32" />
+                    <cylinder base="0.1" top="0.18" height="0.8" slices="32" stacks="32" />
                 </primitive>
             </children> 
         </node>
@@ -777,6 +777,7 @@
         <node id="cup2" castshadows="true" receiveshadows="true">
 			<transforms>
                 <translate value3="6.4 4.4 2" />
+                <scale value3="1.0 1.5 1.0" />
             </transforms>
 			
             <children>             
