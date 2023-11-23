@@ -42,7 +42,7 @@
         <texture id="darkBlueWallBump" filepath="scenes/t08g01/textures/darkBlueWallBump.png" />
         <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg"/>        
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
-        <texture id="targetTex" filepath="scenes/t08g01/textures/target.jpg"
+        <texture id="targetTex" filepath="scenes/t08g01/textures/target.jpg" mipmaps="false"
             mipmap0="scenes/t08g01/textures/target0.jpg"
             mipmap1="scenes/t08g01/textures/target1.jpg"
             mipmap2="scenes/t08g01/textures/target2.jpg"
