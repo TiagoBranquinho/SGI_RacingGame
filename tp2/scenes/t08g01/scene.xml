@@ -70,6 +70,7 @@
         <texture id="beerTex" filepath="scenes/t08g01/textures/beer.mp4" isVideo="true" />
         <texture id="beerFoamTex" filepath="scenes/t08g01/textures/beerFoam.jpg" />
         <texture id="beerFoamBump" filepath="scenes/t08g01/textures/beerFoamBump.png" />
+        <texture id="signTex" filepath="scenes/t08g01/textures/sign.png" />
     </textures>
 
     <materials>
@@ -153,8 +154,8 @@
             specular="0.9 0.9 0.9 1.0"
             shininess="0"
             textureref="bottleTex"
-            texlength_s="1.5"
-            texlength_t="4"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
         <material id="bottleApp1"
@@ -163,8 +164,8 @@
             specular="0.9 0.9 0.9 1.0"
             shininess="0"
             textureref="bottleTex1"
-            texlength_s="1.5"
-            texlength_t="4"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
         <material id="bottleApp2"
@@ -173,8 +174,8 @@
             specular="0.9 0.9 0.9 1.0"
             shininess="0"
             textureref="bottleTex2"
-            texlength_s="1.5"
-            texlength_t="4"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
         <material id="bottleApp3"
@@ -183,8 +184,8 @@
             specular="0.9 0.9 0.9 1.0"
             shininess="0"
             textureref="bottleTex3"
-            texlength_s="1.5"
-            texlength_t="4"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
         <material id="discoballApp"
@@ -211,10 +212,19 @@
             specular="0.8 0.8 0.8 1.0" 
             shininess="0" 
             textureref="beerFoamTex" 
-            texlength_s="0.18" 
-            texlength_t="0.017"
+            texlength_s="1" 
+            texlength_t="1"
             bumpref="beerFoamBump"
             bumpscale="0.01"/>
+
+        <material id="signApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="1 1 1 1.0"  
+            specular="1 1 1 1.0" 
+            shininess="0" 
+            textureref="signTex" 
+            texlength_s="1" 
+            texlength_t="1" />
 
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 
@@ -265,6 +275,7 @@
                 <noderef id="stool1" />
                 <noderef id="stool2" />
                 <noderef id="stool3" />
+                <noderef id="sign" />
             </children>
         </node>
 
@@ -719,13 +730,14 @@
             <transforms>
                 <translate value3="16 5 0.06" />
                 <rotate value3="1.57079632679 1.74533 0.0" />
+                <scale value3="2.0 0.1 2.0" />
             </transforms>
 
             <materialref id="targetApp" />
 
             <children>
                 <primitive>
-                    <cylinder base="2.0" top="2.0" height="0.1" slices="20" stacks="32"
+                    <cylinder base="1.0" top="1.0" height="1" slices="20" stacks="32"
                         capsclose='true' />
                 </primitive>
             </children>
@@ -734,13 +746,14 @@
         <node id="cupTop">
             <transforms>
                 <translate value3="0.0 0.4 0.0" />
+                <scale value3="0.18 0.01 0.18" />
             </transforms>
 
             <materialref id="beerFoamApp" />
 
             <children>
                 <primitive>
-                    <cylinder base="0.18" top="0.18" height="0.01" slices="32" stacks="32" capsclose='true'/>
+                    <cylinder base="1" top="1" height="1" slices="32" stacks="32" capsclose='true'/>
                 </primitive>
             </children>
         </node>
@@ -1165,6 +1178,45 @@
 
             <children>
                 <noderef id="stool" />
+            </children>
+        </node>
+        <node id="signBack" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="11 6.5 19.99" />
+                <rotate value3="0 3.1415 0" />
+                <scale value3="2 2 1" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <polygon radius="0.6" slices="20" stacks="4" color_c="1 0 0 1" color_p="1 0 0 1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="signFront" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="11 6.5 19.98" />
+                <rotate value3="-1.57079632679 -1.57079632679 0" />
+                <scale value3="1 0.01 1" />
+            </transforms>
+
+            <materialref id="signApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="1" top="1" height="1" slices="32" stacks="32" capsclose="true" />
+                </primitive>
+            </children>
+        </node>
+        <node id="sign" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 0 0" />
+            </transforms>
+
+            <children>
+                <noderef id="signBack" />
+                <noderef id="signFront" />
             </children>
         </node>
     </graph>
