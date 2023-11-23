@@ -47,7 +47,6 @@ export class MyPolygon extends THREE.BufferGeometry {
 
                 // Compute color based on distance from center
                 const color1 = this.pointColorScale(point1)
-                console.log(color1)
                 const color2 = this.pointColorScale(point2)
                 const color3 = this.pointColorScale(point3)
 

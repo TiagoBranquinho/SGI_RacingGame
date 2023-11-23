@@ -38,12 +38,12 @@
         center="0 0 0" 
         emissive="1.0 1.0 1.0 1.0" 
         intensity="1.0" 
-        up="./nightSky.jpg"
-        down="./nightSky.jpg"
-        left="./nightSky.jpg"
-        right="./nightSky.jpg"
-        front="./nightSky.jpg"
-        back="./nightSky.jpg" />
+        up="scenes/t08g01/textures/nightSky.jpg"
+        down="scenes/t08g01/textures/nightSky.jpg"
+        left="scenes/t08g01/textures/nightSky.jpg"
+        right="scenes/t08g01/textures/nightSky.jpg"
+        front="scenes/t08g01/textures/nightSky.jpg"
+        back="scenes/t08g01/textures/nightSky.jpg" />
 
     <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas
     texturas -->
