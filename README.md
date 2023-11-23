@@ -25,14 +25,6 @@
 
 -----
 
-### [TP2 - ...](tp2)
-- (items briefly describing main strong points)
-
-----
-
-### [TP3 - ...](tp3)
-- (items briefly describing main strong points)
-
 ### [TP2](tp2)
  
 #### Scene Graph
@@ -71,5 +63,8 @@ The XML scene showcases a night bar, constructed by a wood floor and four brick 
  ![Scene_v2.3](./tp2/screenshots/scene_v2_3.png)
  ![LODs](./tp2/screenshots/lods.png)
 
+----
 
+### [TP3 - ...](tp3)
+- (items briefly describing main strong points)
 
