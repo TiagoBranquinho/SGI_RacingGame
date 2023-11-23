@@ -200,24 +200,20 @@ class MyGuiInterface {
         const selectedNode = this.nodeList.find(node => node.name.slice(1) === this.currentNodeName.node);
         if (selectedNode) {
             let specificFolder = nodesFolder.addFolder(this.currentNodeName.node);
-            specificFolder.add(selectedNode, 'visible').name('on');
+            specificFolder.add(selectedNode, 'visible').name('visible');
             let positionFolder = specificFolder.addFolder('Position');
-            positionFolder.add(selectedNode.position, 'x', -50, 50).name('x');
-            positionFolder.add(selectedNode.position, 'y', -50, 50).name('y');
-            positionFolder.add(selectedNode.position, 'z', -50, 50).name('z');
+            positionFolder.add(selectedNode.position, 'x', -10, 10).name('x');
+            positionFolder.add(selectedNode.position, 'y', -10, 10).name('y');
+            positionFolder.add(selectedNode.position, 'z', -10, 10).name('z');
             let rotationFolder = specificFolder.addFolder('Rotation');
-            rotationFolder.add(selectedNode.rotation, 'x', -50, 50).name('x');
-            rotationFolder.add(selectedNode.rotation, 'y', -50, 50).name('y');
-            rotationFolder.add(selectedNode.rotation, 'z', -50, 50).name('z');
+            rotationFolder.add(selectedNode.rotation, 'x', -3.14, 3.14).name('x');
+            rotationFolder.add(selectedNode.rotation, 'y', -3.14, 3.14).name('y');
+            rotationFolder.add(selectedNode.rotation, 'z', -3.14, 3.14).name('z');
             let scaleFolder = specificFolder.addFolder('Scale');
-            scaleFolder.add(selectedNode.scale, 'x', -50, 50).name('x');
-            scaleFolder.add(selectedNode.scale, 'y', -50, 50).name('y');
-            scaleFolder.add(selectedNode.scale, 'z', -50, 50).name('z');
+            scaleFolder.add(selectedNode.scale, 'x', -5, 0).name('x');
+            scaleFolder.add(selectedNode.scale, 'y', -5, 5).name('y');
+            scaleFolder.add(selectedNode.scale, 'z', -5, 5).name('z');
         }
-    }
-
-    selectNodeFromScene(name) {
-
     }
 
     dfs(node) {
