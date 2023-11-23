@@ -27,7 +27,11 @@ The parser support all types of required textures, that is: sky boxes, mip-maps,
 
 Wireframe materials are supported by the parser and is implemented in the XML in the line supporting the disco ball.
 
+![Wireframe](./tp2/screenshots/wireframe.png)
+
 #### Buffer Geometry
+
+Buffer geometry is supported by the parser allowing the construction of polygons and is implemented in the XML scene in the "No Smoking" sign.
 
 #### GUI
 
@@ -35,7 +39,10 @@ A GUI that allows to move and modify cameras, lights and different depth nodes w
 
 #### XML Scene
 
-The XML scene showcases a night bar, constructed by a wood floor and four brick walls with bump textures, one of them containing a neon sign emitting light. The bar is also lightened by two pointlights and two spotlights. Inside there can be seen two benches, a table, a counter and a shelf with wood textures, as well as four bottles constructed with nurbs, a disco ball with a video texture, a dart target with bump textures and mip-maps, three pints with video textures and bump textured foam, and three stools constructed using a 3D model. The bar is encapsulated by a sky box with a starry night and, when zooming out, objects with nurbs will be replaced with less detailed primitives, while objects of smaller dimensions will gradually disappear.   
+The XML scene showcases a night bar, constructed by a wood floor and four brick walls with bump textures, one of them containing a neon sign emitting light. The bar is also lightened by two pointlights and two spotlights. Inside there can be seen two benches, a table, a counter and a shelf with wood textures, as well as four bottles constructed with nurbs, a disco ball with a video texture, a dart target with bump textures and mip-maps, three pints with video textures and bump textured foam, three stools, constructed using a 3D model, and a "No Smoking" sign, constructed using buffer geometry to design the polygon that constitures the background of the sign. The bar is encapsulated by a sky box with a starry night and, when zooming out, objects with nurbs will be replaced with less detailed primitives, while objects of smaller dimensions will gradually disappear.   
 
-
+ ![Scene_v2](./tp2/screenshots/scene_v2.png)
+ ![Scene_v2.2](./tp2/screenshots/scene_v2_2.png)
+ ![Scene_v2.3](./tp2/screenshots/scene_v2_3.png)
+ ![LODs](./tp2/screenshots/lods.png)
 
