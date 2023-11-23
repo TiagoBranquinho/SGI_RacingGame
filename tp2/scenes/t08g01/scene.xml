@@ -373,7 +373,7 @@
 
             <transforms>
                 <translate value3="0 0 -0.5" />
-                <rotate value3="0 180.0 0.0" />
+                <rotate value3="0 3.14159265359 0.0" />
             </transforms>
 
             <children>
@@ -400,7 +400,7 @@
 
             <transforms>
                 <translate value3="0 -0.5 0" />
-                <rotate value3="90 0.0 0.0" />
+                <rotate value3="1.57079632679 0.0 0.0" />
             </transforms>
 
             <children>
@@ -414,7 +414,7 @@
 
             <transforms>
                 <translate value3="0 0.5 0" />
-                <rotate value3="-90 0.0 0.0" />
+                <rotate value3="-1.57079632679 0.0 0.0" />
             </transforms>
 
             <children>
@@ -428,7 +428,7 @@
 
             <transforms>
                 <translate value3="-0.5 0 0" />
-                <rotate value3="0.0 -90.0 0.0" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
             </transforms>
 
             <children>
@@ -441,7 +441,7 @@
         <node id="rectangle6">
             <transforms>
                 <translate value3="0.5 0 0" />
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57079632679 0.0" />
             </transforms>
 
             <children>
@@ -532,7 +532,7 @@
         <node id="table">
             <transforms>
                 <translate value3="0 1.2 0" />
-                <rotate value3="0.0 90.0 0.0" />
+                <rotate value3="0.0 1.57079632679 0.0" />
                 <scale value3="6 2.5 3.5" />
             </transforms>
 
@@ -601,7 +601,7 @@
         <node id="bench2" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="17.49 0.01 19.99" />
-                <rotate value3="0.0 180.0 0.0" />
+                <rotate value3="0.0 3.14159265359 0.0" />
             </transforms>
 
             <children>
@@ -649,7 +649,7 @@
         <node id="floor" receiveshadows="true">
             <transforms>
                 <translate value3="0 0 20" />
-                <rotate value3="-90 0.0 0.0" />
+                <rotate value3="-1.57079632679 0.0 0.0" />
             </transforms>
 
             <materialref id="barFloorApp" />
@@ -664,7 +664,7 @@
         <node id="leftWall" receiveshadows="true">
             <transforms>
                 <translate value3="0 0 20" />
-                <rotate value3="0.0 90 0.0" />
+                <rotate value3="0.0 1.57079632679 0.0" />
             </transforms>
 
             <materialref id="barWallApp" />
@@ -689,7 +689,7 @@
         <node id="rightWall" receiveshadows="true">
             <transforms>
                 <translate value3="25 0 0" />
-                <rotate value3="0.0 -90 0.0" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
             </transforms>
 
             <materialref id="darkBlueWallApp" />
@@ -704,7 +704,6 @@
         <node id="frontWall" receiveshadows="true">
             <transforms>
                 <translate value3="0 0 20" />
-                <rotate value3="0.0 0 0.0" />
             </transforms>
 
             <materialref id="darkBlueWallApp" />
@@ -719,7 +718,7 @@
         <node id="target" receiveshadows="true">
             <transforms>
                 <translate value3="16 5 0.06" />
-                <rotate value3="90.0 100.0 0.0" />
+                <rotate value3="1.57079632679 1.74533 0.0" />
             </transforms>
 
             <materialref id="targetApp" />
@@ -822,7 +821,7 @@
             <transforms>
                 <translate value3="1.0 0.0 0.0" />
                 <scale value3="0.5 0.5 0.5" />
-                <rotate value3="0.0 -90 0.0" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
             </transforms>
 
             <children>
@@ -891,7 +890,7 @@
             <transforms>
                 <translate value3="1.0 1.0 1.0" />
                 <scale value3="0.5 0.5 0.5" />
-                <rotate value3="0.0 -90 0.0" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
             </transforms>
 
             <children>
@@ -1031,7 +1030,7 @@
         <node id="lightSupport">
             <transforms>
                 <translate value3="-0.5 0.5 0.0" />
-                <rotate value3="0 0.0 45" />
+                <rotate value3="0.0 0.0 0.78539816339" />
             </transforms>
 
             <materialref id="blackMetal" />
@@ -1064,7 +1063,7 @@
         <node id="spotlight">
             <transforms>
                 <translate value3="0.0 0.0 0.0" />
-                <rotate value3="0 0.0 85" />
+                <rotate value3="0 0.0 1.48353" />
             </transforms>
 
             <materialref id="blackMetal" />
@@ -1079,7 +1078,7 @@
         <node id="spotlightLens">
             <transforms>
                 <translate value3="0.75 -0.065 0.0" />
-                <rotate value3="0 0 85" />
+                <rotate value3="0 0 1.48353" />
             </transforms>
 
             <materialref id="glassApp" />
@@ -1094,7 +1093,7 @@
         <node id="fullSpotlight" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="24.0 7.0 1.0" />
-                <rotate value3="0 -145 0" />
+                <rotate value3="0 -2.53073 0" />
             </transforms>
 
             <children>
@@ -1121,7 +1120,7 @@
         <node id="dartsLight1" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="16 7.5 0.06" />
-                <rotate value3="90 0 90" />
+                <rotate value3="1.57079632679 0 1.57079632679" />
             </transforms>
 
             <children>
@@ -1131,7 +1130,7 @@
         <node id="stool">
             <transforms>
                 <translate value3="0.0 1.85 0.0" />
-                <rotate value3="0 -90 0" />
+                <rotate value3="0 -1.57079632679 0" />
                 <scale value3="3 4 3" />
             </transforms>
 
