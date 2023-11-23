@@ -3,12 +3,8 @@ import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyTriangle } from './MyTriangle.js';
-<<<<<<< HEAD
-import { Model3D } from './Model3d.js';
 import { MySceneData } from './parser/MySceneData.js';
-=======
 import { MyModel3D } from './Model3d.js';
->>>>>>> 54609be (model 3d added)
 
 /**
  *  This class contains the contents of out application

@@ -8,7 +8,6 @@
 
     <fog color="0.66 0.66 0.66 1.0" near="0.0" far="300.0" />
 
-<<<<<<< HEAD
     <cameras initial="cam1" > 
         <perspective id="cam1" 
             angle="60" 
@@ -16,15 +15,6 @@
             far="1000" 
             location="15 10 15" 
             target="5 5 5" /> 
-=======
-    <cameras initial="cam1">
-        <perspective id="cam1"
-            angle="60"
-            near="0.1"
-            far="1000"
-            location="15 10 15"
-            target="0 15 0" />
->>>>>>> 54609be (model 3d added)
 
         <perspective id="pov"
             angle="60"
@@ -34,17 +24,10 @@
             target="10 2 0" />
     </cameras>
 
-<<<<<<< HEAD
     <skybox size="60 60 60" 
         center="0 0 0" 
         emissive="1.0 1.0 1.0 1.0" 
         intensity="1.0" 
-=======
-    <skybox size="50 50 50"
-        center="0 0 0"
-        emissive="1.0 1.0 1.0 1.0"
-        intensity="1.0"
->>>>>>> 54609be (model 3d added)
         up="./nightSky.jpg"
         down="./nightSky.jpg"
         left="./nightSky.jpg"
@@ -115,7 +98,6 @@
             bumpref="darkBlueWallBump"
             bumpscale="0.02" />
 
-<<<<<<< HEAD
         <material id="barFloorApp" 
             emissive="0.0 0.0 0.0 1" 
 			color="0.1 0.1 0.1 1.0" 
@@ -136,26 +118,6 @@
             texlength_t="1" 
             bumpref="targetBump"
             bumpscale="1.0"/>
-=======
-        <material id="barFloorApp"
-            emissive="0.0 0.0 0.0 1"
-            color="0.1 0.1 0.1 1.0"
-            specular="0 0 0 0"
-            shininess="0"
-            textureref="barFloorTex"
-            texlength_s="20"
-            texlength_t="25"
-            twosided="true" />
-
-        <material id="targetApp"
-            emissive="0.0 0.0 0.0 1"
-            color="0.1 0.1 0.1 1.0"
-            specular="0 0 0 0"
-            shininess="10"
-            textureref="targetTex"
-            texlength_s="1"
-            texlength_t="1" />
->>>>>>> 54609be (model 3d added)
 
         <material id="glassApp"
             emissive="0.9 0.9 1.0 1"
@@ -233,7 +195,6 @@
             texlength_s="0.15"
             texlength_t="0.8" />
 
-<<<<<<< HEAD
         <material id="beerFoamApp" 
             emissive="0.0 0.0 0.0 1" 
 			color="0.8 0.8 0.8 1.0" 
@@ -259,24 +220,6 @@
             shininess="0"  
             wireframe="true"/>
     </materials> 
-=======
-        <material id="beerFoamApp"
-            emissive="0.0 0.0 0.0 1"
-            color="0.8 0.8 0.8 1.0"
-            specular="0.8 0.8 0.8 1.0"
-            shininess="0"
-            textureref="beerFoamTex"
-            texlength_s="1"
-            texlength_t="1" />
-
-        <material id="blackMetal"
-            emissive="0.0 0.0 0.0 1"
-            color="0.1 0.1 0.1 1.0"
-            specular="0.1 0.1 0.1 1.0"
-            shininess="0"
-            twosided="true" />
-    </materials>
->>>>>>> 54609be (model 3d added)
 
     <graph rootid="scene">
 
@@ -809,12 +752,7 @@
 
             <children>
                 <primitive>
-<<<<<<< HEAD
                     <cylinder base="0.18" top="0.18" height="0.01" slices="32" stacks="32" capsclose='true'/>
-=======
-                    <cylinder base="0.15" top="0.15" height="0.01" slices="32" stacks="32"
-                        capsclose='true' />
->>>>>>> 54609be (model 3d added)
                 </primitive>
             </children>
         </node>
@@ -1082,15 +1020,9 @@
                 <translate value3="0.0 0.7 0.0" />
             </transforms>
 
-<<<<<<< HEAD
             <materialref id="wireApp" /> 
 			
             <children>             
-=======
-            <materialref id="blackMetal" />
-
-            <children>
->>>>>>> 54609be (model 3d added)
                 <primitive>
                     <cylinder base="0.03" top="0.03" height="1" slices="32" stacks="32"
                         capsclose='true' />
