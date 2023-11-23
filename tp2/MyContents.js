@@ -3,8 +3,12 @@ import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
 import { MyTriangle } from './MyTriangle.js';
+<<<<<<< HEAD
 import { Model3D } from './Model3d.js';
 import { MySceneData } from './parser/MySceneData.js';
+=======
+import { MyModel3D } from './Model3d.js';
+>>>>>>> 54609be (model 3d added)
 
 /**
  *  This class contains the contents of out application
@@ -64,7 +68,9 @@ class MyContents {
 
         this.configureSkyBoxes(data.skyboxes);
 
-        this.createNodes(data.nodes.scene.children, data.nodes.scene.materialIds[0], data.nodes.scene.castShadows, data.nodes.scene.receiveShadows);
+        let rootNode = data.rootId;
+
+        this.createNodes(data.nodes[rootId].children, data.nodes[rootId].materialIds[0], data.nodes[rootId].castShadows, data.nodes[rootId].receiveShadows);
 
         this.configureCameras(data.cameras, data.activeCameraId);
 
@@ -184,7 +190,7 @@ class MyContents {
                             }
                         }
                     }
-                    
+
 
                 }
                 texture.anisotropy = texture_el.anisotropy
@@ -495,13 +501,11 @@ class MyContents {
 
 
                 case "model3d":
-                    geometry = new Model3D(representation.filepath);
-                    mesh = this.getPrimitiveMesh(geometry, materialref);
-                    mesh.castShadow = castShadow;
-                    mesh.receiveShadow = receiveShadow;
-
-                    return mesh;
-
+                    let object = new THREE.Object3D();
+                    MyModel3D.loadModel(representation.filepath).then((gltf) => {
+                        object.add(gltf.scene);
+                    });
+                    return object;
 
                 default:
                     console.error("Invalid primitive subtype: " + node.subtype)

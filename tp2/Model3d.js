@@ -1,33 +1,13 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-export class Model3D extends THREE.Object3D {
-    constructor(filepath) {
+export class MyModel3D extends THREE.Object3D {
+    constructor() {
         super();
-        loadModel(filepath);
     }
 
-    loadModel(filepath){
-        // Load 3D model
-        // You need to implement your own logic for loading 3D models based on the filepath
-        const loader = new THREE.OBJLoader(); // Use the appropriate loader for your file format
-        loader.load(
-            filepath,
-            (object) => {
-                // Add the loaded 3D model to the scene
-                this.add(object);
-            },
-            (xhr) => {
-                // Handle loading progress if needed
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-            },
-            (error) => {
-                console.error('Error loading 3D model', error);
-            }
-        );
-
-        // Set custom properties
-        this.userData = params;
-
-        return this;
+    static async loadModel(filepath) {
+        const loader = new GLTFLoader();
+        return loader.loadAsync(filepath);
     }
 }
