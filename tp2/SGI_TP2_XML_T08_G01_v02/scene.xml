@@ -1,0 +1,1223 @@
+<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<yaf>
+
+    <!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014,
+    FEUP, University of Porto -->
+
+    <globals background="0 0 0 1" ambient="0.26 0.23 0.23 1" />
+
+    <fog color="0 0 0 1.0" near="0.0" far="300.0" />
+
+    <cameras initial="cam1" > 
+        <perspective id="cam1" 
+            angle="60" 
+            near="0.1" 
+            far="1000" 
+            location="15 10 15" 
+            target="5 5 5" />
+
+        <orthogonal id="cam2"
+            near="-50"
+            far="100"
+            location="0 0 20"
+            target="0 0 0"
+            left="-5"
+            right="5"
+            bottom="-5"
+            top="5" />
+
+        <perspective id="pov"
+            angle="60"
+            near="0.1"
+            far="1000"
+            location="23 5 18"
+            target="10 2 -2" />
+    </cameras>
+
+    <skybox size="60 60 60" 
+        center="0 0 0" 
+        emissive="1.0 1.0 1.0 1.0" 
+        intensity="1.0" 
+        up="scenes/t08g01/textures/nightSky.jpg"
+        down="scenes/t08g01/textures/nightSky.jpg"
+        left="scenes/t08g01/textures/nightSky.jpg"
+        right="scenes/t08g01/textures/nightSky.jpg"
+        front="scenes/t08g01/textures/nightSky.jpg"
+        back="scenes/t08g01/textures/nightSky.jpg" />
+
+    <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas
+    texturas -->
+    <textures>
+        <texture id="barWallTex" filepath="scenes/t08g01/textures/barWall.avif" />
+        <texture id="barWallBump" filepath="scenes/t08g01/textures/barWallBump.png" />
+        <texture id="darkBlueWallTex" filepath="scenes/t08g01/textures/darkBlueWall.jpg" />
+        <texture id="darkBlueWallBump" filepath="scenes/t08g01/textures/darkBlueWallBump.png" />
+        <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg" />
+        <texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
+        <texture id="targetTex" filepath="scenes/t08g01/textures/target.jpg" mipmaps="false"
+            magFilter="NearestFilter" minFilter="NearestFilter"
+            mipmap0="scenes/t08g01/textures/target0.jpg"
+            mipmap1="scenes/t08g01/textures/target1.jpg"
+            mipmap2="scenes/t08g01/textures/target2.jpg"
+            mipmap3="scenes/t08g01/textures/target3.jpg" />
+        <texture id="targetBump" filepath="scenes/t08g01/textures/targetBump.png" />
+        <texture id="glassTex" filepath="scenes/t08g01/textures/glass.jpg" />
+        <texture id="bottleTex" filepath="scenes/t08g01/textures/bottle.jpg" />
+        <texture id="bottleTex1" filepath="scenes/t08g01/textures/bottle1.jpg" />
+        <texture id="bottleTex2" filepath="scenes/t08g01/textures/bottle2.jpg" />
+        <texture id="bottleTex3" filepath="scenes/t08g01/textures/bottle3.jpg" />
+        <texture id="discoballTex" filepath="scenes/t08g01/textures/discoball.mp4" isVideo="true" />
+        <texture id="beerTex" filepath="scenes/t08g01/textures/beer.mp4" isVideo="true" />
+        <texture id="beerFoamTex" filepath="scenes/t08g01/textures/beerFoam.jpg" />
+        <texture id="beerFoamBump" filepath="scenes/t08g01/textures/beerFoamBump.png" />
+        <texture id="signTex" filepath="scenes/t08g01/textures/sign.png" />
+    </textures>
+
+    <materials>
+
+        <material id="tableApp"
+            color="0.36 0.25 0.2 1.0"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="tableTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="barWallApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.1 0.1 0.64 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="barWallTex"
+            texlength_s="20"
+            texlength_t="8"
+            twosided="true"
+            bumpref="barWallBump"
+            bumpscale="0.1" />
+
+        <material id="darkBlueWallApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.1 0.1 0.64 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="darkBlueWallTex"
+            texlength_s="25"
+            texlength_t="8"
+            twosided="true"
+            bumpref="darkBlueWallBump"
+            bumpscale="0.02" />
+
+        <material id="barFloorApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="0.1 0.1 0.1 1.0" 
+            specular="0 0 0 0" 
+            shininess="0" 
+            textureref="barFloorTex" 
+            texlength_s="20" 
+            texlength_t="25" 
+            twosided = "true" />
+        
+        <material id="targetApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="0.1 0.1 0.1 1.0" 
+            specular="0 0 0 0" 
+            shininess="10" 
+            textureref="targetTex" 
+            texlength_s="1" 
+            texlength_t="1" 
+            bumpref="targetBump"
+            bumpscale="1.0"/>
+
+        <material id="glassApp"
+            emissive="0.9 0.9 1.0 1"
+            color="0.9 0.9 0.9 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="glassTex"
+            texlength_s="1"
+            texlength_t="1" />
+
+        <material id="glassApp2"
+            emissive="0.9 0.5 1.0 1"
+            color="0.9 0.9 0.5 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="glassTex"
+            texlength_s="1"
+            texlength_t="1" />
+
+        <material id="bottleApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.9 0.9 0.9 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="bottleTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="bottleApp1"
+            emissive="0.0 0.0 0.0 1"
+            color="0.9 0.9 0.9 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="bottleTex1"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="bottleApp2"
+            emissive="0.0 0.0 0.0 1"
+            color="0.9 0.9 0.9 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="bottleTex2"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="bottleApp3"
+            emissive="0.0 0.0 0.0 1"
+            color="0.9 0.9 0.9 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="bottleTex3"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="discoballApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.9 0.9 0.9 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="0"
+            textureref="discoballTex"
+            texlength_s="0.7"
+            texlength_t="0.7" />
+
+        <material id="beerApp"
+            emissive="0.0 0.0 0.0 1"
+            color="0.95 0.56 0.11 1.0"
+            specular="0.95 0.56 0.11 1.0"
+            shininess="0"
+            textureref="beerTex"
+            texlength_s="0.15"
+            texlength_t="0.8" />
+
+        <material id="beerFoamApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="0.8 0.8 0.8 1.0" 
+            specular="0.8 0.8 0.8 1.0" 
+            shininess="0" 
+            textureref="beerFoamTex" 
+            texlength_s="1" 
+            texlength_t="1"
+            bumpref="beerFoamBump"
+            bumpscale="0.01"/>
+
+        <material id="signApp" 
+            emissive="0.0 0.0 0.0 1" 
+			color="1 1 1 1.0"  
+            specular="1 1 1 1.0" 
+            shininess="0" 
+            textureref="signTex" 
+            texlength_s="1" 
+            texlength_t="1" />
+
+        <material id="blackMetal" 
+            emissive="0.0 0.0 0.0 1" 
+            color="0.1 0.1 0.1 1.0"  
+            specular="0.1 0.1 0.1 1.0" 
+            shininess="0"  
+            twosided = "true" />
+
+        <material id="wireApp" 
+            emissive="0.0 0.0 0.0 1" 
+            color="0.1 0.1 0.1 1.0"  
+            specular="0.1 0.1 0.1 1.0" 
+            shininess="0"  
+            wireframe="true"/>
+    </materials> 
+
+    <graph rootid="scene">
+
+        <lod id="lodDemo">
+            <noderef id="sceneDist0" mindist="0" />
+            <noderef id="sceneDist60" mindist="60" />
+            <noderef id="sceneDist100" mindist="100" />
+        </lod>
+
+        <node id="sceneDist0">
+            <children>
+                <noderef id="leftWall" />
+                <noderef id="rightWall" />
+                <noderef id="backWall" />
+                <noderef id="frontWall" />
+                <noderef id="floor" />
+                <noderef id="table1" />
+                <noderef id="bench1" />
+                <noderef id="bench2" />
+                <noderef id="counter" />
+                <noderef id="target" />
+                <noderef id="cup1" />
+                <noderef id="cup2" />
+                <noderef id="cup3" />
+                <noderef id="shelf1" />
+                <noderef id="bottle1" />
+                <noderef id="bottle2" />
+                <noderef id="bottle3" />
+                <noderef id="bottle4" />
+                <noderef id="discoBall" />
+                <noderef id="fullSpotlight" />
+                <noderef id="dartsLight1" />
+                <noderef id="stool1" />
+                <noderef id="stool2" />
+                <noderef id="stool3" />
+                <noderef id="sign" />
+            </children>
+        </node>
+
+        <node id="sceneDist60">
+            <children>
+                <noderef id="leftWall" />
+                <noderef id="rightWall" />
+                <noderef id="backWall" />
+                <noderef id="frontWall" />
+                <noderef id="floor" />
+                <noderef id="table1" />
+                <noderef id="bench1" />
+                <noderef id="bench2" />
+                <noderef id="counter" />
+                <noderef id="target" />
+                <noderef id="shelf1" />
+                <noderef id="bottle1Dist60" />
+                <noderef id="bottle2Dist60" />
+                <noderef id="bottle3Dist60" />
+                <noderef id="bottle4Dist60" />
+                <noderef id="discoBall" />
+                <noderef id="fullSpotlight" />
+                <noderef id="dartsLight1" />
+                <noderef id="stool1" />
+                <noderef id="stool2" />
+                <noderef id="stool3" />
+            </children>
+        </node>
+
+        <node id="sceneDist100">
+            <children>
+                <noderef id="leftWall" />
+                <noderef id="rightWall" />
+                <noderef id="backWall" />
+                <noderef id="frontWall" />
+                <noderef id="floor" />
+                <noderef id="table1" />
+                <noderef id="bench1" />
+                <noderef id="bench2" />
+                <noderef id="counter" />
+                <noderef id="shelf1" />
+            </children>
+        </node>
+
+        <node id="scene">
+            <children>
+                <lodref id="lodDemo" />
+
+                <pointlight id="chandelier1" enabled="true"
+                    color="0.8 0.8 1.0 1"
+                    intensity="90.0"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="true"
+                    position="8.33 10 10"
+                />
+
+                <pointlight id="chandelier2" enabled="true"
+                    color="0.8 0.8 1.0 1"
+                    intensity="90.0"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="true"
+                    position="16.66 10 10"
+                />
+
+                <spotlight id="barLight" enabled="true"
+                    color="0 0 0.78 1"
+                    intensity="10.0"
+                    distance="100"
+                    decay="1.0"
+                    castshadow="true"
+                    position="0 4 10"
+                    target="12.5 4 10"
+                    penumbra="0.8"
+                    angle="1.0471975511965976"
+                />
+
+                <spotlight id="spotLight" enabled="true"
+                    color="0.50 0.50 1.0 1"
+                    intensity="50.0"
+                    distance="100"
+                    decay="1.0"
+                    castshadow="true"
+                    position="23.6 7.0 1.3"
+                    target="15 5 8"
+                    penumbra="0.8"
+                    angle="1.0471975511965976"
+                />
+
+                <spotlight id="targetLight" enabled="true"
+                    color="0.90 0.50 1.0 1"
+                    intensity="10.0"
+                    distance="100"
+                    decay="1.0"
+                    castshadow="true"
+                    position="16 7.5 0.25"
+                    target="16 2 2"
+                    penumbra="0.8"
+                    angle="180"
+                />
+            </children>
+        </node>
+
+        <node id="rectangle1">
+
+            <transforms>
+                <translate value3="0 0 -0.5" />
+                <rotate value3="0 3.14159265359 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="rectangle2">
+
+            <transforms>
+                <translate value3="0 0 0.5" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="rectangle3">
+
+            <transforms>
+                <translate value3="0 -0.5 0" />
+                <rotate value3="1.57079632679 0.0 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="rectangle4">
+
+            <transforms>
+                <translate value3="0 0.5 0" />
+                <rotate value3="-1.57079632679 0.0 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="rectangle5">
+
+            <transforms>
+                <translate value3="-0.5 0 0" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="rectangle6">
+            <transforms>
+                <translate value3="0.5 0 0" />
+                <rotate value3="0.0 1.57079632679 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="unitCube">
+            <children>
+                <!-- Back -->
+                <noderef id="rectangle1" />
+                <!-- Front -->
+                <noderef id="rectangle2" />
+                <!-- Bottom -->
+                <noderef id="rectangle3" />
+                <!-- Top -->
+                <noderef id="rectangle4" />
+                <!-- Left -->
+                <noderef id="rectangle5" />
+                <!-- Right -->
+                <noderef id="rectangle6" />
+            </children>
+        </node>
+
+        <node id="leg">
+            <transforms>
+                <scale value3="0.06 0.92 0.06" />
+            </transforms>
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="leg1">
+            <transforms>
+                <translate value3="0.45 0 0.42" />
+            </transforms>
+
+            <children>
+                <noderef id="leg" />
+            </children>
+        </node>
+
+        <node id="leg2">
+            <transforms>
+                <translate value3="0.45 0 -0.42" />
+            </transforms>
+
+            <children>
+                <noderef id="leg" />
+            </children>
+        </node>
+
+        <node id="leg3">
+            <transforms>
+                <translate value3="-0.45 0 0.42" />
+            </transforms>
+
+            <children>
+                <noderef id="leg" />
+            </children>
+        </node>
+
+        <node id="leg4">
+            <transforms>
+                <translate value3="-0.45 0 -0.42" />
+            </transforms>
+
+            <children>
+                <noderef id="leg" />
+            </children>
+        </node>
+
+        <node id="tableTop">
+            <transforms>
+                <translate value3="0 0.48 0" />
+                <scale value3="1 0.08 1" />
+            </transforms>
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="table">
+            <transforms>
+                <translate value3="0 1.2 0" />
+                <rotate value3="0.0 1.57079632679 0.0" />
+                <scale value3="6 2.5 3.5" />
+            </transforms>
+
+            <materialref id="tableApp" />
+
+            <children>
+                <noderef id="tableTop" />
+                <noderef id="leg1" />
+                <noderef id="leg2" />
+                <noderef id="leg3" />
+                <noderef id="leg4" />
+            </children>
+        </node>
+
+        <node id="table1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="20 0 16.99" />
+            </transforms>
+
+            <children>
+                <noderef id="table" />
+            </children>
+        </node>
+
+        <node id="benchBottom">
+            <transforms>
+                <translate value3="1.25 1.0 3.0" />
+                <scale value3="2.5 2.0 6.0" />
+            </transforms>
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="benchTop">
+            <transforms>
+                <translate value3="2.25 2.5 3.0" />
+                <scale value3="0.5 3.0 6.0" />
+            </transforms>
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="bench">
+            <materialref id="tableApp" />
+
+            <children>
+                <noderef id="benchBottom" />
+                <noderef id="benchTop" />
+            </children>
+        </node>
+
+        <node id="bench1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="22.49 0.01 13.99" />
+            </transforms>
+
+            <children>
+                <noderef id="bench" />
+            </children>
+        </node>
+
+        <node id="bench2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="17.49 0.01 19.99" />
+                <rotate value3="0.0 3.14159265359 0.0" />
+            </transforms>
+
+            <children>
+                <noderef id="bench" />
+            </children>
+        </node>
+
+        <node id="counterBottom">
+            <transforms>
+                <translate value3="0 1.5 0" />
+                <scale value3="2.5 3.0 10.0" />
+            </transforms>
+
+            <materialref id="blackMetal" />
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="counterTop">
+            <transforms>
+                <translate value3="0.0 3.5 0.0" />
+                <scale value3="3 1.0 10.5" />
+            </transforms>
+
+            <materialref id="tableApp" />
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="counter" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="6.0 0.01 5.26" />
+            </transforms>
+
+            <children>
+                <noderef id="counterBottom" />
+                <noderef id="counterTop" />
+            </children>
+        </node>
+
+        <node id="floor" receiveshadows="true">
+            <transforms>
+                <translate value3="0 0 20" />
+                <rotate value3="-1.57079632679 0.0 0.0" />
+            </transforms>
+
+            <materialref id="barFloorApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="25 20" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="leftWall" receiveshadows="true">
+            <transforms>
+                <translate value3="0 0 20" />
+                <rotate value3="0.0 1.57079632679 0.0" />
+            </transforms>
+
+            <materialref id="barWallApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 8" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="backWall" receiveshadows="true">
+            <materialref id="darkBlueWallApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="25 8" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="rightWall" receiveshadows="true">
+            <transforms>
+                <translate value3="25 0 0" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
+            </transforms>
+
+            <materialref id="darkBlueWallApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 8" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="frontWall" receiveshadows="true">
+            <transforms>
+                <translate value3="0 0 20" />
+            </transforms>
+
+            <materialref id="darkBlueWallApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="25 8" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="target" receiveshadows="true">
+            <transforms>
+                <translate value3="16 5 0.06" />
+                <rotate value3="1.57079632679 1.74533 0.0" />
+                <scale value3="2.0 0.1 2.0" />
+            </transforms>
+
+            <materialref id="targetApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="1.0" top="1.0" height="1" slices="20" stacks="32"
+                        capsclose='true' />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="cupTop">
+            <transforms>
+                <translate value3="0.0 0.4 0.0" />
+                <scale value3="0.18 0.01 0.18" />
+            </transforms>
+
+            <materialref id="beerFoamApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="1" top="1" height="1" slices="32" stacks="32" capsclose='true'/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="cupBottom">
+            <materialref id="beerApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.1" top="0.18" height="0.8" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="cup">
+
+            <children>
+                <noderef id="cupTop" />
+                <noderef id="cupBottom" />
+            </children>
+        </node>
+
+        <node id="cup1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="7 4.4 4.9" />
+            </transforms>
+
+            <children>
+                <noderef id="cup" />
+            </children>
+        </node>
+
+        <node id="cup2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="6.4 4.4 2" />
+                <scale value3="1.0 1.5 1.0" />
+            </transforms>
+
+            <children>
+                <noderef id="cup" />
+            </children>
+        </node>
+
+        <node id="cup3" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="6.5 4.4 8" />
+            </transforms>
+
+            <children>
+                <noderef id="cup" />
+            </children>
+        </node>
+
+        <node id="shelf">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <scale value3="1.5 0.5 10.5" />
+            </transforms>
+
+            <materialref id="tableApp" />
+
+            <children>
+                <noderef id="unitCube" />
+            </children>
+        </node>
+
+        <node id="shelf1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="0.76 6.0 5.26" />
+            </transforms>
+
+            <children>
+                <noderef id="shelf" />
+            </children>
+        </node>
+
+        <node id="bottle">
+            <transforms>
+                <translate value3="1.0 0.0 0.0" />
+                <scale value3="0.5 0.5 0.5" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <nurbs degree_u="4" degree_v="4" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="1.0" yy="0.0" zz="0.0" />
+                        <controlpoint xx="1.0" yy="1.0" zz="0.0" />
+                        <controlpoint xx="1.0" yy="2.0" zz="0.0" />
+                        <controlpoint xx="1.8" yy="3.0" zz="0.0" />
+                        <controlpoint xx="1.8" yy="4.0" zz="0.0" />
+                        <controlpoint xx="1.0" yy="0.0" zz="1.0" />
+                        <controlpoint xx="1.0" yy="1.0" zz="1.0" />
+                        <controlpoint xx="1.0" yy="2.0" zz="1.0" />
+                        <controlpoint xx="1.8" yy="3.0" zz="0.2" />
+                        <controlpoint xx="1.8" yy="4.0" zz="0.2" />
+                        <controlpoint xx="2.0" yy="0.0" zz="1.5" />
+                        <controlpoint xx="2.0" yy="1.0" zz="1.5" />
+                        <controlpoint xx="2.0" yy="2.0" zz="1.5" />
+                        <controlpoint xx="2.0" yy="3.0" zz="0.2" />
+                        <controlpoint xx="2.0" yy="4.0" zz="0.2" />
+                        <controlpoint xx="3.0" yy="0.0" zz="1.0" />
+                        <controlpoint xx="3.0" yy="1.0" zz="1.0" />
+                        <controlpoint xx="3.0" yy="2.0" zz="1.0" />
+                        <controlpoint xx="2.2" yy="3.0" zz="0.2" />
+                        <controlpoint xx="2.2" yy="4.0" zz="0.2" />
+                        <controlpoint xx="3.0" yy="0.0" zz="0.0" />
+                        <controlpoint xx="3.0" yy="1.0" zz="0.0" />
+                        <controlpoint xx="3.0" yy="2.0" zz="0.0" />
+                        <controlpoint xx="2.2" yy="3.0" zz="0.0" />
+                        <controlpoint xx="2.2" yy="4.0" zz="0.0" />
+                    </nurbs>
+                </primitive>
+                <primitive>
+                    <nurbs degree_u="4" degree_v="4" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="1.0" yy="0.0" zz="0.0" />
+                        <controlpoint xx="1.0" yy="1.0" zz="0.0" />
+                        <controlpoint xx="1.0" yy="2.0" zz="0.0" />
+                        <controlpoint xx="1.8" yy="3.0" zz="0.0" />
+                        <controlpoint xx="1.8" yy="4.0" zz="0.0" />
+                        <controlpoint xx="1.0" yy="0.0" zz="-1.0" />
+                        <controlpoint xx="1.0" yy="1.0" zz="-1.0" />
+                        <controlpoint xx="1.0" yy="2.0" zz="-1.0" />
+                        <controlpoint xx="1.8" yy="3.0" zz="-0.2" />
+                        <controlpoint xx="1.8" yy="4.0" zz="-0.2" />
+                        <controlpoint xx="2.0" yy="0.0" zz="-1.5" />
+                        <controlpoint xx="2.0" yy="1.0" zz="-1.5" />
+                        <controlpoint xx="2.0" yy="2.0" zz="-1.5" />
+                        <controlpoint xx="2.0" yy="3.0" zz="-0.2" />
+                        <controlpoint xx="2.0" yy="4.0" zz="-0.2" />
+                        <controlpoint xx="3.0" yy="0.0" zz="-1.0" />
+                        <controlpoint xx="3.0" yy="1.0" zz="-1.0" />
+                        <controlpoint xx="3.0" yy="2.0" zz="-1.0" />
+                        <controlpoint xx="2.2" yy="3.0" zz="-0.2" />
+                        <controlpoint xx="2.2" yy="4.0" zz="-0.2" />
+                        <controlpoint xx="3.0" yy="0.0" zz="0.0" />
+                        <controlpoint xx="3.0" yy="1.0" zz="0.0" />
+                        <controlpoint xx="3.0" yy="2.0" zz="0.0" />
+                        <controlpoint xx="2.2" yy="3.0" zz="0.0" />
+                        <controlpoint xx="2.2" yy="4.0" zz="0.0" />
+                    </nurbs>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="bottleDist60">
+            <transforms>
+                <translate value3="1.0 1.0 1.0" />
+                <scale value3="0.5 0.5 0.5" />
+                <rotate value3="0.0 -1.57079632679 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <cylinder base="1.0" top="0.1" height="4.0" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="bottle1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 5.25" />
+            </transforms>
+
+            <materialref id="bottleApp" />
+
+            <children>
+                <noderef id="bottle" />
+            </children>
+        </node>
+        <node id="bottle2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 1.00" />
+            </transforms>
+
+            <materialref id="bottleApp1" />
+
+            <children>
+                <noderef id="bottle" />
+            </children>
+        </node>
+        <node id="bottle3" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 3.10" />
+            </transforms>
+
+            <materialref id="bottleApp2" />
+
+            <children>
+                <noderef id="bottle" />
+            </children>
+        </node>
+        <node id="bottle4" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 7.10" />
+            </transforms>
+
+            <materialref id="bottleApp3" />
+
+            <children>
+                <noderef id="bottle" />
+            </children>
+        </node>
+
+        <node id="bottle1Dist60" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 5.25" />
+            </transforms>
+
+            <materialref id="bottleApp" />
+
+            <children>
+                <noderef id="bottleDist60" />
+            </children>
+        </node>
+        <node id="bottle2Dist60" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 1.00" />
+            </transforms>
+
+            <materialref id="bottleApp1" />
+
+            <children>
+                <noderef id="bottleDist60" />
+            </children>
+        </node>
+        <node id="bottle3Dist60" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 3.10" />
+            </transforms>
+
+            <materialref id="bottleApp2" />
+
+            <children>
+                <noderef id="bottleDist60" />
+            </children>
+        </node>
+        <node id="bottle4Dist60" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-0.2 6.25 7.10" />
+            </transforms>
+
+            <materialref id="bottleApp3" />
+
+            <children>
+                <noderef id="bottleDist60" />
+            </children>
+        </node>
+
+        <node id="ball">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+            </transforms>
+
+            <materialref id="discoballApp" />
+
+            <children>
+                <primitive>
+                    <sphere radius="0.7" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+        <node id="line">
+            <transforms>
+                <translate value3="0.0 0.7 0.0" />
+            </transforms>
+
+            <materialref id="wireApp" /> 
+			
+            <children>             
+                <primitive>
+                    <cylinder base="0.03" top="0.03" height="1" slices="32" stacks="32"
+                        capsclose='true' />
+                </primitive>
+            </children>
+        </node>
+        <node id="discoBall" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="12.5 7.0 10" />
+            </transforms>
+
+            <children>
+                <noderef id="ball" />
+                <noderef id="line" />
+            </children>
+        </node>
+        <node id="lightSupport">
+            <transforms>
+                <translate value3="-0.5 0.5 0.0" />
+                <rotate value3="0.0 0.0 0.78539816339" />
+            </transforms>
+
+            <materialref id="blackMetal" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.1" top="0.1" height="1.2" slices="32" stacks="32"
+                        capsclose='true' />
+                </primitive>
+            </children>
+        </node>
+        <node id="lightSupport1">
+            <transforms>
+                <translate value3="0.0 0.0 0.5" />
+            </transforms>
+
+            <children>
+                <noderef id="lightSupport" />
+            </children>
+        </node>
+        <node id="lightSupport2">
+            <transforms>
+                <translate value3="0.0 0.0 -0.5" />
+            </transforms>
+
+            <children>
+                <noderef id="lightSupport" />
+            </children>
+        </node>
+        <node id="spotlight">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0 0.0 1.48353" />
+            </transforms>
+
+            <materialref id="blackMetal" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.5" top="0.5" height="1.5" slices="32" stacks="32"
+                        capsclose='true' />
+                </primitive>
+            </children>
+        </node>
+        <node id="spotlightLens">
+            <transforms>
+                <translate value3="0.75 -0.065 0.0" />
+                <rotate value3="0 0 1.48353" />
+            </transforms>
+
+            <materialref id="glassApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.48" top="0.48" height="0.1" slices="32" stacks="32"
+                        capsclose='true' />
+                </primitive>
+            </children>
+        </node>
+        <node id="fullSpotlight" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="24.0 7.0 1.0" />
+                <rotate value3="0 -2.53073 0" />
+            </transforms>
+
+            <children>
+                <noderef id="lightSupport1" />
+                <noderef id="lightSupport2" />
+                <noderef id="spotlightLens" />
+                <noderef id="spotlight" />
+            </children>
+        </node>
+        <node id="dartsLight">
+            <transforms>
+                <translate value3="0 0 0" />
+            </transforms>
+
+            <materialref id="glassApp2" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="2" slices="64" stacks="1"
+                        capsclose="true" thetalength="3.14" />
+                </primitive>
+            </children>
+        </node>
+        <node id="dartsLight1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="16 7.5 0.06" />
+                <rotate value3="1.57079632679 0 1.57079632679" />
+            </transforms>
+
+            <children>
+                <noderef id="dartsLight" />
+            </children>
+        </node>
+        <node id="stool">
+            <transforms>
+                <translate value3="0.0 1.85 0.0" />
+                <rotate value3="0 -1.57079632679 0" />
+                <scale value3="3 4 3" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="scenes/t08g01/models/stool.glb" />
+                </primitive>
+            </children>
+        </node>
+        <node id="stool1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="9.0 0.0 8.0" />
+            </transforms>
+
+            <children>
+                <noderef id="stool" />
+            </children>
+        </node>
+        <node id="stool2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="9.3 0.0 5.0" />
+            </transforms>
+
+            <children>
+                <noderef id="stool" />
+            </children>
+        </node>
+        <node id="stool3" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="8.5 0.0 2.0" />
+            </transforms>
+
+            <children>
+                <noderef id="stool" />
+            </children>
+        </node>
+        <node id="signBack" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="11 6.5 19.99" />
+                <rotate value3="0 3.1415 0" />
+                <scale value3="2 2 1" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <polygon radius="0.6" slices="20" stacks="4" color_c="1 0 0 1" color_p="1 0 0 1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="signFront" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="11 6.5 19.98" />
+                <rotate value3="-1.57079632679 -1.57079632679 0" />
+                <scale value3="1 0.01 1" />
+            </transforms>
+
+            <materialref id="signApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="1" top="1" height="1" slices="32" stacks="32" capsclose="true" />
+                </primitive>
+            </children>
+        </node>
+        <node id="sign" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 0 0" />
+            </transforms>
+
+            <children>
+                <noderef id="signBack" />
+                <noderef id="signFront" />
+            </children>
+        </node>
+    </graph>
+</yaf> 
