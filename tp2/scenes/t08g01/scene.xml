@@ -23,7 +23,7 @@
             target="10 2 0" />
     </cameras> 
 
-    <skybox size="100 100 100" 
+    <skybox size="60 60 60" 
         center="0 0 0" 
         emissive="1.0 1.0 1.0 1.0" 
         intensity="1.0" 
@@ -42,15 +42,11 @@
         <texture id="darkBlueWallBump" filepath="scenes/t08g01/textures/darkBlueWallBump.png" />
         <texture id="barFloorTex" filepath="scenes/t08g01/textures/barFloor.jpg"/>        
 		<texture id="tableTex" filepath="scenes/t08g01/textures/table.png" />
-        <texture id="targetTex" filepath="scenes/t08g01/textures/target.jpg" mipmaps="false"
+        <texture id="targetTex" filepath="scenes/t08g01/textures/target.jpg" mipmaps="false" magFilter="NearestFilter" minFilter="NearestFilter"
             mipmap0="scenes/t08g01/textures/target0.jpg"
             mipmap1="scenes/t08g01/textures/target1.jpg"
             mipmap2="scenes/t08g01/textures/target2.jpg"
-            mipmap3="scenes/t08g01/textures/target3.jpg"
-            mipmap4="scenes/t08g01/textures/target4.jpg"
-            mipmap5="scenes/t08g01/textures/target5.jpg" 
-            mipmap6="scenes/t08g01/textures/target6.jpg" 
-            mipmap7="scenes/t08g01/textures/target7.jpg"/>
+            mipmap3="scenes/t08g01/textures/target3.jpg"/>
         <texture id="targetBump" filepath="scenes/t08g01/textures/targetBump.png" />
         <texture id="glassTex" filepath="scenes/t08g01/textures/glass.jpg" />
         <texture id="bottleTex" filepath="scenes/t08g01/textures/bottle.jpg" />
@@ -60,6 +56,7 @@
         <texture id="discoballTex" filepath="scenes/t08g01/textures/discoball.mp4" isVideo="true" />
         <texture id="beerTex" filepath="scenes/t08g01/textures/beer.mp4" isVideo="true" />
         <texture id="beerFoamTex" filepath="scenes/t08g01/textures/beerFoam.jpg" />
+        <texture id="beerFoamBump" filepath="scenes/t08g01/textures/beerFoamBump.png" />
     </textures>
 
     <materials> 
@@ -115,7 +112,9 @@
             shininess="10" 
             textureref="targetTex" 
             texlength_s="1" 
-            texlength_t="1" />
+            texlength_t="1" 
+            bumpref="targetBump"
+            bumpscale="1.0"/>
 
         <material id="glassApp" 
             emissive="0.9 0.9 1.0 1" 
@@ -200,7 +199,9 @@
             shininess="0" 
             textureref="beerFoamTex" 
             texlength_s="0.18" 
-            texlength_t="0.017" />
+            texlength_t="0.017"
+            bumpref="beerFoamBump"
+            bumpscale="0.01"/>
 
         <material id="blackMetal" 
             emissive="0.0 0.0 0.0 1" 
