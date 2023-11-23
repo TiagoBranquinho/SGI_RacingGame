@@ -1,3 +1,16 @@
+# SGI 2023/2024
+
+## Group T08G01
+| Name             | Number    | E-Mail             |
+| ---------------- | --------- | ------------------ |
+| Henrique Silva         | 202007242 | up202007242@up.pt                |
+| Tiago Branquinho         | 202005567 | up202005567@up.pt                |
+
+----
+
+### [TP2](tp2)
+
+
 # sgi-tp2-base
 The starting point of the second assignment of SGI.
 
