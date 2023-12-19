@@ -6,6 +6,7 @@ import { MyTriangle } from './MyTriangle.js';
 import { MySceneData } from './parser/MySceneData.js';
 import { MyModel3D } from './Model3d.js';
 import { MyPolygon } from './MyPolygon.js';
+import { MyTrack } from './MyTrack.js';
 
 /**
  *  This class contains the contents of out application
@@ -21,10 +22,11 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.reader.open("scenes/t08g01/scene.xml");
+        this.reader.open("t08g01/scene.xml");
         //this.reader.open("scenes/SGI_TP2_XML_T07_G07_V02/SGI_TP2_XML_T07_G07_V02.xml");
 
-
+        this.track = new MyTrack(this.app)
+        this.track.init()
     }
 
     /**
@@ -324,7 +326,7 @@ class MyContents {
     getPrimitiveMesh(geometry, materialref) {
         let material = this.createMaterial(materialref)
         if (material.map === null) {
-            let texture = new THREE.TextureLoader().load("scenes/t08g01/textures/bottle.jpg");
+            let texture = new THREE.TextureLoader().load("t08g01/textures/bottle.jpg");
             material.map = texture;
         }
         let mesh = new THREE.Mesh(geometry, material)

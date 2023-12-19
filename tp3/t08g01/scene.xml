@@ -4,9 +4,9 @@
     <!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014,
     FEUP, University of Porto -->
 
-    <globals background="0 0 0 1" ambient="0.26 0.23 0.23 1" />
+    <globals background="0 0 0 1" ambient="1 1 1 1" />
 
-    <fog color="0 0 0 1.0" near="0.0" far="300.0" />
+    <fog color="1 1 1 1.0" near="0.0" far="700.0" />
 
     <cameras initial="cam1" > 
         <perspective id="cam1" 
@@ -34,24 +34,45 @@
             target="10 2 -2" />
     </cameras>
 
-    <skybox size="60 60 60" 
+    <skybox size="600 600 600" 
         center="0 0 0" 
         emissive="1.0 1.0 1.0 1.0" 
         intensity="1.0" 
-        up="scenes/t08g01/textures/nightSky.jpg"
-        down="scenes/t08g01/textures/nightSky.jpg"
-        left="scenes/t08g01/textures/nightSky.jpg"
-        right="scenes/t08g01/textures/nightSky.jpg"
-        front="scenes/t08g01/textures/nightSky.jpg"
-        back="scenes/t08g01/textures/nightSky.jpg" />
+        up="t08g01/textures/sky.jpg"
+        down="t08g01/textures/sky.jpg"
+        left="t08g01/textures/sky.jpg"
+        right="t08g01/textures/sky.jpg"
+        front="t08g01/textures/sky.jpg"
+        back="t08g01/textures/sky.jpg" />
 
     <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas
     texturas -->
     <textures>
+        <texture id="grassTex" filepath="t08g01/textures/grass.jpg" />
+        <texture id="coneTex" filepath="t08g01/textures/cone.jpg" />
         
     </textures>
 
     <materials>
+        <material id="grassApp"
+            color="0.1 0.7 0.0 1.0"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="grassTex"
+            texlength_s="0.01"
+            texlength_t="0.01"
+            twosided="true" />
+
+        <material id="coneApp"
+            color="1.0 0.5 0.0 1.0"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="coneTex"
+            texlength_s="0.01"
+            texlength_t="0.01"
+            twosided="true" />
 
     </materials> 
 
@@ -59,7 +80,8 @@
 
         <node id="scene">
             <children>
-                <noderef id="unitCube" />
+                <noderef id="terrain" />
+                <noderef id="cone" />
             </children>
         </node>
 
@@ -159,6 +181,37 @@
                 <noderef id="rectangle5" />
                 <!-- Right -->
                 <noderef id="rectangle6" />
+            </children>
+        </node>
+
+        <node id="terrain">
+            <transforms>
+                <rotate value3="-1.57079632679 0.0 0.0" />
+                <scale value3="600 600 600" />
+            </transforms>
+
+            <materialref id="grassApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="cone">
+            <transforms>
+                <translate value3="0.0 1.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <materialref id="coneApp" />
+
+            <children>
+                <primitive>
+                    <cylinder base="2.0" top="0.1" height="3.0" slices="32" stacks="32" />
+                </primitive>
             </children>
         </node>
     </graph>
