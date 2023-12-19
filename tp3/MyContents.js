@@ -24,10 +24,10 @@ class MyContents {
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
         //this.reader.open("scenes/SGI_TP2_XML_T07_G07_V02/SGI_TP2_XML_T07_G07_V02.xml");
-        this.menu = new MyMenu(this);
     }
 
     showMenu() {
+        this.menu = new MyMenu(this);
         this.menu.display();
         if (this.axis === null) {
             this.axis = new MyAxis(this.app)
