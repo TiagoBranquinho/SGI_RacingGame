@@ -7,6 +7,7 @@ import { MySceneData } from './parser/MySceneData.js';
 import { MyModel3D } from './Model3d.js';
 import { MyPolygon } from './MyPolygon.js';
 import { MyTrack } from './MyTrack.js';
+import { MyMenu } from './MyMenu.js';
 
 /**
  *  This class contains the contents of out application
@@ -22,21 +23,23 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.reader.open("t08g01/scene.xml");
         //this.reader.open("scenes/SGI_TP2_XML_T07_G07_V02/SGI_TP2_XML_T07_G07_V02.xml");
-
-        this.track = new MyTrack(this.app)
-        this.track.init()
+        this.menu = new MyMenu(this);
     }
 
-    /**
-     * initializes the contents
-     */
-    init() {
+    showMenu() {
+        this.menu.display();
         if (this.axis === null) {
             this.axis = new MyAxis(this.app)
             this.app.scene.add(this.axis)
         }
+    }
+
+    startGame() {
+        this.reader.open("t08g01/scene.xml");
+        this.track = new MyTrack(this.app)
+        this.track.init()
+
     }
 
     /**
@@ -153,7 +156,7 @@ class MyContents {
      */
     createTexture(texture_id) {
         let texture_el = this.app.textures[texture_id]
-        if(texture_el === undefined){
+        if (texture_el === undefined) {
             return null
         }
         let texture = null

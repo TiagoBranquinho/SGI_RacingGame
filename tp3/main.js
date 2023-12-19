@@ -13,7 +13,7 @@ app.setGui(gui);
 // create the contents object
 let contents = new MyContents(app)
 // initializes the contents
-contents.init()
+contents.startGame()
 // hooks the contents object in the application object
 app.setContents(contents);
 
