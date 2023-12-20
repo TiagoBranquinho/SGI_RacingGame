@@ -36,6 +36,7 @@ class MyContents {
     }
 
     startGame() {
+        this.app.reset();
         this.reader.open("t08g01/scene.xml");
         this.track = new MyTrack(this.app)
         this.track.init()

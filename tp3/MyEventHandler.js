@@ -35,7 +35,7 @@ class MyEventHandler {
 
     onPointerUp() {
         this.mousePressed = false; // Clear the flag when the mouse is released
-        
+
     }
 
     onPointerMove(event) {
@@ -67,13 +67,22 @@ class MyEventHandler {
 
     pickingHelper(intersects) {
         if (intersects.length > 0) {
-            console.log(intersects)
+            //console.log(intersects)
             const obj = intersects[0].object;
             obj.material.color.setHex(this.pickingColor);
 
             // Track the selected car when the mouse is pressed
             if (this.mousePressed) {
-                this.selectedCar = obj;
+                if (obj.launchGame) {
+                    if (this.selectedCar != null) {
+                        this.contents.startGame();
+                    }
+                }
+                else {
+                    this.selectedCar = obj;
+                    console.log("selected car: " + this.selectedCar);
+                }
+
             }
 
         } else {

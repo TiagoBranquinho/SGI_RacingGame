@@ -69,6 +69,15 @@ class MyApp  {
         window.addEventListener('resize', this.onResize.bind(this), false );
     }
 
+    reset() {
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color( 0x101010 );
+        this.cameras = [];
+        this.lights = [];
+        this.lightHelpersVisible = false;
+        this.init();
+    }
+
     /**
      * initializes all the textures
      */
