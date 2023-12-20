@@ -88,6 +88,10 @@ class MyMenuHandler {
                         this.removeListener();
                         this.contents.startGame(this.selectedCar.parent.parent.children[0]);
                     }
+                    else {
+                        alert("Please select a car first!");
+                        this.onPointerUp();
+                    }
                 }
                 else {
                     this.selectedCar = obj;

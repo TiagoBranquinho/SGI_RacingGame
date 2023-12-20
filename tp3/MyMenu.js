@@ -52,7 +52,6 @@ class MyMenu {
         carGroup.add(car);
         carGroup.add(buttonGroup);
         this.draw(carGroup);
-        console.log(buttonGroup)
         this.intersectObjects.push(buttonGroup.children[0]);
         this.rotatableObjects.push(car);
     }
@@ -77,7 +76,6 @@ class MyMenu {
         // Create a text label for the button
         let label = await this.addText(text, labelPosition, size, rotationQuotient); // Corrected here
         buttonGroup.add(label);
-        console.log(buttonGroup)
         if (draw) {
             this.intersectObjects.push(button);
             this.draw(buttonGroup);
