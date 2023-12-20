@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { MyEventHandler } from './MyEventHandler.js';
+import { MyMenuHandler } from './MyMenuHandler.js';
 
 
 class MyMenu {
@@ -12,7 +12,7 @@ class MyMenu {
         this.intersectObjects = [];
         this.rotatableObjects = [];
         this.createMenu();
-        this.menuHandler = new MyEventHandler(this.contents, this.intersectObjects, this.rotatableObjects);
+        this.menuHandler = new MyMenuHandler(this.contents, this.intersectObjects, this.rotatableObjects);
     }
 
     createMenu() {

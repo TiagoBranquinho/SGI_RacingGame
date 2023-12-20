@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-class MyEventHandler {
+class MyMenuHandler {
     constructor(contents, intersectObjects, rotatableObjects) {
         this.contents = contents;
         this.intersectObjects = intersectObjects;
@@ -84,9 +84,9 @@ class MyEventHandler {
             // Track the selected car when the mouse is pressed
             if (this.mousePressed) {
                 if (obj.launchGame) {
-                    if (this.selectedCar != null) {
+                    if (this.selectedCar !== null) {
                         this.removeListener();
-                        this.contents.startGame();
+                        this.contents.startGame(this.selectedCar.parent.parent.children[0]);
                     }
                 }
                 else {
@@ -133,7 +133,6 @@ class MyEventHandler {
         // Calculate rotation amounts based on mouse movement
         const rotationSpeed = 0.005;
         const deltaX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-
         // Apply rotation to the object in both X and Y directions
         for (var i = 0; i < this.rotatableObjects.length; i++) {
             this.rotatableObjects[i].rotation.y += deltaX * rotationSpeed;
@@ -142,4 +141,4 @@ class MyEventHandler {
 
 
 }
-export { MyEventHandler };
+export { MyMenuHandler };

@@ -35,14 +35,15 @@ class MyContents {
         }
     }
 
-    startGame() {
+    startGame(car) {
         this.app.init();
         const canvas = document.getElementById("canvas");
         canvas.removeChild(canvas.childNodes[0]);
         this.reader.open("t08g01/scene.xml");
         this.track = new MyTrack(this.app)
         this.track.init()
-        console.log(this.app.controls)
+        this.app.scene.add(car)
+        console.log(car)
 
     }
 
