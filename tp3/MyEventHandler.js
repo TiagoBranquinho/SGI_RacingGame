@@ -1,19 +1,20 @@
 import * as THREE from 'three';
 
 class MyEventHandler {
-    constructor(contents, intersectObjects) {
+    constructor(contents, intersectObjects, rotatableObjects) {
         this.contents = contents;
         this.intersectObjects = intersectObjects;
+        this.rotatableObjects = rotatableObjects;
         this.init();
         this.moveListener();
         this.mousePressed = false;
+        this.selectedCar = null; // Track the selected car
     }
     init() {
         this.pointer = new THREE.Vector2()
         this.raycaster = new THREE.Raycaster()
-        this.raycaster.near = 1
-        this.raycaster.far = 20
-        this.lastPickedObj = null
+        this.raycaster.near = 0.1
+        this.raycaster.far = 100
         this.pickingColor = 0x00ff00
     }
     moveListener() {
@@ -27,7 +28,14 @@ class MyEventHandler {
 
     onPointerUp() {
         this.mousePressed = false; // Clear the flag when the mouse is released
+
+        // Update color based on the custom property
+        for (var i = 0; i < this.intersectObjects.length; i++) {
+            const car = this.intersectObjects[i];
+            car.material.color.setHex(this.pickingColor);
+        }
     }
+
     onPointerMove(event) {
 
         // calculate pointer position in normalized device coordinates
@@ -54,29 +62,31 @@ class MyEventHandler {
         this.transverseRaycastProperties(intersects)
     }
 
+
     pickingHelper(intersects) {
         if (intersects.length > 0) {
-            const obj = intersects[0].object
-            this.changeColorOfFirstPickedObj(obj)
+            console.log(intersects)
+            const obj = intersects[0].object;
+            obj.material.color.setHex(this.pickingColor);
+
+            // Track the selected car when the mouse is pressed
+            if (this.mousePressed) {
+                this.selectedCar = obj;
+            }
+
         } else {
-            this.restoreColorOfFirstPickedObj()
+            this.restoreColorOfFirstPickedObj();
         }
     }
 
-    changeColorOfFirstPickedObj(obj) {
-        if (this.lastPickedObj != obj) {
-            if (this.lastPickedObj)
-                this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
-            this.lastPickedObj = obj;
-            this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
-            this.lastPickedObj.material.color.setHex(this.pickingColor);
-        }
-    }
+
 
     restoreColorOfFirstPickedObj() {
-        if (this.lastPickedObj)
-            this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
-        this.lastPickedObj = null;
+        for (var i = 0; i < this.intersectObjects.length; i++) {
+            let car = this.intersectObjects[i];
+            if (car != this.selectedCar)
+                car.material.color.setHex(0x0088ff);
+        }
     }
 
     transverseRaycastProperties(intersects) {
@@ -102,8 +112,8 @@ class MyEventHandler {
         const deltaX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 
         // Apply rotation to the object in both X and Y directions
-        for (var i = 0; i < this.intersectObjects.length; i++) {
-            this.intersectObjects[i].rotation.y += deltaX * rotationSpeed;
+        for (var i = 0; i < this.rotatableObjects.length; i++) {
+            this.rotatableObjects[i].rotation.y += deltaX * rotationSpeed;
         }
     }
 

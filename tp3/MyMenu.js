@@ -10,18 +10,19 @@ class MyMenu {
         this.contents = contents;
         this.menu = new THREE.Group();
         this.intersectObjects = [];
+        this.rotatableObjects = [];
         this.createMenu();
         console.log(this.menu);
-        this.menuHandler = new MyEventHandler(this.contents, this.intersectObjects);
+        this.menuHandler = new MyEventHandler(this.contents, this.intersectObjects, this.rotatableObjects);
     }
 
     createMenu() {
         this.initCameras();
         this.initLights();
-        this.addText('F1eup', new THREE.Vector3(-2, 3, 0), 1.2, 8);
+        this.addText('F1eup', new THREE.Vector3(-2, 4, 0), 1.2, 8);
         this.addText('Choose your car', new THREE.Vector3(-5, -4, 0), 1, -10);
-        this.addInteractiveSquare('car1.glb', new THREE.Vector3(3, -2, 0), 2);
-        this.addInteractiveSquare('car2.glb', new THREE.Vector3(-3, -2, 0), 0.01);
+        this.addInteractiveCar('car1.glb', new THREE.Vector3(3, 1, 0), 2);
+        this.addInteractiveCar('car2.glb', new THREE.Vector3(-3, 1, 0), 0.01);
     }
 
     draw(obj) {
@@ -35,26 +36,47 @@ class MyMenu {
         this.contents.app.scene.add(this.menu);
     }
 
-    addInteractiveSquare(name, position, scale) {
+    addInteractiveCar(name, position, scale) {
         const src = 't08g01/models/';
+        let carGroup = new THREE.Group();
+        let car = this.contents.processModel3D({ filepath: src + name });
 
-        let car = this.contents.processModel3D({ filepath: src + name })
-        car.position.x = position.x;
-        car.position.y = position.y;
-        car.position.z = position.z;
+        // Create a parent group for the car and add all parts to it
+        car.position.copy(position);
         car.scale.set(scale, scale, scale);
-        //put car looking at the camera
-        let target = this.contents.app.activeCamera.position;
-        target.y = -1
-        car.lookAt(position);
-        if (name == 'car1.glb') {
-            car.rotation.y = Math.PI / 1.1;
-        }
+        car.rotation.x = Math.PI / 8;
 
-        this.draw(car);
+        let boxLength = 3;
+        let boxHeight = 0.8;
+        // Create a button
+        const buttonGeometry = new THREE.BoxGeometry(boxLength, boxHeight, 0.2);
+        const buttonMaterial = new THREE.MeshBasicMaterial({ color: 0x0088ff });
+        const button = new THREE.Mesh(buttonGeometry, buttonMaterial);
+        // Position the button below the car
+        button.position.copy(position);
+        button.position.y -= 1.5;
 
-        this.intersectObjects.push(car);
+        // Add the car and button to the carGroup
+        carGroup.add(car);
+        carGroup.add(button);
+        let size = 0.4;
+        let labelPosition = button.position.clone();
+        labelPosition.y -= boxHeight / 2;
+        labelPosition.x -= boxLength / 2;
+        labelPosition.x += size / 2;
+        labelPosition.y += size / 2;
+        // Create a text label for the button
+        const label = this.addText('Selected', labelPosition, size, 18); // Corrected here
+        carGroup.add(label);
+
+        this.draw(carGroup);
+        this.intersectObjects.push(button);
+        this.rotatableObjects.push(car);
     }
+
+
+
+
 
     addText(text, position, size, rotationQuotient) {
         const loader = new FontLoader();
@@ -63,7 +85,7 @@ class MyMenu {
             const textGeometry = new TextGeometry(text, {
                 font: font,
                 size: size,  // Adjust the size as needed
-                height: 0.2,
+                height: 0.1,
                 curveSegments: 12,
                 bevelEnabled: false
 
@@ -88,7 +110,7 @@ class MyMenu {
                 angle: 75,
                 near: 0.1,
                 far: 1000,
-                location: [0, 2, 8],
+                location: [0, 0, 8],
                 target: [0, 0, 0]
             },
             // Add more cameras as needed
