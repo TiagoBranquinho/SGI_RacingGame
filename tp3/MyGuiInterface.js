@@ -72,8 +72,6 @@ class MyGuiInterface {
             camera.updateProjectionMatrix();
         });
 
-        console.log(this.app.controls)
-
 
         if (camera.isPerspectiveCamera) {
 

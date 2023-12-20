@@ -23,17 +23,19 @@ class MyEventHandler {
         document.addEventListener("pointerup", this.onPointerUp.bind(this), false);
     }
     onPointerDown() {
-        this.mousePressed = true; // Set the flag when the mouse is pressed
+        this.mousePressed = true; // Set the flag when the mouse is pressed~
+        //2. set the picking ray from the camera position and mouse coordinates
+        this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
+
+        //3. compute intersections
+        var intersects = this.raycaster.intersectObjects(this.intersectObjects);
+
+        this.pickingHelper(intersects)
     }
 
     onPointerUp() {
         this.mousePressed = false; // Clear the flag when the mouse is released
-
-        // Update color based on the custom property
-        for (var i = 0; i < this.intersectObjects.length; i++) {
-            const car = this.intersectObjects[i];
-            car.material.color.setHex(this.pickingColor);
-        }
+        
     }
 
     onPointerMove(event) {
@@ -59,7 +61,7 @@ class MyEventHandler {
 
         this.pickingHelper(intersects)
 
-        this.transverseRaycastProperties(intersects)
+        //this.transverseRaycastProperties(intersects)
     }
 
 
@@ -84,8 +86,9 @@ class MyEventHandler {
     restoreColorOfFirstPickedObj() {
         for (var i = 0; i < this.intersectObjects.length; i++) {
             let car = this.intersectObjects[i];
-            if (car != this.selectedCar)
+            if (car != this.selectedCar) {
                 car.material.color.setHex(0x0088ff);
+            }
         }
     }
 

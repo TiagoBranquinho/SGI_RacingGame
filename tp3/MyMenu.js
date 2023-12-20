@@ -12,7 +12,6 @@ class MyMenu {
         this.intersectObjects = [];
         this.rotatableObjects = [];
         this.createMenu();
-        console.log(this.menu);
         this.menuHandler = new MyEventHandler(this.contents, this.intersectObjects, this.rotatableObjects);
     }
 
@@ -74,6 +73,32 @@ class MyMenu {
         this.rotatableObjects.push(car);
     }
 
+    /* addButton(position, length, height, color, rotationQuotient) {
+        let boxLength = 3;
+        let boxHeight = 0.8;
+        // Create a button
+        const buttonGeometry = new THREE.BoxGeometry(boxLength, boxHeight, 0.2);
+        const buttonMaterial = new THREE.MeshBasicMaterial({ color: 0x0088ff });
+        const button = new THREE.Mesh(buttonGeometry, buttonMaterial);
+        // Position the button below the car
+        button.position.copy(position);
+        button.position.y -= 1.5;
+
+        // Add the car and button to the carGroup
+        carGroup.add(car);
+        carGroup.add(button);
+        let size = 0.4;
+        let labelPosition = button.position.clone();
+        labelPosition.y -= boxHeight / 2;
+        labelPosition.x -= boxLength / 2;
+        labelPosition.x += size / 2;
+        labelPosition.y += size / 2;
+        // Create a text label for the button
+        const label = this.addText('Selected', labelPosition, size, 18); // Corrected here
+        carGroup.add(label);
+
+        this.draw(carGroup);
+    } */
 
 
 
