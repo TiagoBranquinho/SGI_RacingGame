@@ -91,7 +91,7 @@ class MyApp  {
         this.activeCameraName = cameraName
         this.activeCamera = this.cameras[this.activeCameraName]
         this.updateCameraIfRequired()
-        //this.gui.reset()
+        this.gui.reset()
     }
 
     /**

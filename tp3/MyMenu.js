@@ -17,10 +17,11 @@ class MyMenu {
 
     createMenu() {
         this.initCameras();
+        this.initLights();
         this.addText('F1eup', new THREE.Vector3(-2, 3, 0), 1.2, 8);
         this.addText('Choose your car', new THREE.Vector3(-5, -4, 0), 1, -10);
-        this.addInteractiveSquare('Car 1', 'car1.jpg', new THREE.Vector3(-3, 0, 0));
-        this.addInteractiveSquare('Car 2', 'car2.jpg', new THREE.Vector3(3, 0, 0));
+        this.addInteractiveSquare('car1.glb', new THREE.Vector3(3, -2, 0), 2);
+        this.addInteractiveSquare('car2.glb', new THREE.Vector3(-3, -2, 0), 0.01);
     }
 
     draw(obj) {
@@ -34,21 +35,25 @@ class MyMenu {
         this.contents.app.scene.add(this.menu);
     }
 
-    addInteractiveSquare(label, name, position) {
-        const src = 't08g01/textures/menu/';
-        const squareGeometry = new THREE.PlaneGeometry(4, 4);
-        const textureLoader = new THREE.TextureLoader();
+    addInteractiveSquare(name, position, scale) {
+        const src = 't08g01/models/';
 
-        textureLoader.load(src + name, (texture) => {
-            const squareMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-            const squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
+        let car = this.contents.processModel3D({ filepath: src + name })
+        car.position.x = position.x;
+        car.position.y = position.y;
+        car.position.z = position.z;
+        car.scale.set(scale, scale, scale);
+        //put car looking at the camera
+        let target = this.contents.app.activeCamera.position;
+        target.y = -1
+        car.lookAt(position);
+        if (name == 'car1.glb') {
+            car.rotation.y = Math.PI / 1.1;
+        }
 
-            squareMesh.position.copy(position);
-            squareMesh.name = label;
-            this.draw(squareMesh);
-            this.intersectObjects.push(squareMesh);
+        this.draw(car);
 
-        });
+        this.intersectObjects.push(car);
     }
 
     addText(text, position, size, rotationQuotient) {
@@ -83,25 +88,34 @@ class MyMenu {
                 angle: 75,
                 near: 0.1,
                 far: 1000,
-                location: [0, 0, 8],
+                location: [0, 2, 8],
                 target: [0, 0, 0]
             },
-            {
-                id: 'camera2',
-                type: 'orthogonal',
-                left: -5,
-                right: 5,
-                top: 5,
-                bottom: -5,
-                near: 0.1,
-                far: 100,
-                location: [0, 0, 10],
-                target: [0, 0, 0]
-            }
             // Add more cameras as needed
         ];
         this.contents.configureCameras(initialCameras, 'camera1');
     }
+
+    initLights() {
+        const lightsData = {
+            type: 'globals',
+            ambient: {
+                isColor: true,
+                r: 1, // Example ambient color values
+                g: 1,
+                b: 1
+            },
+            background: {
+                isColor: true,
+                r: 0.1, // Example background color values
+                g: 0.1,
+                b: 0.1
+            }
+        };
+
+        this.contents.configureGlobals(lightsData);
+    }
+
 
 }
 

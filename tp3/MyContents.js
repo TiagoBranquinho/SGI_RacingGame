@@ -341,6 +341,7 @@ class MyContents {
         MyModel3D.loadModel(model3d.filepath).then((gltf) => {
             object.add(gltf.scene);
         });
+        console.log(object);
         return object;
     }
 
