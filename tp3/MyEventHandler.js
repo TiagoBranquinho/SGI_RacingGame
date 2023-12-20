@@ -18,9 +18,19 @@ class MyEventHandler {
         this.pickingColor = 0x00ff00
     }
     moveListener() {
-        document.addEventListener("pointermove", this.onPointerMove.bind(this), false);
-        document.addEventListener("pointerdown", this.onPointerDown.bind(this), false);
-        document.addEventListener("pointerup", this.onPointerUp.bind(this), false);
+        this.boundPointerMove = this.onPointerMove.bind(this);
+        this.boundPointerDown = this.onPointerDown.bind(this);
+        this.boundPointerUp = this.onPointerUp.bind(this);
+
+        document.addEventListener("pointermove", this.boundPointerMove, false);
+        document.addEventListener("pointerdown", this.boundPointerDown, false);
+        document.addEventListener("pointerup", this.boundPointerUp, false);
+    }
+
+    removeListener() {
+        document.removeEventListener("pointermove", this.boundPointerMove, false);
+        document.removeEventListener("pointerdown", this.boundPointerDown, false);
+        document.removeEventListener("pointerup", this.boundPointerUp, false);
     }
     onPointerDown() {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
@@ -75,6 +85,7 @@ class MyEventHandler {
             if (this.mousePressed) {
                 if (obj.launchGame) {
                     if (this.selectedCar != null) {
+                        this.removeListener();
                         this.contents.startGame();
                     }
                 }
