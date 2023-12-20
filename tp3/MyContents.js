@@ -336,6 +336,14 @@ class MyContents {
         return mesh
     }
 
+    processModel3D(model3d) {
+        let object = new THREE.Object3D();
+        MyModel3D.loadModel(model3d.filepath).then((gltf) => {
+            object.add(gltf.scene);
+        });
+        return object;
+    }
+
 
     /**  
      * Retrieves a node from the scene graph
@@ -501,11 +509,7 @@ class MyContents {
 
 
                 case "model3d":
-                    let object = new THREE.Object3D();
-                    MyModel3D.loadModel(representation.filepath).then((gltf) => {
-                        object.add(gltf.scene);
-                    });
-                    return object;
+                    return this.processModel3D(representation);
 
                 case "polygon":
                     let polygon = new MyPolygon(representation.radius,

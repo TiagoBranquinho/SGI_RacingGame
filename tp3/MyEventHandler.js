@@ -6,6 +6,7 @@ class MyEventHandler {
         this.intersectObjects = intersectObjects;
         this.init();
         this.moveListener();
+        this.mousePressed = false;
     }
     init() {
         this.pointer = new THREE.Vector2()
@@ -16,11 +17,16 @@ class MyEventHandler {
         this.pickingColor = 0x00ff00
     }
     moveListener() {
-        document.addEventListener(
-            "pointermove",
-            this.onPointerMove.bind(this),
-            false
-        );
+        document.addEventListener("pointermove", this.onPointerMove.bind(this), false);
+        document.addEventListener("pointerdown", this.onPointerDown.bind(this), false);
+        document.addEventListener("pointerup", this.onPointerUp.bind(this), false);
+    }
+    onPointerDown() {
+        this.mousePressed = true; // Set the flag when the mouse is pressed
+    }
+
+    onPointerUp() {
+        this.mousePressed = false; // Clear the flag when the mouse is released
     }
     onPointerMove(event) {
 
@@ -38,6 +44,10 @@ class MyEventHandler {
 
         //3. compute intersections
         var intersects = this.raycaster.intersectObjects(this.intersectObjects);
+
+        if (this.mousePressed) {
+            this.rotateSquares(event);
+        }
 
         this.pickingHelper(intersects)
 
@@ -72,7 +82,7 @@ class MyEventHandler {
     transverseRaycastProperties(intersects) {
         for (var i = 0; i < intersects.length; i++) {
 
-            console.log(intersects[i]);
+            //console.log(intersects[i]);
 
             /*
             An intersection has the following properties :
@@ -85,6 +95,18 @@ class MyEventHandler {
             */
         }
     }
+
+    rotateSquares(event) {
+        // Calculate rotation amounts based on mouse movement
+        const rotationSpeed = 0.005;
+        const deltaX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+
+        // Apply rotation to the object in both X and Y directions
+        for (var i = 0; i < this.intersectObjects.length; i++) {
+            this.intersectObjects[i].rotation.y += deltaX * rotationSpeed;
+        }
+    }
+
 
 }
 export { MyEventHandler };
