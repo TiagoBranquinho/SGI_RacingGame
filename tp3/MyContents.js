@@ -8,6 +8,7 @@ import { MyModel3D } from './Model3d.js';
 import { MyPolygon } from './MyPolygon.js';
 import { MyTrack } from './MyTrack.js';
 import { MyMenu } from './MyMenu.js';
+import { MyVehicle } from './MyVehicle.js';
 
 /**
  *  This class contains the contents of out application
@@ -40,11 +41,9 @@ class MyContents {
         const canvas = document.getElementById("canvas");
         canvas.removeChild(canvas.childNodes[0]);
         this.reader.open("t08g01/scene.xml");
-        this.track = new MyTrack(this.app)
+        let vehicle = new MyVehicle(this.app, car);
+        this.track = new MyTrack(this.app, vehicle)
         this.track.init()
-        this.app.scene.add(car)
-        console.log(car)
-
     }
 
     /**
