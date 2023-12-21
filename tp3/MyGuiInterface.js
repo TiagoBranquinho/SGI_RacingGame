@@ -88,6 +88,7 @@ class MyGuiInterface {
                 this.app.controls.target.z = camera.target.z;
             });
         }
+        
         this.cameraFolder.open();
     }
 
