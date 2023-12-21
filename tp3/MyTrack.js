@@ -2,8 +2,9 @@ import * as THREE from 'three';
 
 class MyTrack {
 
-    constructor(app) {
+    constructor(app, vehicle) {
         this.app = app;
+        this.vehicle = vehicle;
 
         //Curve related attributes
         this.segments = 200;
@@ -123,6 +124,7 @@ class MyTrack {
 
     init() {
         this.buildCurve();
+        this.vehicle.draw();
     }
 
 }

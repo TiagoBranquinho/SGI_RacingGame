@@ -8,6 +8,7 @@ import { MyModel3D } from './Model3d.js';
 import { MyPolygon } from './MyPolygon.js';
 import { MyTrack } from './MyTrack.js';
 import { MyMenu } from './MyMenu.js';
+import { MyVehicle } from './MyVehicle.js';
 
 /**
  *  This class contains the contents of out application
@@ -35,11 +36,14 @@ class MyContents {
         }
     }
 
-    startGame() {
+    startGame(car) {
+        this.app.init();
+        const canvas = document.getElementById("canvas");
+        canvas.removeChild(canvas.childNodes[0]);
         this.reader.open("t08g01/scene.xml");
-        this.track = new MyTrack(this.app)
+        let vehicle = new MyVehicle(this.app, car);
+        this.track = new MyTrack(this.app, vehicle)
         this.track.init()
-
     }
 
     /**
@@ -336,6 +340,20 @@ class MyContents {
         return mesh
     }
 
+    processModel3D(model3d) {
+        let object = new THREE.Object3D();
+        MyModel3D.loadModel(model3d.filepath).then((gltf) => {
+            object.add(gltf.scene);
+        });
+        object.name = model3d.filepath
+        if(model3d.filepath.split('/')[2] === 'car1.glb'){
+            console.log(object)
+            object.rotation.y = Math.PI;
+            console.log(object)
+        }
+        return object;
+    }
+
 
     /**  
      * Retrieves a node from the scene graph
@@ -501,11 +519,7 @@ class MyContents {
 
 
                 case "model3d":
-                    let object = new THREE.Object3D();
-                    MyModel3D.loadModel(representation.filepath).then((gltf) => {
-                        object.add(gltf.scene);
-                    });
-                    return object;
+                    return this.processModel3D(representation);
 
                 case "polygon":
                     let polygon = new MyPolygon(representation.radius,
