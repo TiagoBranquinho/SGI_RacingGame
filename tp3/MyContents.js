@@ -650,6 +650,8 @@ class MyContents {
     }
 
     update() {
+        if (this.track !== undefined && this.track !== null)
+            this.track.update();
     }
 }
 

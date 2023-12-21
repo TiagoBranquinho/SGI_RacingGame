@@ -22,6 +22,7 @@ class MyVehicle {
         this.model.scale.set(scale, scale, scale);
         this.model.position.set(0, 0.8, 0);
         this.model.rotation.x = 0;
+        this.model.rotation.y = Math.PI / 2;
     }
     draw() {
         this.app.scene.add(this.model);
