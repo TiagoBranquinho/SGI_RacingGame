@@ -114,19 +114,10 @@
         <node id="scene">
             <children>
                 <noderef id="terrain" />
-                <noderef id="cone1" />
-                <noderef id="cone2" />
-                <noderef id="cone3" />
-                <noderef id="cone4" />
-                <noderef id="speedRamp1" />
-                <noderef id="speedRamp2" />
-                <noderef id="speedRamp3" />
+                <noderef id="powerups" />
+                <noderef id="obstacles" />
                 <noderef id="clock1" />
-                <noderef id="barrel1" />
-                <noderef id="barrel2" />
-                <noderef id="park1" />
-                <noderef id="park2" />
-                <noderef id="park3" />
+                <noderef id="parks" />
             </children>
         </node>
 
@@ -259,7 +250,20 @@
                 </primitive>
             </children>
         </node>
+        <node id="cones">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
 
+            <children>
+                <noderef id="cone1" />
+                <noderef id="cone2" />
+                <noderef id="cone3" />
+                <noderef id="cone4" />
+            </children>
+        </node>
         <node id="cone1">
             <transforms>
                 <translate value3="10.0 0.0 -3.0" />
@@ -323,7 +327,19 @@
                 </primitive>
             </children>
         </node>
+        <node id="speedRamps">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
 
+            <children>
+                <noderef id="speedRamp1" />
+                <noderef id="speedRamp2" />
+                <noderef id="speedRamp3" />
+            </children>
+        </node>
         <node id="speedRamp1">
             <transforms>
                 <translate value3="-50.0 0.0 -2.0" />
@@ -388,7 +404,7 @@
 
         <node id="barrel">
             <transforms>
-                <translate value3="0.0 0.8 0.0" />
+                <translate value3="0.0 0.0 0.0" />
                 <rotate value3="0 -1.57079632679 0" />
                 <scale value3="2 2 2" />
             </transforms>
@@ -399,10 +415,21 @@
                 </primitive>
             </children>
         </node>
-        
+        <node id="barrels">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel1" />
+                <noderef id="barrel2" />
+            </children>
+        </node>
         <node id="barrel1">
             <transforms>
-                <translate value3="208 0.0 -50" />
+                <translate value3="208 0.8 -50" />
                 <rotate value3="0.0 1.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -414,13 +441,36 @@
 
         <node id="barrel2">
             <transforms>
-                <translate value3="-70 0.0 -35" />
+                <translate value3="-70 0.8 -35" />
                 <rotate value3="0.0 1.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
 
             <children>
                 <noderef id="barrel" />
+            </children>
+        </node>
+        <node id="obstacles">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrels" />
+                <noderef id="cones" />
+            </children>
+        </node>
+        <node id="powerups">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="speedRamps" />
             </children>
         </node>
 
@@ -439,7 +489,19 @@
                 </primitive>
             </children>
         </node>
+        <node id="parks">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
 
+            <children>
+                <noderef id="park1" />
+                <noderef id="park2" />
+                <noderef id="park3" />
+            </children>
+        </node>
         <node id="park1">
             <transforms>
                 <translate value3="-75 0.0 -55" />

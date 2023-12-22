@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { MyObstacles } from './MyObstacles.js';
 
 class MyTrack {
 
@@ -6,7 +7,7 @@ class MyTrack {
         this.app = app;
         this.player = player;
         this.bot = bot;
-
+        this.obstacleHandler = new MyObstacles(app);
         //Curve related attributes
         this.segments = 200;
         this.width = 8;
