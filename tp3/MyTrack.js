@@ -18,7 +18,7 @@ class MyTrack {
         this.closedCurve = false;
 
         this.path = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(0, 0, 0),   
+            new THREE.Vector3(0, 0, 0),
             new THREE.Vector3(-120, 0, 0),
             new THREE.Vector3(-140, 0, -40),
             new THREE.Vector3(-120, 0, -80),
@@ -39,7 +39,7 @@ class MyTrack {
         //animation parameters
 
         this.keyPoints = [
-            new THREE.Vector3(0, 0.8, 0),   
+            new THREE.Vector3(0, 0.8, 0),
             new THREE.Vector3(120, 0.8, 0),
             new THREE.Vector3(140, 0.8, -40),
             new THREE.Vector3(120, 0.8, -80),
@@ -66,9 +66,9 @@ class MyTrack {
         this.animationMaxDuration = 30 //seconds
     }
 
-        /**
-     * Creates the necessary elements for the curve
-     */
+    /**
+ * Creates the necessary elements for the curve
+ */
     buildCurve() {
         this.createCurveMaterialsTextures();
         this.createCurveObjects();
@@ -87,10 +87,10 @@ class MyTrack {
         this.material.map.wrapT = THREE.RepeatWrapping;
 
         this.wireframeMaterial = new THREE.MeshBasicMaterial({
-        color: 0x0000ff,
-        opacity: 0.3,
-        wireframe: true,
-        transparent: true,
+            color: 0x0000ff,
+            opacity: 0.3,
+            wireframe: true,
+            transparent: true,
         });
 
         this.lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
@@ -101,11 +101,11 @@ class MyTrack {
      */
     createCurveObjects() {
         let geometry = new THREE.TubeGeometry(
-        this.path,
-        this.segments,
-        this.width,
-        3,
-        this.closedCurve
+            this.path,
+            this.segments,
+            this.width,
+            3,
+            this.closedCurve
         );
         this.mesh = new THREE.Mesh(geometry, this.material);
         this.wireframe = new THREE.Mesh(geometry, this.wireframeMaterial);
@@ -127,7 +127,7 @@ class MyTrack {
         this.curve.add(this.line);
 
         this.curve.rotateZ(Math.PI);
-        this.curve.scale.set(1,0.2,1);
+        this.curve.scale.set(1, 0.2, 1);
         this.app.scene.add(this.curve);
     }
 
@@ -136,7 +136,7 @@ class MyTrack {
      */
     updateCurve() {
         if (this.curve !== undefined && this.curve !== null) {
-        this.app.scene.remove(this.curve);
+            this.app.scene.remove(this.curve);
         }
         this.buildCurve();
     }
@@ -146,7 +146,7 @@ class MyTrack {
      */
     updateCurveClosing() {
         if (this.curve !== undefined && this.curve !== null) {
-        this.app.scene.remove(this.curve);
+            this.app.scene.remove(this.curve);
         }
         this.buildCurve();
     }
@@ -232,7 +232,39 @@ class MyTrack {
         this.checkAnimationStateIsPause()
         this.checkTracksEnabled()
 
+        this.checkCollisions()
+
+        if (this.isPlayerOnTrack()) {
+            console.log("on track")
+        }
+        else {
+            console.log("off track")
+        }
+
     }
+
+    checkCollisions() {
+        const playerObstacleCollision = this.obstacleHandler.checkCollision(this.player.model.position, this.player.radius)
+
+        if (playerObstacleCollision) {
+            this.player.model.position.x = 0
+            this.player.model.position.z = 0
+        }
+    }
+
+    isPlayerOnTrack() {
+        const playerPosition = this.player.model.position.clone();
+        const raycaster = new THREE.Raycaster(playerPosition, new THREE.Vector3(0, -1, 0));
+
+        // Check intersections with the track mesh
+        const intersections = raycaster.intersectObject(this.curve, true);
+
+        // If there are intersections, the player is on the track
+        return intersections.length > 0;
+    }
+
+
+
 
     init() {
         this.buildCurve();
@@ -289,7 +321,6 @@ class MyTrack {
 
         // Play both animations
         positionAction.play()
-        
     }
 
 }

@@ -42,6 +42,15 @@ class MyObstacles {
         return null;
     }
 
+    checkCollision(position, radius) {
+        for (let [coord, type] of this.obstacles.entries()) {
+            if (coord.distanceTo(position) <= radius) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 export { MyObstacles };
