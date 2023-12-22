@@ -2,9 +2,10 @@ import * as THREE from 'three';
 
 class MyTrack {
 
-    constructor(app, vehicle) {
+    constructor(app, player, bot) {
         this.app = app;
-        this.vehicle = vehicle;
+        this.player = player;
+        this.bot = bot;
 
         //Curve related attributes
         this.segments = 200;
@@ -234,7 +235,8 @@ class MyTrack {
 
     init() {
         this.buildCurve();
-        this.vehicle.draw();
+        this.bot.draw();
+        this.player.draw();
 
         //visual debuging the path and the controls points
         this.debugKeyFrames()
@@ -279,7 +281,7 @@ class MyTrack {
         const positionClip = new THREE.AnimationClip('positionAnimation', this.animationMaxDuration, [positionKF])
 
         // Create an AnimationMixer
-        this.mixer = new THREE.AnimationMixer(this.vehicle.model)
+        this.mixer = new THREE.AnimationMixer(this.bot.model)
 
         // Create AnimationActions for each clip
         const positionAction = this.mixer.clipAction(positionClip)

@@ -41,8 +41,9 @@ class MyContents {
         const canvas = document.getElementById("canvas");
         canvas.removeChild(canvas.childNodes[0]);
         this.reader.open("t08g01/scene.xml");
-        let vehicle = new MyVehicle(this.app, car);
-        this.track = new MyTrack(this.app, vehicle)
+        let player = new MyVehicle(this.app, car, true);
+        let bot = new MyVehicle(this.app, car.clone());
+        this.track = new MyTrack(this.app, player, bot)
         this.track.init()
     }
 

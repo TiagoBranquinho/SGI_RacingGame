@@ -3,12 +3,14 @@ import { MyVehicleHandler } from './MyVehicleHandler.js';
 
 class MyVehicle {
 
-    constructor(app, model) {
+    constructor(app, model, isPlayer = false) {
         this.app = app;
         this.model = model;
         this.velocity = 0;
         this.init();
-        this.handler = new MyVehicleHandler(this.app, this);
+        if (isPlayer === true) {
+            this.handler = new MyVehicleHandler(this.app, this);
+        }
     }
     init() {
         let scale;
