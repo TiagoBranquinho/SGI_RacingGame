@@ -105,7 +105,7 @@ class MyVehicleHandler {
         // Update car position so it only moves in the direction it's facing
         this.vehicle.model.position.add(this.velocity);
 
-        const cameraOffset = new THREE.Vector3(0, 5, -20);
+        const cameraOffset = new THREE.Vector3(0, 3, -9);
         cameraOffset.applyEuler(this.vehicle.model.rotation);
         if (this.lockCamera) {
             this.app.activeCamera.position.copy(this.vehicle.model.position).add(cameraOffset);
