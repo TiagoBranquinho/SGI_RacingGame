@@ -4,15 +4,24 @@ class MyObstacles {
 
     constructor(app) {
         this.app = app;
-        this.obstacles = {};
+        this.obstacleNodes = {};
+        this.obstacles = new Map();
         this.init();
     }
     init() {
         console.log(this.app.scene.children[4])
-        for(let type of ['cones']){
-            this.obstacles[type] = this.dfs(this.app.scene.children[4], type)
-            console.log(this.obstacles[type])
+        for (let type of ['cones', 'barrels']) {
+            this.obstacleNodes[type] = this.dfs(this.app.scene.children[4], type)
+            for (let i = 0; i < this.obstacleNodes[type].children.length; i++) {
+                const child = this.obstacleNodes[type].children[i];
+                this.obstacles.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
+            }
         }
+        //console log this.obstacles
+        for (let [coord, type] of this.obstacles.entries()) {
+            console.log(coord, type);
+        }
+
     }
     getPosition(obj) {
         return obj.position;
