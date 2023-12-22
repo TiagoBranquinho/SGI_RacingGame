@@ -234,11 +234,14 @@ class MyTrack {
 
         this.checkCollisions()
 
-        if (this.isPlayerOnTrack()) {
-            console.log("on track")
+        if (!this.isPlayerOnTrack()) {
+            this.collisionTime = Date.now();
+        }
+        if (Date.now() - this.collisionTime <= 3000) {
+            this.player.handler.slow = true;
         }
         else {
-            console.log("off track")
+            this.player.handler.slow = false;
         }
 
     }

@@ -3,7 +3,6 @@ import * as THREE from 'three';
 class MyVehicleHandler {
     constructor(app, vehicle) {
         this.vehicle = vehicle;
-        console.log(this.vehicle);
         this.app = app;
         this.init();
         this.keyStates = {
@@ -13,6 +12,9 @@ class MyVehicleHandler {
             "KeyD": false,
             "Space": false,
         };
+        this.normalSpeed = 0.6;
+        this.speedReduction = 0.4;
+        this.slow = false;
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.acceleration = 0.0007;  // Adjust the acceleration factor
         this.deceleration = 0.0004;  // Adjust the deceleration factor
@@ -51,7 +53,7 @@ class MyVehicleHandler {
             console.log("gato")
             this.lockCamera = !this.lockCamera;
         }
-        const speed = 0.5;
+        const speed = this.slow === true ? this.normalSpeed * this.speedReduction : this.normalSpeed;
         // Create a direction vector based on the vehicle's current rotation
         this.direction.set(0, 0, 1);
         this.rotationSpeed = this.velocity.length() * 0.05;
@@ -101,7 +103,6 @@ class MyVehicleHandler {
 
         // Update the velocity based on the direction
         this.velocity = this.direction.clone().multiplyScalar(this.velocity.length());
-
         // Update car position so it only moves in the direction it's facing
         this.vehicle.model.position.add(this.velocity);
 
