@@ -46,6 +46,8 @@ class MyContents {
         canvas.appendChild(playerStatus);
         let player = new MyVehicle(this.app, car, true);
         let bot = new MyVehicle(this.app, car.clone());
+        player.model.position.z = 3
+        bot.model.position.z = -3
         this.track = new MyTrack(this.app, player, bot)
         this.track.init()
     }

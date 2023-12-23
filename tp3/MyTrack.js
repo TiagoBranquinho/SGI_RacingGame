@@ -43,7 +43,7 @@ class MyTrack {
         //animation parameters
 
         this.keyPoints = [
-            new THREE.Vector3(0, 0.8, 0),
+            new THREE.Vector3(0, 0.8, -3),
             new THREE.Vector3(120, 0.8, 0),
             new THREE.Vector3(140, 0.8, -40),
             new THREE.Vector3(120, 0.8, -80),
@@ -58,7 +58,7 @@ class MyTrack {
             new THREE.Vector3(-120, 0.8, 230),
             new THREE.Vector3(-160, 0.8, 220),
             new THREE.Vector3(-150, 0.8, 0),
-            new THREE.Vector3(-0, 0.8, 0)
+            new THREE.Vector3(-0, 0.8, -3)
         ];
 
         this.clock = new THREE.Clock()

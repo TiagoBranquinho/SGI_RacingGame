@@ -53,7 +53,7 @@
         <texture id="trafficConeTex" filepath="t08g01/textures/trafficCone.jpg" />
         <texture id="speedRampTex" filepath="t08g01/textures/speedRamp.jpg" />
         <texture id="parkTex" filepath="t08g01/textures/park.webp" />
-        
+        <texture id="finishLineTex" filepath="t08g01/textures/finishLine.jpg" />
     </textures>
 
     <materials>
@@ -107,6 +107,16 @@
             texlength_t="0.5"
             twosided="true" />
 
+        <material id="finishLineApp"
+            color="0.8 0.8 0.8 1.0"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="finishLineTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
     </materials> 
 
     <graph rootid="scene">
@@ -118,6 +128,8 @@
                 <noderef id="obstacles" />
                 <noderef id="clock1" />
                 <noderef id="parks" />
+                <noderef id="raceFlag" />
+                <noderef id="finishLine" />
             </children>
         </node>
 
@@ -266,7 +278,7 @@
         </node>
         <node id="cone1">
             <transforms>
-                <translate value3="10.0 0.0 -3.0" />
+                <translate value3="40.0 0.0 5.0" />
                 <rotate value3="0.0 0.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -535,6 +547,36 @@
 
             <children>
                 <noderef id="park" />
+            </children>
+        </node>
+
+        <node id="raceFlag">
+            <transforms>
+                <translate value3="2.0 7.0 0.0" />
+                <rotate value3="0 0 0" />
+                <scale value3="1 0.4 0.4" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="t08g01/models/raceFlag.glb" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="finishLine">
+            <transforms>
+                <translate value3="2.0 0.85 0.0" />
+                <rotate value3="-1.57079632679 0.0 0.0" />
+                <scale value3="3 12 1" />
+            </transforms>
+
+            <materialref id="finishLineApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-0.5 -0.5" xy2="0.5 0.5" />
+                </primitive>
             </children>
         </node>
     </graph>
