@@ -227,7 +227,7 @@ class MyTrack {
         this.mixer.update(delta)
 
         const tangent = this.spline.getTangentAt((this.mixer.time % this.animationMaxDuration) / this.animationMaxDuration)
-        this.vehicle.model.rotation.y = Math.atan2(tangent.x, tangent.z)
+        this.bot.model.rotation.y = Math.atan2(tangent.x, tangent.z)
 
         this.checkAnimationStateIsPause()
         this.checkTracksEnabled()
