@@ -18,7 +18,6 @@ class MyTrack {
         this.showMesh = true;
         this.showLine = true;
         this.closedCurve = false;
-        this.playerInfo = document.getElementById('player-status');
 
 
         this.path = new THREE.CatmullRomCurve3([
@@ -235,26 +234,17 @@ class MyTrack {
 
         this.checkAnimationStateIsPause()
         this.checkTracksEnabled()
+        this.player.updateState()
 
+        this.checkPlayerCollisions()
+    }
+
+    checkPlayerCollisions() {
         this.checkObjectsCollisions()
         this.checkPowerupsCollisions()
-
         if (!this.isPlayerOnTrack() || this.checkBotCollisions()) {
-            this.collisionTime = Date.now();
+            this.player.setSlow();
         }
-        this.checkObjectsCollisions();
-
-        this.player.handler.slow = false;
-        this.player.handler.drunk = 1;
-        this.updatePlayerStatus("");
-        if (Date.now() - this.collisionTime <= 3000) {
-            this.player.handler.slow = true;
-        }
-        if (Date.now() - this.drunkTime <= 3000) {
-            this.updatePlayerStatus("Drunk");
-            this.player.handler.drunk = -1;
-        }
-
     }
 
     checkObjectsCollisions() {
@@ -262,10 +252,10 @@ class MyTrack {
 
         switch (playerObstacleCollisionType) {
             case 'cone':
-                this.collisionTime = Date.now();
+                this.player.setSlow();
                 break;
             case 'barrel':
-                this.drunkTime = Date.now();
+                this.player.setDrunk();
                 break;
             default:
                 break;
@@ -275,7 +265,7 @@ class MyTrack {
         const playerPowerUpCollisionType = this.powerupHandler.checkCollision(this.player.model.position, this.player.radius)
 
         if (playerPowerUpCollisionType) {
-            this.player.model.position.y = 5
+            //this.player.model.position.y = 5
         }
     }
 
@@ -352,10 +342,6 @@ class MyTrack {
 
         // Play both animations
         positionAction.play()
-    }
-
-    updatePlayerStatus(status) {
-        this.playerInfo.innerHTML = status;
     }
 
 }
