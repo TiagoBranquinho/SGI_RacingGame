@@ -18,9 +18,9 @@ class MyObstacles {
             }
         }
         //console log this.obstacles
-        for (let [coord, type] of this.obstacles.entries()) {
+        /* for (let [coord, type] of this.obstacles.entries()) {
             console.log(coord, type);
-        }
+        } */
 
     }
     getPosition(obj) {

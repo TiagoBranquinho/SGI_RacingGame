@@ -232,9 +232,9 @@ class MyTrack {
         this.checkAnimationStateIsPause()
         this.checkTracksEnabled()
 
-        this.checkCollisions()
+        this.checkObjectsCollisions()
 
-        if (!this.isPlayerOnTrack()) {
+        if (!this.isPlayerOnTrack() || this.checkBotCollisions()) {
             this.collisionTime = Date.now();
         }
         if (Date.now() - this.collisionTime <= 3000) {
@@ -246,13 +246,17 @@ class MyTrack {
 
     }
 
-    checkCollisions() {
+    checkObjectsCollisions() {
         const playerObstacleCollision = this.obstacleHandler.checkCollision(this.player.model.position, this.player.radius)
 
         if (playerObstacleCollision) {
             this.player.model.position.x = 0
             this.player.model.position.z = 0
         }
+    }
+
+    checkBotCollisions(){
+        return this.bot.model.position.distanceTo(this.player.model.position) <= this.bot.radius + this.player.radius;
     }
 
     isPlayerOnTrack() {
