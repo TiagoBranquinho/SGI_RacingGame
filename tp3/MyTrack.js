@@ -31,9 +31,7 @@ class MyTrack {
             new THREE.Vector3(120, 0, 230),
             new THREE.Vector3(160, 0, 220),
             new THREE.Vector3(150, 0, 0),
-            new THREE.Vector3(0, 0, 0)
-            
-            
+            new THREE.Vector3(0, 0, 0) 
         ]);
 
         //animation parameters
@@ -63,7 +61,7 @@ class MyTrack {
         this.mixerPause = false
 
         this.enableAnimationPosition = true
-        this.animationMaxDuration = 15 //seconds
+        this.animationMaxDuration = 30 //seconds
     }
 
         /**
@@ -164,7 +162,7 @@ class MyTrack {
      */
     debugKeyFrames() {
 
-        let spline = new THREE.CatmullRomCurve3([...this.keyPoints])
+        this.spline = new THREE.CatmullRomCurve3([...this.keyPoints])
 
         // Setup visual control points
 
@@ -178,7 +176,7 @@ class MyTrack {
             this.app.scene.add(sphere)
         }
 
-        const tubeGeometry = new THREE.TubeGeometry(spline, 100, 0.05, 10, false)
+        const tubeGeometry = new THREE.TubeGeometry(this.spline, 100, 0.05, 10, false)
         const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
         const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial)
 
@@ -226,6 +224,12 @@ class MyTrack {
         const delta = this.clock.getDelta()
         this.mixer.update(delta)
 
+        const point = this.spline.getPointAt((this.mixer.time % this.animationMaxDuration) / this.animationMaxDuration)
+        const nextPoint = this.spline.getPointAt(((this.mixer.time + 0.001) % this.animationMaxDuration) / this.animationMaxDuration)
+
+        const tangent = this.spline.getTangentAt((this.mixer.time % this.animationMaxDuration) / this.animationMaxDuration)
+        this.vehicle.model.rotation.y = Math.atan2(tangent.x, tangent.z)
+
         this.checkAnimationStateIsPause()
         this.checkTracksEnabled()
 
@@ -238,7 +242,22 @@ class MyTrack {
         //visual debuging the path and the controls points
         this.debugKeyFrames()
 
-        const positionKF = new THREE.VectorKeyframeTrack('.position', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        // Assuming `duration` is the total duration of the animation
+        let duration = this.animationMaxDuration; // specify the duration
+
+        let distances = [0];
+        for (let i = 1; i < this.spline.points.length; i++) {
+            let segmentLength = this.spline.points[i].distanceTo(this.spline.points[i - 1]);
+            distances.push(distances[i - 1] + segmentLength);
+        }
+
+        let totalDistance = distances[distances.length - 1];
+
+        let times = distances.map(distance => (distance / totalDistance) * duration);
+
+        console.log(times);
+
+        const positionKF = new THREE.VectorKeyframeTrack('.position', times,
             [
                 ...this.keyPoints[0],
                 ...this.keyPoints[1],
@@ -260,56 +279,16 @@ class MyTrack {
             THREE.InterpolateSmooth  /* THREE.InterpolateLinear (default), THREE.InterpolateDiscrete,*/
         )
 
-        const yAxis = new THREE.Vector3(0, 1, 0)
-        const q1 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(90))
-        const q2 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(110))
-        const q3 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(200))
-        const q4 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(180))
-        const q5 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(90))
-        const q6 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-20))
-        const q7 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-80))
-        const q8 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-60))
-        const q9 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(30))
-        const q10 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(40))
-        const q11 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-10))
-        const q12 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-40))
-        const q13 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-100))
-        const q14 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-150))
-        const q15 = new THREE.Quaternion().setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-270))
-
-
-        const quaternionKF = new THREE.QuaternionKeyframeTrack('.quaternion', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10 ,11 ,12 ,13 ,14],
-            [q1.x, q1.y, q1.z, q1.w,
-            q2.x, q2.y, q2.z, q2.w,
-            q3.x, q3.y, q3.z, q3.w,
-            q4.x, q4.y, q4.z, q4.w,
-            q5.x, q5.y, q5.z, q5.w,
-            q6.x, q6.y, q6.z, q6.w,
-            q7.x, q7.y, q7.z, q7.w,
-            q8.x, q8.y, q8.z, q8.w,
-            q9.x, q9.y, q9.z, q9.w,
-            q10.x, q10.y, q10.z, q10.w,
-            q11.x, q11.y, q11.z, q11.w,
-            q12.x, q12.y, q12.z, q12.w,
-            q13.x, q13.y, q13.z, q13.w,
-            q14.x, q14.y, q14.z, q14.w,
-            q15.x, q15.y, q15.z, q15.w
-        ]
-        );
-
         const positionClip = new THREE.AnimationClip('positionAnimation', this.animationMaxDuration, [positionKF])
-        const rotationClip = new THREE.AnimationClip('rotationAnimation', this.animationMaxDuration, [quaternionKF])
 
         // Create an AnimationMixer
         this.mixer = new THREE.AnimationMixer(this.vehicle.model)
 
         // Create AnimationActions for each clip
         const positionAction = this.mixer.clipAction(positionClip)
-        const rotationAction = this.mixer.clipAction(rotationClip)
 
         // Play both animations
         positionAction.play()
-        rotationAction.play()
         
     }
 
