@@ -352,7 +352,7 @@ class MyContents {
             object.add(gltf.scene);
         });
         object.name = model3d.filepath
-        if(model3d.filepath.split('/')[2] === 'car1.glb'){
+        if (model3d.filepath.split('/')[2] === 'car1.glb') {
             console.log(object)
             object.rotation.y = Math.PI;
             console.log(object)
@@ -656,8 +656,9 @@ class MyContents {
     }
 
     update() {
-        if (this.track !== undefined && this.track !== null)
+        if (this.track !== undefined && this.track !== null) {
             this.track.update();
+        }
     }
 }
 

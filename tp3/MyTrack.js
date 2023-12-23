@@ -18,7 +18,10 @@ class MyTrack {
         this.showMesh = true;
         this.showLine = true;
         this.closedCurve = false;
-
+        this.enableCollisions = false;
+        setTimeout(() => {
+            this.enableCollisions = true;
+        }, 1000);
 
         this.path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 0, 0),
@@ -236,7 +239,10 @@ class MyTrack {
         this.checkTracksEnabled()
         this.player.updateState()
 
-        this.checkPlayerCollisions()
+
+        if (this.enableCollisions) {
+            this.checkPlayerCollisions()
+        }
     }
 
     checkPlayerCollisions() {
@@ -279,7 +285,6 @@ class MyTrack {
 
         // Check intersections with the track mesh
         const intersections = raycaster.intersectObject(this.curve, true);
-
         // If there are intersections, the player is on the track
         return intersections.length == 0;
     }
@@ -342,7 +347,9 @@ class MyTrack {
 
         // Play both animations
         positionAction.play()
+
     }
+
 
 }
 
