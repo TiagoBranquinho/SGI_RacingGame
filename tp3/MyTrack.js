@@ -242,7 +242,7 @@ class MyTrack {
     checkPlayerCollisions() {
         this.checkObjectsCollisions()
         this.checkPowerupsCollisions()
-        if (!this.isPlayerOnTrack() || this.checkBotCollisions()) {
+        if (this.isPlayerOffTrack() || this.checkBotCollisions()) {
             this.player.setSlow();
         }
     }
@@ -273,7 +273,7 @@ class MyTrack {
         return this.player.model.position.distanceTo(this.bot.model.position) <= this.bot.radius + this.player.radius;
     }
 
-    isPlayerOnTrack() {
+    isPlayerOffTrack() {
         const playerPosition = this.player.model.position.clone();
         const raycaster = new THREE.Raycaster(playerPosition, new THREE.Vector3(0, -1, 0));
 
@@ -281,7 +281,7 @@ class MyTrack {
         const intersections = raycaster.intersectObject(this.curve, true);
 
         // If there are intersections, the player is on the track
-        return intersections.length > 0;
+        return intersections.length == 0;
     }
 
 
