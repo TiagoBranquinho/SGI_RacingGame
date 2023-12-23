@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MyObstacles } from './MyObstacles.js';
+import { MyPowerups } from './MyPowerups.js';
 
 class MyTrack {
 
@@ -8,6 +9,7 @@ class MyTrack {
         this.player = player;
         this.bot = bot;
         this.obstacleHandler = new MyObstacles(app);
+        this.powerupHandler = new MyPowerups(app);
         //Curve related attributes
         this.segments = 200;
         this.width = 8;
@@ -16,6 +18,8 @@ class MyTrack {
         this.showMesh = true;
         this.showLine = true;
         this.closedCurve = false;
+        this.playerInfo = document.getElementById('player-status');
+
 
         this.path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 0, 0),
@@ -33,7 +37,7 @@ class MyTrack {
             new THREE.Vector3(120, 0, 230),
             new THREE.Vector3(160, 0, 220),
             new THREE.Vector3(150, 0, 0),
-            new THREE.Vector3(0, 0, 0) 
+            new THREE.Vector3(0, 0, 0)
         ]);
 
         //animation parameters
@@ -233,29 +237,49 @@ class MyTrack {
         this.checkTracksEnabled()
 
         this.checkObjectsCollisions()
+        this.checkPowerupsCollisions()
 
         if (!this.isPlayerOnTrack() || this.checkBotCollisions()) {
             this.collisionTime = Date.now();
         }
+        this.checkObjectsCollisions();
+
+        this.player.handler.slow = false;
+        this.player.handler.drunk = 1;
+        this.updatePlayerStatus("");
         if (Date.now() - this.collisionTime <= 3000) {
             this.player.handler.slow = true;
         }
-        else {
-            this.player.handler.slow = false;
+        if (Date.now() - this.drunkTime <= 3000) {
+            this.updatePlayerStatus("Drunk");
+            this.player.handler.drunk = -1;
         }
 
     }
 
     checkObjectsCollisions() {
-        const playerObstacleCollision = this.obstacleHandler.checkCollision(this.player.model.position, this.player.radius)
+        const playerObstacleCollisionType = this.obstacleHandler.checkCollision(this.player.model.position, this.player.radius)
 
-        if (playerObstacleCollision) {
-            this.player.model.position.x = 0
-            this.player.model.position.z = 0
+        switch (playerObstacleCollisionType) {
+            case 'cone':
+                this.collisionTime = Date.now();
+                break;
+            case 'barrel':
+                this.drunkTime = Date.now();
+                break;
+            default:
+                break;
+        }
+    }
+    checkPowerupsCollisions() {
+        const playerPowerUpCollisionType = this.powerupHandler.checkCollision(this.player.model.position, this.player.radius)
+
+        if (playerPowerUpCollisionType) {
+            this.player.model.position.y = 5
         }
     }
 
-    checkBotCollisions(){
+    checkBotCollisions() {
         return this.bot.model.position.distanceTo(this.player.model.position) <= this.bot.radius + this.player.radius;
     }
 
@@ -328,6 +352,10 @@ class MyTrack {
 
         // Play both animations
         positionAction.play()
+    }
+
+    updatePlayerStatus(status) {
+        this.playerInfo.innerHTML = status;
     }
 
 }

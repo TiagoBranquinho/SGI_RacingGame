@@ -15,6 +15,7 @@ class MyVehicleHandler {
         this.normalSpeed = 0.6;
         this.speedReduction = 0.4;
         this.slow = false;
+        this.drunk = 1;
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.acceleration = 0.0007;  // Adjust the acceleration factor
         this.deceleration = 0.0004;  // Adjust the deceleration factor
@@ -75,7 +76,7 @@ class MyVehicleHandler {
 
         if (this.keyStates['KeyA']) {
             // Rotate the vehicle to the left
-            this.vehicle.model.rotation.y += this.rotationSpeed;
+            this.vehicle.model.rotation.y += (this.rotationSpeed * this.drunk);
         }
 
         if (this.keyStates['KeyS']) {
@@ -85,7 +86,7 @@ class MyVehicleHandler {
 
         if (this.keyStates['KeyD']) {
             // Rotate the vehicle to the right
-            this.vehicle.model.rotation.y -= this.rotationSpeed;
+            this.vehicle.model.rotation.y -= (this.rotationSpeed * this.drunk);
         }
 
 

@@ -1,24 +1,23 @@
 import * as THREE from 'three';
 
-class MyObstacles {
+class MyPowerups {
 
     constructor(app) {
         this.app = app;
-        this.obstacleNodes = {};
-        this.obstacles = new Map();
+        this.powerupNodes = {};
+        this.powerups = new Map();
         this.init();
     }
     init() {
-        console.log(this.app.scene.children)
-        console.log(this.app.scene.children[4])
-        for (let type of ['cones', 'barrels']) {
-            this.obstacleNodes[type] = this.dfs(this.app.scene.children[4], type)
-            for (let i = 0; i < this.obstacleNodes[type].children.length; i++) {
-                const child = this.obstacleNodes[type].children[i];
-                this.obstacles.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
+        console.log(this.app.scene.children[3])
+        for (let type of ['speedRamps']) {
+            this.powerupNodes[type] = this.dfs(this.app.scene.children[3], type)
+            for (let i = 0; i < this.powerupNodes[type].children.length; i++) {
+                const child = this.powerupNodes[type].children[i];
+                this.powerups.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
             }
         }
-        /* for (let [coord, type] of this.obstacles.entries()) {
+        /* for (let [coord, type] of this.powerups.entries()) {
             console.log(coord, type);
         } */
 
@@ -43,7 +42,7 @@ class MyObstacles {
     }
 
     checkCollision(position, radius) {
-        for (let [coord, type] of this.obstacles.entries()) {
+        for (let [coord, type] of this.powerups.entries()) {
             if (coord.distanceTo(position) <= radius) {
                 return type;
             }
@@ -53,4 +52,4 @@ class MyObstacles {
 
 }
 
-export { MyObstacles };
+export { MyPowerups };
