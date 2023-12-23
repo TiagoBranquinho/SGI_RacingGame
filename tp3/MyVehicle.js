@@ -6,7 +6,7 @@ class MyVehicle {
     constructor(app, model, isPlayer = false) {
         this.app = app;
         this.model = model;
-        this.radius = 3;
+        isPlayer ? this.radius = 3 : 3;
         this.collisionsTime = 3000;
         this.info = document.getElementById('player-status');
         this.isNormal = true;

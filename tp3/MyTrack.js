@@ -270,7 +270,7 @@ class MyTrack {
     }
 
     checkBotCollisions() {
-        return this.bot.model.position.distanceTo(this.player.model.position) <= this.bot.radius + this.player.radius;
+        return this.player.model.position.distanceTo(this.bot.model.position) <= this.bot.radius + this.player.radius;
     }
 
     isPlayerOnTrack() {
