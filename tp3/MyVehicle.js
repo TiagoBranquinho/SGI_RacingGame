@@ -10,7 +10,7 @@ class MyVehicle {
         this.collisionsTime = 3000;
         this.info = document.getElementById('player-status');
         this.isNormal = true;
-        this.state = {"drunk": false, "slow": false};
+        this.state = {"drunk": false, "slow": false, "boost" : false};
         if (isPlayer === true) {
             this.handler = new MyVehicleHandler(this.app, this);
         }
@@ -38,39 +38,57 @@ class MyVehicle {
     setDrunk() {
         this.drunkTime = Date.now();
         this.handler.drunk = -1;
-        this.updateInfo("Drunk\n");
+        this.state.drunk = true;
+    }
+
+    removeDrunk() {
+        this.handler.drunk = 1;
+        this.state.drunk = false;
     }
 
     setSlow() {
         this.slowTime = Date.now();
-        this.handler.slow = true;
-        this.updateInfo("Slow\n");
+        this.handler.slow = 0.4;
+        this.state.slow = true;
     }
 
-    setNormal() {
-        this.handler.drunk = 1;
-        this.handler.slow = false;
-        this.updateInfo("");
+    removeSlow() {
+        this.handler.slow = 1;
+        this.state.slow = false;
+    }
+
+    setBoost() {
+        this.boostTime = Date.now();
+        this.handler.boost = 2;
+        this.state.boost = true;
+    }
+
+    removeBoost() {
+        this.handler.boost = 1;
+        this.state.boost = false;
     }
 
     updateState() {
-        if (this.handler.slow && Date.now() - this.slowTime > this.collisionsTime) {
-            this.setNormal();
+        if (this.handler.slow === 0.4 && Date.now() - this.slowTime > this.collisionsTime) {
+            this.removeSlow();
         }
         if (this.handler.drunk === -1 && Date.now() - this.drunkTime > this.collisionsTime) {
-            this.setNormal();
+            this.removeDrunk();
         }
+        if (this.handler.boost === 2 && Date.now() - this.boostTime > this.collisionsTime) {
+            this.removeBoost();
+        }
+        this.updateInfo();
     }
 
-    updateInfo(state) {
-        if(state === "normal"){
-            for(let key in this.state){
-                this.state[key] = false;
+    updateInfo() {
+        let info = "";
+        for(let key in this.state){
+            if(this.state[key]){
+                info += key + "\n";
             }
         }
-        else{
-            this.state[state] = true;
-        }
+        this.info.innerText = info;
     }
 
 }

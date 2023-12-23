@@ -265,7 +265,7 @@ class MyTrack {
         const playerPowerUpCollisionType = this.powerupHandler.checkCollision(this.player.model.position, this.player.radius)
 
         if (playerPowerUpCollisionType) {
-            //this.player.model.position.y = 5
+            this.player.setBoost();
         }
     }
 
