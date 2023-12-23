@@ -224,9 +224,6 @@ class MyTrack {
         const delta = this.clock.getDelta()
         this.mixer.update(delta)
 
-        const point = this.spline.getPointAt((this.mixer.time % this.animationMaxDuration) / this.animationMaxDuration)
-        const nextPoint = this.spline.getPointAt(((this.mixer.time + 0.001) % this.animationMaxDuration) / this.animationMaxDuration)
-
         const tangent = this.spline.getTangentAt((this.mixer.time % this.animationMaxDuration) / this.animationMaxDuration)
         this.vehicle.model.rotation.y = Math.atan2(tangent.x, tangent.z)
 
