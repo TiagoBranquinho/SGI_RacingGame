@@ -270,8 +270,15 @@ class MyTrack {
     checkPowerupsCollisions() {
         const playerPowerUpCollisionType = this.powerupHandler.checkCollision(this.player.model.position, this.player.radius)
 
-        if (playerPowerUpCollisionType) {
-            this.player.setBoost();
+        switch (playerPowerUpCollisionType) {
+            case 'speedRamp':
+                this.player.setBoost();
+                break;
+            case 'clock':
+                this.player.reduceTime();
+                break;
+            default:
+                break;
         }
     }
 

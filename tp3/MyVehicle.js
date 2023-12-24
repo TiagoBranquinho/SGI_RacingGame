@@ -10,7 +10,10 @@ class MyVehicle {
         this.collisionsTime = 3000;
         this.info = document.getElementById('player-status');
         this.isNormal = true;
-        this.state = {"drunk": false, "slow": false, "boost" : false};
+        this.time = Date.now();
+        this.lastTimeReduction = Date.now();
+        this.timeReductionInterval = 5000; // Set this to the desired interval in milliseconds
+        this.state = { "drunk": false, "slow": false, "boost": false };
         if (isPlayer === true) {
             this.handler = new MyVehicleHandler(this.app, this);
         }
@@ -83,12 +86,19 @@ class MyVehicle {
 
     updateInfo() {
         let info = "";
-        for(let key in this.state){
-            if(this.state[key]){
+        for (let key in this.state) {
+            if (this.state[key]) {
                 info += key + "\n";
             }
         }
-        this.info.innerText = info;
+        this.info.innerText = info + "Time: " + Math.floor((Date.now() - this.time) / 1000) + "s";
+    }
+
+    reduceTime() {
+        if (Date.now() - this.lastTimeReduction >= this.timeReductionInterval) {
+            this.time += 2000;
+            this.lastTimeReduction = Date.now();
+        }
     }
 
 }

@@ -126,7 +126,6 @@
                 <noderef id="terrain" />
                 <noderef id="powerups" />
                 <noderef id="obstacles" />
-                <noderef id="clock1" />
                 <noderef id="parks" />
                 <noderef id="raceFlag" />
                 <noderef id="finishLine" />
@@ -401,7 +400,17 @@
                 </primitive>
             </children>
         </node>
+        <node id="clocks">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
 
+            <children>
+                <noderef id="clock1" />
+            </children>
+        </node>
         <node id="clock1">
             <transforms>
                 <translate value3="125 0.0 -60" />
@@ -483,6 +492,7 @@
 
             <children>
                 <noderef id="speedRamps" />
+                <noderef id="clocks" />
             </children>
         </node>
 

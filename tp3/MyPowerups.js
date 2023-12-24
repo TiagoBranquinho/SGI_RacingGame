@@ -9,8 +9,7 @@ class MyPowerups {
         this.init();
     }
     init() {
-        console.log(this.app.scene.children[3])
-        for (let type of ['speedRamps']) {
+        for (let type of ['speedRamps', 'clocks']) {
             this.powerupNodes[type] = this.dfs(this.app.scene.children[3], type)
             for (let i = 0; i < this.powerupNodes[type].children.length; i++) {
                 const child = this.powerupNodes[type].children[i];
