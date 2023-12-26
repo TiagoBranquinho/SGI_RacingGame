@@ -1,21 +1,25 @@
 import * as THREE from 'three';
 
 class MyMenuHandler {
-    constructor(contents, intersectObjects, rotatableObjects) {
+    constructor(contents, playerCars, botCars, rotatableObjects) {
         this.contents = contents;
-        this.intersectObjects = intersectObjects;
+        this.playerCars = playerCars;
+        this.botCars = botCars;
         this.rotatableObjects = rotatableObjects;
         this.init();
         this.moveListener();
         this.mousePressed = false;
-        this.selectedCar = null; // Track the selected car
+        this.selectedPlayerCar = null; // Track the selected car
+        this.selectedBotCar = null; // Track the selected car
     }
     init() {
         this.pointer = new THREE.Vector2()
         this.raycaster = new THREE.Raycaster()
         this.raycaster.near = 0.1
         this.raycaster.far = 100
-        this.pickingColor = 0x00ff00
+        this.pickingColorPlayer = 0x00ff00
+        this.pickingColorBot = 0xff0000
+        this.pickingColorStart = 0x0000ff
     }
     moveListener() {
         this.boundPointerMove = this.onPointerMove.bind(this);
@@ -38,9 +42,13 @@ class MyMenuHandler {
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
 
         //3. compute intersections
-        var intersects = this.raycaster.intersectObjects(this.intersectObjects);
+        var intersectsCar = this.raycaster.intersectObjects(this.playerCars);
 
-        this.pickingHelper(intersects)
+        this.pickingHelper(intersectsCar, "car")
+
+        var intersectsBot = this.raycaster.intersectObjects(this.botCars);
+
+        this.pickingHelper(intersectsBot, "bot")
     }
 
     onPointerUp() {
@@ -62,16 +70,17 @@ class MyMenuHandler {
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
 
-        //3. compute intersections
-        var intersects = this.raycaster.intersectObjects(this.intersectObjects);
+        var allCars = this.playerCars.concat(this.botCars);
 
+        // Compute intersections
+        var intersects = this.raycaster.intersectObjects(allCars);
+    
         if (this.mousePressed) {
             this.rotateSquares(event);
         }
-
-        this.pickingHelper(intersects)
-
-        //this.transverseRaycastProperties(intersects)
+    
+        // Call pickingHelper once
+        this.pickingHelper(intersects);
     }
 
 
@@ -79,14 +88,25 @@ class MyMenuHandler {
         if (intersects.length > 0) {
             //console.log(intersects)
             const obj = intersects[0].object;
-            obj.material.color.setHex(this.pickingColor);
+            let pickingColor;
+            if (this.playerCars.includes(obj) && !obj.launchGame) {
+                pickingColor = this.pickingColorPlayer;
+            }
+            else if(this.botCars.includes(obj)) {
+                pickingColor = this.pickingColorBot;
+            }
+            else {
+                pickingColor = this.pickingColorStart;
+            }
+
+            obj.material.color.setHex(pickingColor);
 
             // Track the selected car when the mouse is pressed
             if (this.mousePressed) {
                 if (obj.launchGame) {
-                    if (this.selectedCar !== null) {
+                    if (this.selectedPlayerCar !== null && this.selectedBotCar !== null) {
                         this.removeListener();
-                        this.contents.startGame(this.selectedCar.parent.parent.children[0]);
+                        this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0]);
                     }
                     else {
                         alert("Please select a car first!");
@@ -94,8 +114,14 @@ class MyMenuHandler {
                     }
                 }
                 else {
-                    this.selectedCar = obj;
-                    console.log("selected car: " + this.selectedCar);
+                    if (this.playerCars.includes(obj)) {
+                        this.selectedPlayerCar = obj;
+                        console.log("selected player car: " + this.selectedPlayerCar);
+                    }
+                    else {
+                        this.selectedBotCar = obj;
+                        console.log("selected bot car: " + this.selectedBotCar);
+                    }
                 }
 
             }
@@ -108,9 +134,15 @@ class MyMenuHandler {
 
 
     restoreColorOfFirstPickedObj() {
-        for (var i = 0; i < this.intersectObjects.length; i++) {
-            let car = this.intersectObjects[i];
-            if (car != this.selectedCar) {
+        for (var i = 0; i < this.playerCars.length; i++) {
+            let car = this.playerCars[i];
+            if (car != this.selectedPlayerCar) {
+                car.material.color.setHex(0x0088ff);
+            }
+        }
+        for (var i = 0; i < this.botCars.length; i++) {
+            let car = this.botCars[i];
+            if (car != this.selectedBotCar) {
                 car.material.color.setHex(0x0088ff);
             }
         }

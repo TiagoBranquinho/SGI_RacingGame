@@ -9,10 +9,11 @@ class MyMenu {
     constructor(contents) {
         this.contents = contents;
         this.menu = new THREE.Group();
-        this.intersectObjects = [];
+        this.playerCars = [];
+        this.botCars = [];
         this.rotatableObjects = [];
         this.createMenu();
-        this.menuHandler = new MyMenuHandler(this.contents, this.intersectObjects, this.rotatableObjects);
+        this.menuHandler = new MyMenuHandler(this.contents, this.playerCars, this.botCars, this.rotatableObjects);
     }
 
     createMenu() {
@@ -20,8 +21,10 @@ class MyMenu {
         this.initLights();
         this.addText('F1eup', new THREE.Vector3(-2, 4, 0), 1.2, 8, true);
         this.addText('Choose your car', new THREE.Vector3(-5, -3, 0), 1, -10, true);
-        this.addInteractiveCar('car1.glb', new THREE.Vector3(3, 1, 0), 2);
-        this.addInteractiveCar('car2.glb', new THREE.Vector3(-3, 1, 0), 0.01);
+        this.addText('Player', new THREE.Vector3(-7, 0.5, 0), 0.3, 8, true);
+        this.addText('Bot', new THREE.Vector3(-7, -1, 0), 0.3, 8, true);
+        this.addInteractiveCar('car1.glb', new THREE.Vector3(3, 2, 0), 2);
+        this.addInteractiveCar('car2.glb', new THREE.Vector3(-3, 2, 0), 0.01);
         this.addButton(new THREE.Vector3(0, -4, 0), 3, 0.8, 0x0088ff, 'Start', 0.4, 28, true);
     }
 
@@ -44,15 +47,21 @@ class MyMenu {
         // Create a parent group for the car and add all parts to it
         car.position.copy(position);
         car.scale.set(scale, scale, scale);
-        car.rotation.x = Math.PI / 8;
+        car.rotation.x = Math.PI / 7;
         let buttonPosition = position.clone();
         buttonPosition.y -= 1.5;
         let buttonGroup = await this.addButton(buttonPosition, 3, 0.8, 0x0088ff, 'Selected', 0.4, 18);
         // Add the car and button to the carGroup
         carGroup.add(car);
         carGroup.add(buttonGroup);
+        this.playerCars.push(buttonGroup.children[0]);
+        let buttonPosition2 = buttonPosition.clone();
+        buttonPosition2.y -= 1.5;
+        let buttonGroup2 = await this.addButton(buttonPosition2, 3, 0.8, 0x0088ff, 'Selected', 0.4, 18);
+        // Add the car and button to the carGroup
+        carGroup.add(buttonGroup2);
         this.draw(carGroup);
-        this.intersectObjects.push(buttonGroup.children[0]);
+        this.botCars.push(buttonGroup2.children[0]);
         this.rotatableObjects.push(car);
     }
 
@@ -77,7 +86,7 @@ class MyMenu {
         let label = await this.addText(text, labelPosition, size, rotationQuotient); // Corrected here
         buttonGroup.add(label);
         if (draw) {
-            this.intersectObjects.push(button);
+            this.playerCars.push(button);
             this.draw(buttonGroup);
         }
         return buttonGroup;
