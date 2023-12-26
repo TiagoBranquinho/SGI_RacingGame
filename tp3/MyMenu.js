@@ -11,9 +11,11 @@ class MyMenu {
         this.menu = new THREE.Group();
         this.playerCars = [];
         this.botCars = [];
+        this.botDifficulty = [];
         this.rotatableObjects = [];
         this.createMenu();
-        this.menuHandler = new MyMenuHandler(this.contents, this.playerCars, this.botCars, this.rotatableObjects);
+        console.log(this.botDifficulty)
+        this.menuHandler = new MyMenuHandler(this.contents, this.playerCars, this.botCars, this.botDifficulty, this.rotatableObjects);
     }
 
     createMenu() {
@@ -26,6 +28,11 @@ class MyMenu {
         this.addInteractiveCar('car1.glb', new THREE.Vector3(3, 2, 0), 2);
         this.addInteractiveCar('car2.glb', new THREE.Vector3(-3, 2, 0), 0.01);
         this.addButton(new THREE.Vector3(0, -4, 0), 3, 0.8, 0x0088ff, 'Start', 0.4, 28, true);
+        this.addButton(new THREE.Vector3(6, -1, 0), 1, 0.8, 0x0088ff, '1*', 0.4, 28, true);
+        this.addButton(new THREE.Vector3(8, -1, 0), 1, 0.8, 0x0088ff, '2*', 0.4, 28, true);
+        this.addButton(new THREE.Vector3(10, -1, 0), 1, 0.8, 0x0088ff, '3*', 0.4, 28, true);
+        this.addText('Difficulty', new THREE.Vector3(7, 0, 0), 0.3, 7, true);
+
     }
 
     draw(obj) {
@@ -73,7 +80,7 @@ class MyMenu {
         const button = new THREE.Mesh(buttonGeometry, buttonMaterial);
         // Position the button below the car
         button.position.copy(position);
-        if(text === 'Start'){
+        if (text === 'Start') {
             button.launchGame = true;
         }
         buttonGroup.add(button);
@@ -86,7 +93,13 @@ class MyMenu {
         let label = await this.addText(text, labelPosition, size, rotationQuotient); // Corrected here
         buttonGroup.add(label);
         if (draw) {
-            this.playerCars.push(button);
+            if (text[text.length - 1] === '*') {
+                button.difficulty = Number(text[0]);
+                this.botDifficulty.push(button);
+            }
+            else {
+                this.playerCars.push(button);
+            }
             this.draw(buttonGroup);
         }
         return buttonGroup;
@@ -103,15 +116,14 @@ class MyMenu {
                 const textGeometry = new TextGeometry(text, {
                     font: font,
                     size: size,  // Adjust the size as needed
-                    height: 0.1,
+                    height: draw ? 0.01 : 0.1,  // Adjust the height as needed
                     curveSegments: 12,
                     bevelEnabled: false
                 });
 
                 const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
                 const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.rotation.x = Math.PI / rotationQuotient;
-
+                textMesh.lookAt(this.contents.app.activeCamera.position);
                 textMesh.position.copy(position);
                 if (draw) {
                     this.draw(textMesh);

@@ -3,10 +3,10 @@ import { MyVehicleHandler } from './MyVehicleHandler.js';
 
 class MyVehicle {
 
-    constructor(app, model, isPlayer = false) {
+    constructor(app, model, difficulty = 0) {
         this.app = app;
         this.model = model;
-        this.radius = isPlayer ? 3 : 2;
+        this.radius = difficulty === 0 ? 3 : 2;
         this.collisionsTime = 3;
         this.info = document.getElementById('player-status');
         this.isNormal = true;
@@ -14,9 +14,12 @@ class MyVehicle {
         this.lastTimeReduction = 0;
         this.timeReductionInterval = 5; // Set this to the desired interval in seconds
         this.state = { "drunk": false, "slow": false, "boost": false };
-        if (isPlayer === true) {
+        if (difficulty === 0) {
             this.handler = new MyVehicleHandler(this.app, this);
             this.lapCount = 0;
+        }
+        else {
+            this.difficulty = difficulty;
         }
         this.init();
 

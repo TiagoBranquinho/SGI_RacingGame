@@ -43,7 +43,7 @@ class MyContents {
         }
     }
 
-    startGame(car, car2) {
+    startGame(car, car2, difficulty) {
         this.app.init();
         const canvas = document.getElementById("canvas");
         canvas.removeChild(canvas.childNodes[1]);
@@ -51,8 +51,8 @@ class MyContents {
         const playerStatus = document.createElement("div");
         playerStatus.id = "player-status";
         canvas.appendChild(playerStatus);
-        let player = new MyVehicle(this.app, car, true);
-        let bot = new MyVehicle(this.app, car2.clone());
+        let player = new MyVehicle(this.app, car);
+        let bot = new MyVehicle(this.app, car2.clone(), difficulty);
         player.model.position.z = 3
         bot.model.position.z = -3
         this.track = new MyTrack(this.app, player, bot)
