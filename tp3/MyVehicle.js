@@ -7,15 +7,16 @@ class MyVehicle {
         this.app = app;
         this.model = model;
         this.radius = isPlayer ? 3 : 2;
-        this.collisionsTime = 3000;
+        this.collisionsTime = 3;
         this.info = document.getElementById('player-status');
         this.isNormal = true;
-        this.time = Date.now();
-        this.lastTimeReduction = Date.now();
-        this.timeReductionInterval = 5000; // Set this to the desired interval in milliseconds
+        this.time = 0;
+        this.lastTimeReduction = 0;
+        this.timeReductionInterval = 5; // Set this to the desired interval in seconds
         this.state = { "drunk": false, "slow": false, "boost": false };
         if (isPlayer === true) {
             this.handler = new MyVehicleHandler(this.app, this);
+            this.lapCount = 0;
         }
         this.init();
 
@@ -38,8 +39,8 @@ class MyVehicle {
         this.app.scene.add(this.model);
     }
 
-    setDrunk() {
-        this.drunkTime = Date.now();
+    setDrunk(time) {
+        this.drunkTime = time;
         this.handler.drunk = -1;
         this.state.drunk = true;
     }
@@ -49,8 +50,8 @@ class MyVehicle {
         this.state.drunk = false;
     }
 
-    setSlow() {
-        this.slowTime = Date.now();
+    setSlow(time) {
+        this.slowTime = time;
         this.handler.slow = 0.4;
         this.state.slow = true;
     }
@@ -60,8 +61,8 @@ class MyVehicle {
         this.state.slow = false;
     }
 
-    setBoost() {
-        this.boostTime = Date.now();
+    setBoost(time) {
+        this.boostTime = time;
         this.handler.boost = 2;
         this.state.boost = true;
     }
@@ -71,33 +72,33 @@ class MyVehicle {
         this.state.boost = false;
     }
 
-    updateState() {
-        if (this.handler.slow === 0.4 && Date.now() - this.slowTime > this.collisionsTime) {
+    updateState(time) {
+        if (this.handler.slow === 0.4 && time - this.slowTime > this.collisionsTime) {
             this.removeSlow();
         }
-        if (this.handler.drunk === -1 && Date.now() - this.drunkTime > this.collisionsTime) {
+        if (this.handler.drunk === -1 && time - this.drunkTime > this.collisionsTime) {
             this.removeDrunk();
         }
-        if (this.handler.boost === 2 && Date.now() - this.boostTime > this.collisionsTime) {
+        if (this.handler.boost === 2 && time - this.boostTime > this.collisionsTime) {
             this.removeBoost();
         }
-        this.updateInfo();
+        this.updateInfo(time);
     }
 
-    updateInfo() {
+    updateInfo(time) {
         let info = "";
         for (let key in this.state) {
             if (this.state[key]) {
                 info += key + "\n";
             }
         }
-        this.info.innerText = info + "Time: " + Math.floor((Date.now() - this.time) / 1000) + "s";
+        this.info.innerText = info + "Time: " + Math.floor(time - this.time) + "s";
     }
 
-    reduceTime() {
-        if (Date.now() - this.lastTimeReduction >= this.timeReductionInterval) {
-            this.time += 2000;
-            this.lastTimeReduction = Date.now();
+    reduceTime(time) {
+        if (time - this.lastTimeReduction >= this.timeReductionInterval) {
+            this.time += 2;
+            this.lastTimeReduction = time;
         }
     }
 

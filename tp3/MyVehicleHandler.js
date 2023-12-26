@@ -27,6 +27,15 @@ class MyVehicleHandler {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.update = this.update.bind(this);
+
+        this.paused = false;
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'p' || event.key === 'P') {
+                this.paused = !this.paused;
+            }
+        });
+
         this.initEventListeners();
 
         // Start the game loop
@@ -125,8 +134,10 @@ class MyVehicleHandler {
     }
 
     gameLoop() {
-        // Call the update method and request the next frame
-        this.update();
+        // If the game is not paused, update the game and request the next frame
+        if (!this.paused) {
+            this.update();
+        }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 }

@@ -32,6 +32,14 @@ class MyApp {
         this.cameraNames = [];
         this.lights = [];
         this.lightHelpersVisible = false;
+
+        this.paused = false;
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'p' || event.key === 'P') {
+                this.paused = !this.paused;
+            }
+        });
     }
     /**
      * initializes the application
@@ -172,7 +180,7 @@ class MyApp {
 
         // update the animation if contents were provided
         if (this.activeCamera !== undefined && this.activeCamera !== null) {
-            this.contents.update()
+            this.contents.update(this.paused)
         }
 
         // required if controls.enableDamping or controls.autoRotate are set to true

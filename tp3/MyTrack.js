@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MyObstacles } from './MyObstacles.js';
 import { MyPowerups } from './MyPowerups.js';
+import { MyCheckpoint } from './MyCheckpoint.js';
 
 class MyTrack {
 
@@ -41,6 +42,9 @@ class MyTrack {
             new THREE.Vector3(150, 0, 0),
             new THREE.Vector3(0, 0, 0)
         ]);
+
+        this.checkpoints = this.path.points.map(point => new MyCheckpoint(new THREE.Vector3(-point.x, point.y, point.z)));
+        this.nextCheckpointIndex = 0;
 
         //animation parameters
 
@@ -227,7 +231,18 @@ class MyTrack {
      * this method is called from the render method of the app
      * 
      */
-    update() {
+    update(paused) {
+
+        // If the game is paused, return immediately
+        if (paused) {
+            this.mixerPause = true; // Pause the bot animation
+            this.checkAnimationStateIsPause()
+        } else {
+            this.mixerPause = false; // Unpause the bot animation
+            this.checkAnimationStateIsPause()
+        }
+
+        this.checkTracksEnabled()
 
         const delta = this.clock.getDelta()
         this.mixer.update(delta)
@@ -235,13 +250,33 @@ class MyTrack {
         const tangent = this.spline.getTangentAt((this.mixer.time % this.animationMaxDuration) / this.animationMaxDuration)
         this.bot.model.rotation.y = Math.atan2(tangent.x, tangent.z)
 
-        this.checkAnimationStateIsPause()
-        this.checkTracksEnabled()
-        this.player.updateState()
+        this.player.updateState(this.mixer.time)
 
 
         if (this.enableCollisions) {
             this.checkPlayerCollisions()
+        }
+
+        let checkpoint = this.checkpoints[this.nextCheckpointIndex];
+        if (checkpoint.checkReached(this.player.model.position)) {
+            console.log(this.nextCheckpointIndex);
+            console.log('Checkpoint reached!');
+            // Do something when a checkpoint is reached
+
+            // If this is the last checkpoint, increment the lap count and reset the next checkpoint index
+            if (this.nextCheckpointIndex === this.checkpoints.length - 1) {
+                this.player.lapCount++;
+                console.log('Lap completed! Total laps:', this.player.lapCount);
+                this.nextCheckpointIndex = 0;
+                for (let i = 0; i < this.checkpoints.length; i++) {
+                    this.checkpoints[i].reached = false;
+                }
+            } else {
+                // Otherwise, move to the next checkpoint
+                this.nextCheckpointIndex++;
+            }
+            console.log(this.nextCheckpointIndex);
+            console.log(this.checkpoints[this.nextCheckpointIndex]);
         }
     }
 
@@ -249,7 +284,7 @@ class MyTrack {
         this.checkObjectsCollisions()
         this.checkPowerupsCollisions()
         if (this.isPlayerOffTrack() || this.checkBotCollisions()) {
-            this.player.setSlow();
+            this.player.setSlow(this.mixer.time);
         }
     }
 
@@ -258,10 +293,10 @@ class MyTrack {
 
         switch (playerObstacleCollisionType) {
             case 'cone':
-                this.player.setSlow();
+                this.player.setSlow(this.mixer.time);
                 break;
             case 'barrel':
-                this.player.setDrunk();
+                this.player.setDrunk(this.mixer.time);
                 break;
             default:
                 break;
@@ -272,10 +307,10 @@ class MyTrack {
 
         switch (playerPowerUpCollisionType) {
             case 'speedRamp':
-                this.player.setBoost();
+                this.player.setBoost(this.mixer.time);
                 break;
             case 'clock':
-                this.player.reduceTime();
+                this.player.reduceTime(this.mixer.time);
                 break;
             default:
                 break;

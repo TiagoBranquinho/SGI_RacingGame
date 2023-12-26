@@ -24,7 +24,14 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
+        this.paused = false;
         //this.reader.open("scenes/SGI_TP2_XML_T07_G07_V02/SGI_TP2_XML_T07_G07_V02.xml");
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'p' || event.key === 'P') {
+                this.paused = !this.paused;
+            }
+        });
     }
 
     showMenu() {
@@ -655,9 +662,9 @@ class MyContents {
         )
     }
 
-    update() {
+    update(paused) {
         if (this.track !== undefined && this.track !== null) {
-            this.track.update();
+            this.track.update(paused);
         }
     }
 }
