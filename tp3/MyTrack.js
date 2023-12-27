@@ -21,7 +21,7 @@ class MyTrack {
         this.closedCurve = false;
         this.enableCollisions = false;
         this.placedObstacle = false;
-        
+
         setTimeout(() => {
             this.enableCollisions = true;
         }, 1000);
@@ -320,7 +320,7 @@ class MyTrack {
             default:
                 break;
         }
-        if(!this.placedObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')){
+        if (!this.placedObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')) {
             this.placedObstacle = true;
             this.app.paused = !this.app.paused;
             this.enableListener();
@@ -408,9 +408,22 @@ class MyTrack {
 
     pickingHelper(intersects) {
         if (intersects.length > 0) {
-            console.log(intersects)
-            const obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
-            
+            let initObj = intersects[0].object;
+            let model3dObj = null;
+            while (initObj.parent) {
+                if (initObj.type === "Object3D") {
+                    model3dObj = initObj;
+                }
+                initObj = initObj.parent;
+            }
+            let obj = null;
+            if (model3dObj) {
+                obj = model3dObj.parent.parent;
+            }
+            else {
+                obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
+            }
+
             let pickingColor = 0xdedede;
             this.obstacleHandler.changeColor(obj, pickingColor);
 
