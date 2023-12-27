@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { MyAxis } from './MyAxis.js';
 import { MyFileReader } from './parser/MyFileReader.js';
 import { MyNurbsBuilder } from './MyNurbsBuilder.js';
@@ -57,6 +59,38 @@ class MyContents {
         bot.model.position.z = -3
         this.track = new MyTrack(this.app, player, bot)
         this.track.init()
+
+        this.paused = true; // Pause the game
+        let countdown = 3; // 3 seconds countdown
+        let previousText = null;
+        let countdownInterval = setInterval(async () => {
+            if (countdown > 0) {
+                // Remove the previous text from the scene
+                if (previousText) {
+                    this.app.scene.remove(previousText);
+                }
+        
+                // Add the countdown to the screen and store it in previousText
+                previousText = await this.addText(countdown + '...', new THREE.Vector3(-2, 4, 0), 1.2, 8, true);
+                countdown--;
+            } else {
+                // Remove the previous text from the scene
+                if (previousText) {
+                    this.app.scene.remove(previousText);
+                }
+        
+                previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, 8, true);
+                clearInterval(countdownInterval);
+                this.paused = false; // Start the game
+        
+                // Remove the 'Go!' text after 1 second
+                setTimeout(() => {
+                    if (previousText) {
+                        this.app.scene.remove(previousText);
+                    }
+                }, 1000);
+            }
+        }, 1000);
     }
 
     /**
@@ -660,6 +694,36 @@ class MyContents {
                 console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
             }
         )
+    }
+
+    draw(obj) {
+        this.app.scene.add(obj);
+    }
+
+    async addText(text, position, size, rotationQuotient, draw = false) {
+        return new Promise((resolve, reject) => {
+            const loader = new FontLoader();
+
+            loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+                const textGeometry = new TextGeometry(text, {
+                    font: font,
+                    size: size,  // Adjust the size as needed
+                    height: draw ? 0.01 : 0.1,  // Adjust the height as needed
+                    curveSegments: 12,
+                    bevelEnabled: false
+                });
+
+                const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+                textMesh.lookAt(this.app.activeCamera.position);
+                textMesh.position.copy(position);
+                if (draw) {
+                    this.draw(textMesh);
+                }
+                // Resolve with the created text mesh
+                resolve(textMesh);
+            });
+        });
     }
 
     update(paused) {
