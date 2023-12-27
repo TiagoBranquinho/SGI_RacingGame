@@ -16,7 +16,7 @@ class MyVehicle {
         this.state = { "drunk": false, "slow": false, "boost": false };
         if (difficulty === 0) {
             this.name = "Bot"
-            this.handler = new MyVehicleHandler(this.app, this);
+            this.handler = new MyVehicleHandler(this);
             this.lapCount = 0;
         }
         else {

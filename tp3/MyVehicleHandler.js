@@ -1,16 +1,14 @@
 import * as THREE from 'three';
 
 class MyVehicleHandler {
-    constructor(app, vehicle) {
+    constructor(vehicle) {
         this.vehicle = vehicle;
-        this.app = app;
         this.init();
         this.keyStates = {
             "KeyW": false,
             "KeyA": false,
             "KeyS": false,
             "KeyD": false,
-            "Space": false,
         };
         this.normalSpeed = 0.6;
         this.speedReduction = 0.4;
@@ -23,23 +21,15 @@ class MyVehicleHandler {
         this.braking = 0.0007;  // Adjust the braking factor
         this.maxRotationSpeed = 0.010;
         this.direction = new THREE.Vector3(0, 0, 1);
-        this.lockCamera = true;
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.update = this.update.bind(this);
 
-        this.paused = false;
-
-        window.addEventListener('keydown', (event) => {
-            if (event.key === 'p' || event.key === 'P') {
-                this.paused = !this.paused;
-            }
-        });
+        
 
         this.initEventListeners();
 
         // Start the game loop
-        this.gameLoop();
     }
 
     initEventListeners() {
@@ -60,9 +50,6 @@ class MyVehicleHandler {
     }
 
     update() {
-        if (this.keyStates['Space']) {
-            this.lockCamera = !this.lockCamera;
-        }
         let speed = this.normalSpeed * this.boost * this.slow;
 
         // Create a direction vector based on the vehicle's current rotation
@@ -118,28 +105,15 @@ class MyVehicleHandler {
         // Update car position so it only moves in the direction it's facing
         this.vehicle.model.position.add(this.velocity);
 
-        const cameraOffset = new THREE.Vector3(0, 3, -9);
-        cameraOffset.applyEuler(this.vehicle.model.rotation);
-        if (this.lockCamera) {
-            this.app.activeCamera.position.copy(this.vehicle.model.position).add(cameraOffset);
-        }
-
-        // Update the camera's internal matrix
-        this.app.activeCamera.lookAt(this.vehicle.model.position.clone());
-        this.app.controls.target.copy(this.vehicle.model.position.clone());
-
-        // Make the camera look at the car
-        this.app.activeCamera.updateProjectionMatrix();
-
     }
 
-    gameLoop() {
+    /* gameLoop() {
         // If the game is not paused, update the game and request the next frame
         if (!this.paused) {
             this.update();
         }
         requestAnimationFrame(this.gameLoop.bind(this));
-    }
+    } */
 }
 
 export { MyVehicleHandler };

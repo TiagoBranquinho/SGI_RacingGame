@@ -20,6 +20,13 @@ class MyTrack {
         this.showLine = true;
         this.closedCurve = false;
         this.enableCollisions = false;
+        this.paused = false;
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'p' || event.key === 'P') {
+                this.paused = !this.paused;
+            }
+        });
         setTimeout(() => {
             this.enableCollisions = true;
         }, 1000);
@@ -238,6 +245,7 @@ class MyTrack {
             this.mixerPause = true; // Pause the bot animation
             this.checkAnimationStateIsPause()
         } else {
+            this.player.handler.update();
             this.mixerPause = false; // Unpause the bot animation
             this.checkAnimationStateIsPause()
         }
@@ -278,6 +286,8 @@ class MyTrack {
             console.log(this.nextCheckpointIndex);
             console.log(this.checkpoints[this.nextCheckpointIndex]);
         }
+
+        this.updateCamera();
     }
 
     checkPlayerCollisions() {
@@ -329,6 +339,21 @@ class MyTrack {
         const intersections = raycaster.intersectObject(this.curve, true);
         // If there are intersections, the player is on the track
         return intersections.length == 0;
+    }
+
+    updateCamera(){
+        const cameraOffset = new THREE.Vector3(0, 3, -9);
+        cameraOffset.applyEuler(this.player.model.rotation);
+        if (!this.paused) {
+            this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);
+        }
+
+        // Update the camera's internal matrix
+        this.app.activeCamera.lookAt(this.player.model.position.clone());
+        this.app.controls.target.copy(this.player.model.position.clone());
+
+        // Make the camera look at the car
+        this.app.activeCamera.updateProjectionMatrix();
     }
 
 
