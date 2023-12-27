@@ -150,7 +150,6 @@ class MyMenuHandler {
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
 
         var allCars = this.playerCars.concat(this.botCars).concat(this.botDifficulty);
-
         // Compute intersections
         var intersects = this.raycaster.intersectObjects(allCars);
 

@@ -6,6 +6,7 @@ class MyPowerups {
         this.app = app;
         this.powerupNodes = {};
         this.powerups = new Map();
+        this.objectList = [];
         this.init();
     }
     init() {
@@ -14,12 +15,12 @@ class MyPowerups {
             for (let i = 0; i < this.powerupNodes[type].children.length; i++) {
                 const child = this.powerupNodes[type].children[i];
                 this.powerups.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
+                this.objectList.push(child.children[0].children[0]);
             }
         }
         /* for (let [coord, type] of this.powerups.entries()) {
             console.log(coord, type);
         } */
-
     }
     getPosition(obj) {
         return obj.position;
@@ -48,7 +49,9 @@ class MyPowerups {
         }
         return false;
     }
-
+    getObjectsList() {
+        return this.objectList;
+    }
 }
 
 export { MyPowerups };

@@ -6,6 +6,7 @@ class MyObstacles {
         this.app = app;
         this.obstacleNodes = {};
         this.obstacles = new Map();
+        this.objectList = [];
         this.init();
     }
     init() {
@@ -13,16 +14,28 @@ class MyObstacles {
         console.log(this.app.scene.children[4])
         for (let type of ['cones', 'barrels']) {
             this.obstacleNodes[type] = this.dfs(this.app.scene.children[4], type)
-            for (let i = 0; i < this.obstacleNodes[type].children.length; i++) {
-                const child = this.obstacleNodes[type].children[i];
-                this.obstacles.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
-            }
         }
+        this.update();
         /* for (let [coord, type] of this.obstacles.entries()) {
             console.log(coord, type);
         } */
+        for (let i = 0; i < this.objectList.length; i++) {
+            this.registerInitialColors(this.objectList[i])
+        }
+        console.log(this.objectList);
 
     }
+
+    update() {
+        for (let type of ['cones', 'barrels']) {
+            for (let i = 0; i < this.obstacleNodes[type].children.length; i++) {
+                const child = this.obstacleNodes[type].children[i];
+                this.obstacles.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
+                this.objectList.push(child);
+            }
+        }
+    }
+
     getPosition(obj) {
         return obj.position;
     }
@@ -49,6 +62,41 @@ class MyObstacles {
             }
         }
         return false;
+    }
+
+    getObjectsList() {
+        return this.objectList;
+    }
+
+    changeColor(obj, newColor) {
+        if(obj.type === 'Mesh'){
+            obj.material.color.setHex(newColor);
+        }
+        else{
+            for(let i = 0; i < obj.children.length; i++){
+                this.changeColor(obj.children[i], newColor);
+            }
+        }
+    }
+
+    restoreColor(obj) {
+        if (obj.type === 'Mesh') {
+            obj.material.color.setHex(obj.initialColor);
+        }
+        else {
+            for (let i = 0; i < obj.children.length; i++) {
+                this.restoreColor(obj.children[i]);
+            }
+        }
+    }
+
+    registerInitialColors(obj) {
+        if (obj.type === 'Mesh') {
+            obj.initialColor = obj.material.color.getHex();
+        }
+        for (let child of obj.children) {
+            this.registerInitialColors(child);
+        }
     }
 
 }
