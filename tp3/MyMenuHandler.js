@@ -58,6 +58,7 @@ class MyMenuHandler {
         if (event.key === "Enter") {
             this.removeListenerName();
             this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+            return;
         }
         else if (event.key === "Backspace") {
             this.playerName = this.playerName.slice(0, -1);
