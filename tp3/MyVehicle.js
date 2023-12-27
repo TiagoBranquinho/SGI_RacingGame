@@ -28,7 +28,6 @@ class MyVehicle {
     }
     init() {
         let scale;
-        console.log(this.model.name.split('/'));
         if (this.model.name.split('/')[2] === 'car2.glb') {
             scale = 0.01;
         }

@@ -10,20 +10,19 @@ class MyObstacles {
         this.init();
     }
     init() {
-        console.log(this.app.scene.children)
-        console.log(this.app.scene.children[4])
         for (let type of ['cones', 'barrels']) {
             this.obstacleNodes[type] = this.dfs(this.app.scene.children[4], type)
         }
         this.update();
-        /* for (let [coord, type] of this.obstacles.entries()) {
-            console.log(coord, type);
-        } */
+
+
+
+    }
+
+    gato() {
         for (let i = 0; i < this.objectList.length; i++) {
             this.registerInitialColors(this.objectList[i])
         }
-        console.log(this.objectList);
-
     }
 
     update() {
@@ -65,33 +64,38 @@ class MyObstacles {
     }
 
     getObjectsList() {
-        return this.objectList;
+        return [this.objectList[6]];
     }
 
     changeColor(obj, newColor) {
-        if (obj.type === 'Mesh') {
+        if (obj.material !== undefined) {
             obj.material.color = newColor;
         }
-        else {
-            for (let i = 0; i < obj.children.length; i++) {
-                this.changeColor(obj.children[i], newColor);
-            }
+        for (let i = 0; i < obj.children.length; i++) {
+            this.changeColor(obj.children[i], newColor);
         }
     }
 
     restoreColor(obj) {
         if (obj.type === 'Mesh') {
-            obj.material.color = obj.initialColor;
+            obj.material.color = new THREE.Color();
+            obj.material.color.r = obj.userData.initialColor.r;
+            obj.material.color.g = obj.userData.initialColor.g;
+            obj.material.color.b = obj.userData.initialColor.b;
         }
         for (let i = 0; i < obj.children.length; i++) {
             this.restoreColor(obj.children[i]);
         }
     }
 
+
+
     registerInitialColors(obj) {
-        if (obj.type === 'Mesh') {
-            obj.initialColor = obj.material.color;
-            console.log(obj.initialColor);
+        if (obj.type === "Mesh") {
+            obj.userData.initialColor = new THREE.Color();
+            obj.userData.initialColor.r = obj.material.color.r;
+            obj.userData.initialColor.g = obj.material.color.g;
+            obj.userData.initialColor.b = obj.material.color.b;
         }
         for (let i = 0; i < obj.children.length; i++) {
             this.registerInitialColors(obj.children[i]);

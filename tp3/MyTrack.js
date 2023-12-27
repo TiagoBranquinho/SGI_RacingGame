@@ -262,7 +262,6 @@ class MyTrack {
 
         let checkpoint = this.checkpoints[this.nextCheckpointIndex];
         if (checkpoint.checkReached(this.player.model.position)) {
-            console.log(this.nextCheckpointIndex);
             console.log('Checkpoint reached!');
             // Do something when a checkpoint is reached
 
@@ -278,8 +277,6 @@ class MyTrack {
                 // Otherwise, move to the next checkpoint
                 this.nextCheckpointIndex++;
             }
-            console.log(this.nextCheckpointIndex);
-            console.log(this.checkpoints[this.nextCheckpointIndex]);
         }
 
         this.updateCamera();
@@ -321,6 +318,7 @@ class MyTrack {
                 break;
         }
         if (!this.placedObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')) {
+            this.obstacleHandler.gato();
             this.placedObstacle = true;
             this.app.paused = !this.app.paused;
             this.enableListener();
@@ -455,7 +453,6 @@ class MyTrack {
                     });
 
                     if (objIsInCurve) {
-                        console.log("selected curve");
                         if (this.selectedObstacle !== null) {
                             this.selectedObstacle.position.copy(intersects[0].point);
                             this.obstacleHandler.restoreColor(this.selectedObstacle);
@@ -476,7 +473,7 @@ class MyTrack {
         let obstacles = this.obstacleHandler.getObjectsList();
         for (var i = 0; i < obstacles.length; i++) {
             let obstacle = obstacles[i];
-            if (obstacle != this.selectedObstacle) {
+            if (obstacle !== this.selectedObstacle) {
                 this.obstacleHandler.restoreColor(obstacle);
             }
         }
@@ -518,7 +515,6 @@ class MyTrack {
 
         let times = distances.map(distance => (distance / totalDistance) * duration);
 
-        console.log(times);
 
         const positionKF = new THREE.VectorKeyframeTrack('.position', times,
             [

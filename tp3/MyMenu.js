@@ -14,7 +14,6 @@ class MyMenu {
         this.botDifficulty = [];
         this.rotatableObjects = [];
         this.createMenu();
-        console.log(this.botDifficulty)
         this.menuHandler = new MyMenuHandler(this.contents, this.playerCars, this.botCars, this.botDifficulty, this.rotatableObjects);
     }
 
