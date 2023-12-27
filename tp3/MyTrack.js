@@ -424,8 +424,18 @@ class MyTrack {
                 obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
             }
 
-            let pickingColor = 0xdedede;
-            this.obstacleHandler.changeColor(obj, pickingColor);
+            let pickingColor = new THREE.Color();
+            pickingColor.setRGB(1, 0, 0);
+            let objIsInCurve = false;
+            this.curve.traverse(child => {
+                if (child === obj) {
+                    objIsInCurve = true;
+                }
+            });
+
+            if (!objIsInCurve) {
+                this.obstacleHandler.changeColor(obj, pickingColor);
+            }
 
             if (this.mousePressed) {
                 if (this.obstacleHandler.getObjectsList().includes(obj)) {

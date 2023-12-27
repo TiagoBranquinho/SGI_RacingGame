@@ -69,11 +69,11 @@ class MyObstacles {
     }
 
     changeColor(obj, newColor) {
-        if(obj.type === 'Mesh'){
-            obj.material.color.setHex(newColor);
+        if (obj.type === 'Mesh') {
+            obj.material.color = newColor;
         }
-        else{
-            for(let i = 0; i < obj.children.length; i++){
+        else {
+            for (let i = 0; i < obj.children.length; i++) {
                 this.changeColor(obj.children[i], newColor);
             }
         }
@@ -81,21 +81,20 @@ class MyObstacles {
 
     restoreColor(obj) {
         if (obj.type === 'Mesh') {
-            obj.material.color.setHex(obj.initialColor);
+            obj.material.color = obj.initialColor;
         }
-        else {
-            for (let i = 0; i < obj.children.length; i++) {
-                this.restoreColor(obj.children[i]);
-            }
+        for (let i = 0; i < obj.children.length; i++) {
+            this.restoreColor(obj.children[i]);
         }
     }
 
     registerInitialColors(obj) {
         if (obj.type === 'Mesh') {
-            obj.initialColor = obj.material.color.getHex();
+            obj.initialColor = obj.material.color;
+            console.log(obj.initialColor);
         }
-        for (let child of obj.children) {
-            this.registerInitialColors(child);
+        for (let i = 0; i < obj.children.length; i++) {
+            this.registerInitialColors(obj.children[i]);
         }
     }
 
