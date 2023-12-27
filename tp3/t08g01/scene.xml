@@ -273,11 +273,12 @@
                 <noderef id="cone2" />
                 <noderef id="cone3" />
                 <noderef id="cone4" />
+                <noderef id="cone5" />
             </children>
         </node>
         <node id="cone1">
             <transforms>
-                <translate value3="40.0 0.0 5.0" />
+                <translate value3="40.0 0.9 5.0" />
                 <rotate value3="0.0 0.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -289,7 +290,7 @@
 
         <node id="cone2">
             <transforms>
-                <translate value3="-158 0.0 218" />
+                <translate value3="-158 0.9 218" />
                 <rotate value3="0.0 0.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -301,7 +302,7 @@
 
         <node id="cone3">
             <transforms>
-                <translate value3="120 0 40" />
+                <translate value3="120 0.9 40" />
                 <rotate value3="0.0 0.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -313,7 +314,19 @@
 
         <node id="cone4">
             <transforms>
-                <translate value3="-80 0 -40" />
+                <translate value3="-80 0.9 -40" />
+                <rotate value3="0.0 0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone5">
+            <transforms>
+                <translate value3="0 0.9 -15" />
                 <rotate value3="0.0 0.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>

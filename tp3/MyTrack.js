@@ -20,13 +20,8 @@ class MyTrack {
         this.showLine = true;
         this.closedCurve = false;
         this.enableCollisions = false;
-        this.paused = false;
-
-        window.addEventListener('keydown', (event) => {
-            if (event.key === 'p' || event.key === 'P') {
-                this.paused = !this.paused;
-            }
-        });
+        this.placedObstacle = false;
+        
         setTimeout(() => {
             this.enableCollisions = true;
         }, 1000);
@@ -239,7 +234,6 @@ class MyTrack {
      * 
      */
     update(paused) {
-
         // If the game is paused, return immediately
         if (paused) {
             this.mixerPause = true; // Pause the bot animation
@@ -248,6 +242,7 @@ class MyTrack {
             this.player.handler.update();
             this.mixerPause = false; // Unpause the bot animation
             this.checkAnimationStateIsPause()
+            this.removeListener();
         }
 
         this.checkTracksEnabled()
@@ -293,7 +288,7 @@ class MyTrack {
     checkPlayerCollisions() {
         this.checkObjectsCollisions()
         this.checkPowerupsCollisions()
-        if (this.isPlayerOffTrack() || this.checkBotCollisions()) {
+        if (this.isOffTrack(this.player.model) || this.checkBotCollisions()) {
             this.player.setSlow(this.mixer.time);
         }
     }
@@ -325,15 +320,20 @@ class MyTrack {
             default:
                 break;
         }
+        if(!this.placedObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')){
+            this.placedObstacle = true;
+            this.app.paused = !this.app.paused;
+            this.enableListener();
+        }
     }
 
     checkBotCollisions() {
         return this.player.model.position.distanceTo(this.bot.model.position) <= this.bot.radius + this.player.radius;
     }
 
-    isPlayerOffTrack() {
-        const playerPosition = this.player.model.position.clone();
-        const raycaster = new THREE.Raycaster(playerPosition, new THREE.Vector3(0, -1, 0));
+    isOffTrack(obj) {
+        const position = obj.position.clone();
+        const raycaster = new THREE.Raycaster(position, new THREE.Vector3(0, -1, 0));
 
         // Check intersections with the track mesh
         const intersections = raycaster.intersectObject(this.curve, true);
@@ -341,25 +341,140 @@ class MyTrack {
         return intersections.length == 0;
     }
 
-    updateCamera(){
+    updateCamera() {
         const cameraOffset = new THREE.Vector3(0, 3, -9);
         cameraOffset.applyEuler(this.player.model.rotation);
-        if (!this.paused) {
+        if (!this.app.paused) {
             this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);
+            this.app.activeCamera.lookAt(this.player.model.position.clone());
+            this.app.controls.target.copy(this.player.model.position.clone());
         }
-
-        // Update the camera's internal matrix
-        this.app.activeCamera.lookAt(this.player.model.position.clone());
-        this.app.controls.target.copy(this.player.model.position.clone());
 
         // Make the camera look at the car
         this.app.activeCamera.updateProjectionMatrix();
     }
 
+    enableListener() {
+        document.addEventListener("pointermove", this.boundPointerMove, false);
+        document.addEventListener("pointerdown", this.boundPointerDown, false);
+        document.addEventListener("pointerup", this.boundPointerUp, false);
+
+    }
+
+    removeListener() {
+        document.removeEventListener("pointermove", this.boundPointerMove, false);
+        document.removeEventListener("pointerdown", this.boundPointerDown, false);
+        document.removeEventListener("pointerup", this.boundPointerUp, false);
+    }
+
+    onPointerDown() {
+        this.mousePressed = true; // Set the flag when the mouse is pressed~
+        //2. set the picking ray from the camera position and mouse coordinates
+        this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
+
+        var objects = this.obstacleHandler.getObjectsList().concat([this.curve]);
+        //3. compute intersections
+        var intersects = this.raycaster.intersectObjects(objects);
+
+        this.pickingHelper(intersects)
+    }
+
+    onPointerUp() {
+        this.mousePressed = false; // Clear the flag when the mouse is released
+
+    }
+
+    onPointerMove(event) {
+
+        // calculate pointer position in normalized device coordinates
+        // (-1 to +1) for both components
+
+        //of the screen is the origin
+        this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        //console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
+
+        //2. set the picking ray from the camera position and mouse coordinates
+        this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
+
+        var objects = this.obstacleHandler.getObjectsList();
+
+        //3. compute intersections
+        var intersects = this.raycaster.intersectObjects(objects);
+
+        this.pickingHelper(intersects)
+    }
+
+    pickingHelper(intersects) {
+        if (intersects.length > 0) {
+            console.log(intersects)
+            const obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
+            
+            let pickingColor = 0xdedede;
+            this.obstacleHandler.changeColor(obj, pickingColor);
+
+            if (this.mousePressed) {
+                if (this.obstacleHandler.getObjectsList().includes(obj)) {
+                    if (!this.isOffTrack(obj)) {
+                        return;
+                    }
+                    this.selectedObstacle = obj;
+                    console.log("selected obstacle: " + this.selectedObstacle);
+                }
+                else {
+
+                    let objIsInCurve = false;
+                    this.curve.traverse(child => {
+                        if (child === obj) {
+                            objIsInCurve = true;
+                        }
+                    });
+
+                    if (objIsInCurve) {
+                        console.log("selected curve");
+                        if (this.selectedObstacle !== null) {
+                            this.selectedObstacle.position.copy(intersects[0].point);
+                            this.obstacleHandler.restoreColor(this.selectedObstacle);
+                            this.obstacleHandler.update();
+                            this.selectedObstacle = null;
+                            this.app.paused = !this.app.paused;
+                        }
+                    }
+                }
+            }
+
+        } else {
+            this.restoreColorOfFirstPickedObj();
+        }
+    }
+
+    restoreColorOfFirstPickedObj() {
+        let obstacles = this.obstacleHandler.getObjectsList();
+        for (var i = 0; i < obstacles.length; i++) {
+            let obstacle = obstacles[i];
+            if (obstacle != this.selectedObstacle) {
+                this.obstacleHandler.restoreColor(obstacle);
+            }
+        }
+    }
 
 
 
     init() {
+
+        this.boundPointerMove = this.onPointerMove.bind(this);
+        this.boundPointerDown = this.onPointerDown.bind(this);
+        this.boundPointerUp = this.onPointerUp.bind(this);
+
+
+        this.pointer = new THREE.Vector2()
+        this.raycaster = new THREE.Raycaster()
+        this.raycaster.near = 0.1
+        this.raycaster.far = 100
+        this.selectedObstacle = null
+
+
         this.buildCurve();
         this.bot.draw();
         this.player.draw();

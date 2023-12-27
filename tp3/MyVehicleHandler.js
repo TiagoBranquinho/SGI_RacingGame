@@ -107,13 +107,6 @@ class MyVehicleHandler {
 
     }
 
-    /* gameLoop() {
-        // If the game is not paused, update the game and request the next frame
-        if (!this.paused) {
-            this.update();
-        }
-        requestAnimationFrame(this.gameLoop.bind(this));
-    } */
 }
 
 export { MyVehicleHandler };
