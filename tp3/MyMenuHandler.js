@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 class MyMenuHandler {
     constructor(contents, playerCars, botCars, botDifficulty, rotatableObjects) {
@@ -13,6 +15,7 @@ class MyMenuHandler {
         this.selectedPlayerCar = null; // Track the selected car
         this.selectedBotCar = null; // Track the selected car
         this.selectedBotDifficulty = null;
+        this.playerName = "name";
     }
     init() {
         this.pointer = new THREE.Vector2()
@@ -39,6 +42,74 @@ class MyMenuHandler {
         document.removeEventListener("pointerdown", this.boundPointerDown, false);
         document.removeEventListener("pointerup", this.boundPointerUp, false);
     }
+
+
+    nameListener() {
+        this.gato = this.input.bind(this);
+        document.addEventListener("keydown", this.gato, false);
+    }
+
+    removeListenerName() {
+        document.removeEventListener("keydown", this.gato, false);
+    }
+
+    input(event) {
+        console.log(event);
+        if (event.key === "Enter") {
+            this.removeListenerName();
+            this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+        }
+        else if (event.key === "Backspace") {
+            this.playerName = this.playerName.slice(0, -1);
+        }
+        else {
+            this.playerName += event.key;
+        }
+        this.updateName();
+    }
+
+
+    updateName() {
+        this.contents.app.scene.remove(this.contents.app.scene.children[3]);
+        console.log(this.contents.app.scene.children)
+        this.initName();
+
+    }
+    initName() {
+        // Create a material for the background rectangle
+        this.nameGroup = new THREE.Group();
+        const backgroundMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.9, transparent: true });
+
+        // Create a material for the text
+        const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+        // Create a font loader
+        const fontLoader = new FontLoader();
+
+        // Load a font (you can replace 'helvetiker_regular.typeface.json' with your desired font)
+        fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+
+            // Create a background rectangle
+            const backgroundGeometry = new THREE.PlaneGeometry(40, 10); // Adjust the size as needed
+            this.backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+            this.backgroundMesh.position.set(0, 0, 4); // Adjust the position as needed
+            this.nameGroup.add(this.backgroundMesh);
+            // Create a TextGeometry for the input
+            const textGeometry = new TextGeometry(this.playerName, {
+                font: font,
+                size: 0.9,
+                height: 0.1,
+                curveSegments: 12
+            });
+
+            // Create a mesh for the text
+            this.textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            this.textMesh.position.set(-5, 0, 4); // Center the text in the rectangle
+            this.nameGroup.add(this.textMesh);
+            this.contents.app.scene.add(this.nameGroup);
+        });
+    }
+
     onPointerDown() {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
@@ -81,11 +152,11 @@ class MyMenuHandler {
 
         // Compute intersections
         var intersects = this.raycaster.intersectObjects(allCars);
-    
+
         if (this.mousePressed && intersects.length === 0) {
             this.rotateSquares(event);
         }
-    
+
         // Call pickingHelper once
         this.pickingHelper(intersects);
     }
@@ -99,10 +170,10 @@ class MyMenuHandler {
             if (this.playerCars.includes(obj) && !obj.launchGame) {
                 pickingColor = this.pickingColorPlayer;
             }
-            else if(this.botCars.includes(obj)) {
+            else if (this.botCars.includes(obj)) {
                 pickingColor = this.pickingColorBot;
             }
-            else if(this.botDifficulty.includes(obj)) {
+            else if (this.botDifficulty.includes(obj)) {
                 pickingColor = this.pickingColorBotDifficulty;
             }
             else {
@@ -116,7 +187,9 @@ class MyMenuHandler {
                 if (obj.launchGame) {
                     if (this.selectedPlayerCar !== null && this.selectedBotCar !== null && this.selectedBotDifficulty !== null) {
                         this.removeListener();
-                        this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty);
+                        //this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty);
+                        this.nameListener();
+                        this.initName();
                     }
                     else {
                         alert("Please select a car first!");
@@ -128,11 +201,11 @@ class MyMenuHandler {
                         this.selectedPlayerCar = obj;
                         console.log("selected player car: " + this.selectedPlayerCar);
                     }
-                    else if(this.botCars.includes(obj)) {
+                    else if (this.botCars.includes(obj)) {
                         this.selectedBotCar = obj;
                         console.log("selected bot car: " + this.selectedBotCar);
                     }
-                    else if(this.botDifficulty.includes(obj)){
+                    else if (this.botDifficulty.includes(obj)) {
                         this.selectedBotDifficulty = obj;
                         console.log("selected bot difficulty: " + this.selectedBotDifficulty);
                     }
@@ -160,9 +233,9 @@ class MyMenuHandler {
                 car.material.color.setHex(0x0088ff);
             }
         }
-        for(var i = 0; i < this.botDifficulty.length; i++){
+        for (var i = 0; i < this.botDifficulty.length; i++) {
             let difficulty = this.botDifficulty[i];
-            if(difficulty != this.selectedBotDifficulty){
+            if (difficulty != this.selectedBotDifficulty) {
                 difficulty.material.color.setHex(0x0088ff);
             }
         }
