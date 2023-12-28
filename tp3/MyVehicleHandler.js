@@ -18,7 +18,7 @@ class MyVehicleHandler {
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.acceleration = 0.0007;  // Adjust the acceleration factor
         this.deceleration = 0.0004;  // Adjust the deceleration factor
-        this.braking = 0.0007;  // Adjust the braking factor
+        this.braking = 0.0009;  // Adjust the braking factor
         this.maxRotationSpeed = 0.010;
         this.direction = new THREE.Vector3(0, 0, 1);
         this.handleKeyDown = this.handleKeyDown.bind(this);

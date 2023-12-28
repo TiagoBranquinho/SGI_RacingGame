@@ -64,7 +64,7 @@ class MyObstacles {
     }
 
     getObjectsList() {
-        return [this.objectList[6]];
+        return this.objectList;
     }
 
     changeColor(obj, newColor) {
