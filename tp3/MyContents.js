@@ -359,11 +359,6 @@ class MyContents {
             object.add(gltf.scene);
         });
         object.name = model3d.filepath
-        if (model3d.filepath.split('/')[2] === 'car1.glb') {
-            console.log(object)
-            object.rotation.y = Math.PI;
-            console.log(object)
-        }
         return object;
     }
 

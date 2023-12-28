@@ -15,12 +15,12 @@ class MyVehicle {
         this.timeReductionInterval = 5; // Set this to the desired interval in seconds
         this.state = { "drunk": false, "slow": false, "boost": false };
         if (difficulty === 0) {
-            this.name = "Bot"
             this.handler = new MyVehicleHandler(this);
             this.lapCount = 0;
+            this.name = name;
         }
         else {
-            this.name = name;
+            this.name = "Bot";
             this.difficulty = difficulty;
         }
         this.init();
@@ -30,14 +30,17 @@ class MyVehicle {
         let scale;
         if (this.model.name.split('/')[2] === 'car2.glb') {
             scale = 0.01;
+            this.model.rotation.y = Math.PI / 2;
+            this.model.position.set(0, 0.9, 0);
         }
         else {
             scale = 3;
+            this.model.rotation.y = Math.PI / 2;
+            this.model.children[0].rotation.y = Math.PI;
+            this.model.position.set(0, 1.2, 0);
         }
         this.model.scale.set(scale, scale, scale);
-        this.model.position.set(0, 0.9, 0);
         this.model.rotation.x = 0;
-        this.model.rotation.y = Math.PI / 2;
     }
     draw() {
         this.app.scene.add(this.model);

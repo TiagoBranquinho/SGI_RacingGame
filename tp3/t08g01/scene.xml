@@ -127,6 +127,7 @@
                 <noderef id="powerups" />
                 <noderef id="obstacles" />
                 <noderef id="parks" />
+                <noderef id="parkedCars" />
                 <noderef id="raceFlag" />
                 <noderef id="finishLine" />
             </children>
@@ -864,16 +865,6 @@
             </children>
         </node>
 
-
-
-
-
-
-
-
-
-
-
         <node id="obstacles">
             <transforms>
                 <translate value3="0.0 0.0 0.0" />
@@ -992,5 +983,72 @@
                 </primitive>
             </children>
         </node>
+
+        <node id="parkedCars">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="botsCars" />
+            </children>
+        </node>
+
+        <node id="playersCars">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="playerCar1" />
+            </children>
+        </node>
+
+        <node id="playerCar1">
+            <transforms>
+                <translate value3="2.0 0.9 0.0" />
+                <rotate value3="0 0 0" />
+                <scale value3="1 1 14" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="t08g01/models/car2.glb" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="botsCars">
+            <transforms>
+                <translate value3="0.0 0.0 0.0" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="botCar1" />
+            </children>
+        </node>
+
+        <node id="botCar1">
+            <transforms>
+                <translate value3="2.0 0.9 0.0" />
+                <rotate value3="0 0 0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="t08g01/models/car1.glb" />
+                </primitive>
+            </children>
+        </node>
+
+
+
     </graph>
 </yaf> 
