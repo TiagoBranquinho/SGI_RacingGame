@@ -274,6 +274,13 @@
                 <noderef id="cone3" />
                 <noderef id="cone4" />
                 <noderef id="cone5" />
+                <noderef id="cone6" />
+                <noderef id="cone7" />
+                <noderef id="cone8" />
+                <noderef id="cone9" />
+                <noderef id="cone10" />
+                <noderef id="cone11" />
+
             </children>
         </node>
         <node id="cone1">
@@ -314,7 +321,7 @@
 
         <node id="cone4">
             <transforms>
-                <translate value3="-80 0.9 -40" />
+                <translate value3="-53 0.9 -40" />
                 <rotate value3="0.0 0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -326,7 +333,79 @@
 
         <node id="cone5">
             <transforms>
-                <translate value3="0 0.9 -15" />
+                <translate value3="-59 0.9 -20" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone6">
+            <transforms>
+                <translate value3="-41 0.9 -20" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone7">
+            <transforms>
+                <translate value3="-47 0.9 -20" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone8">
+            <transforms>
+                <translate value3="-41 0.9 -40" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone9">
+            <transforms>
+                <translate value3="-29 0.9 -20" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone10">
+            <transforms>
+                <translate value3="-71 0.9 -20" />
+                <rotate value3="0.0 0.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="cone" />
+            </children>
+        </node>
+
+        <node id="cone11">
+            <transforms>
+                <translate value3="-65 0.9 -40" />
                 <rotate value3="0.0 0.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -459,6 +538,13 @@
             <children>
                 <noderef id="barrel1" />
                 <noderef id="barrel2" />
+                <noderef id="barrel3" />
+                <noderef id="barrel4" />
+                <noderef id="barrel5" />
+                <noderef id="barrel6" />
+                <noderef id="barrel7" />
+                <noderef id="barrel8" />
+                <noderef id="barrel9" />
             </children>
         </node>
         <node id="barrel1">
@@ -475,7 +561,7 @@
 
         <node id="barrel2">
             <transforms>
-                <translate value3="-70 0.8 -35" />
+                <translate value3="-53 0.9 -20" />
                 <rotate value3="0.0 1.0 0.0" />
                 <scale value3="1 1 1" />
             </transforms>
@@ -484,6 +570,89 @@
                 <noderef id="barrel" />
             </children>
         </node>
+        <node id="barrel3">
+            <transforms>
+                <translate value3="-65 0.9 -20" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+        <node id="barrel4">
+            <transforms>
+                <translate value3="-47 0.9 -40" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+
+        <node id="barrel5">
+            <transforms>
+                <translate value3="-35 0.9 -40" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+
+        <node id="barrel6">
+            <transforms>
+                <translate value3="-29 0.9 -40" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+
+        <node id="barrel7">
+            <transforms>
+                <translate value3="-35 0.9 -20" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+
+        <node id="barrel8">
+            <transforms>
+                <translate value3="-71 0.9 -40" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+
+        <node id="barrel9">
+            <transforms>
+                <translate value3="-59 0.9 -40" />
+                <rotate value3="0.0 1.0 0.0" />
+                <scale value3="1 1 1" />
+            </transforms>
+
+            <children>
+                <noderef id="barrel" />
+            </children>
+        </node>
+
         <node id="obstacles">
             <transforms>
                 <translate value3="0.0 0.0 0.0" />
