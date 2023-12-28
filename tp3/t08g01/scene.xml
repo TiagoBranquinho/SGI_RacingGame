@@ -993,6 +993,7 @@
 
             <children>
                 <noderef id="botsCars" />
+                <noderef id="playersCars" />
             </children>
         </node>
 
@@ -1010,9 +1011,9 @@
 
         <node id="playerCar1">
             <transforms>
-                <translate value3="2.0 0.9 0.0" />
+                <translate value3="9 0.1 -15.0" />
                 <rotate value3="0 0 0" />
-                <scale value3="1 1 14" />
+                <scale value3="0.01 0.01 0.01" />
             </transforms>
 
             <children>
@@ -1036,9 +1037,9 @@
 
         <node id="botCar1">
             <transforms>
-                <translate value3="2.0 0.9 0.0" />
-                <rotate value3="0 0 0" />
-                <scale value3="1 1 1" />
+                <translate value3="4.0 0.8 -15.0" />
+                <rotate value3="0 3.14159 0" />
+                <scale value3="3.5 3.5 3.5" />
             </transforms>
 
             <children>
