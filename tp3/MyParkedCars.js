@@ -1,37 +1,31 @@
 import * as THREE from 'three';
 
-class MyObstacles {
+class MyParkedCars {
 
     constructor(app) {
         this.app = app;
-        this.obstacleNodes = {};
-        this.obstacles = new Map();
-        this.objectList = [];
-        console.log(this.app.scene.children)
+        this.carNodes = {};
+        this.carList = [];
         this.init();
     }
     init() {
-        for (let type of ['cones', 'barrels']) {
-            this.obstacleNodes[type] = this.dfs(this.app.scene.children[4], type)
+        for (let type of ['playersCars', 'botsCars']) {
+            this.carNodes[type] = this.dfs(this.app.scene.children[6], type)
         }
         this.update();
-
-
-
     }
 
     gato() {
-        for (let i = 0; i < this.objectList.length; i++) {
-            this.registerInitialColors(this.objectList[i])
+        for (let i = 0; i < this.carList.length; i++) {
+            this.registerInitialColors(this.carList[i])
         }
     }
 
     update() {
-        for (let type of ['cones', 'barrels']) {
-            for (let i = 0; i < this.obstacleNodes[type].children.length; i++) {
-                const child = this.obstacleNodes[type].children[i];
-                this.obstacles.set(new THREE.Vector3(child.position.x, child.position.y, child.position.z), type.slice(0, -1));
-                this.objectList.push(child);
+        for (let type of ['playersCars', 'botsCars']) {
+            for (let i = 0; i < this.carNodes[type].children.length; i++) {
+                const child = this.carNodes[type].children[i];
+                this.carList.push(child);
             }
         }
     }
@@ -55,17 +49,8 @@ class MyObstacles {
         return null;
     }
 
-    checkCollision(position, radius) {
-        for (let [coord, type] of this.obstacles.entries()) {
-            if (coord.distanceTo(position) <= radius) {
-                return type;
-            }
-        }
-        return false;
-    }
-
-    getObjectsList() {
-        return this.objectList;
+    getCarsList() {
+        return this.carList;
     }
 
     changeColor(obj, newColor) {
@@ -105,4 +90,4 @@ class MyObstacles {
 
 }
 
-export { MyObstacles };
+export { MyParkedCars };

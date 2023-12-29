@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MyObstacles } from './MyObstacles.js';
 import { MyPowerups } from './MyPowerups.js';
+import { MyParkedCars } from './MyParkedCars.js';
 import { MyCheckpoint } from './MyCheckpoint.js';
 
 class MyTrack {
@@ -11,6 +12,7 @@ class MyTrack {
         this.bot = bot;
         this.obstacleHandler = new MyObstacles(app);
         this.powerupHandler = new MyPowerups(app);
+        this.parkedCarHandler = new MyParkedCars(app);
         //Curve related attributes
         this.segments = 200;
         this.width = 8;
@@ -20,11 +22,20 @@ class MyTrack {
         this.showLine = true;
         this.closedCurve = false;
         this.enableCollisions = false;
-        this.placedObstacle = false;
+        this.canPlaceObstacle = true;
+        this.listenerEnabled = false;
+        this.pickObstacles = false;
+
 
         setTimeout(() => {
             this.enableCollisions = true;
         }, 1000);
+
+        setTimeout(() => {
+            this.parkedCarHandler.gato();
+        }, 1000);
+
+
 
         this.path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 0, 0),
@@ -238,6 +249,7 @@ class MyTrack {
         if (paused) {
             this.mixerPause = true; // Pause the bot animation
             this.checkAnimationStateIsPause()
+            this.enableListener();
         } else {
             this.player.handler.update();
             this.mixerPause = false; // Unpause the bot animation
@@ -317,9 +329,10 @@ class MyTrack {
             default:
                 break;
         }
-        if (!this.placedObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')) {
+        if (this.canPlaceObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')) {
             this.obstacleHandler.gato();
-            this.placedObstacle = true;
+            this.canPlaceObstacle = false;
+            this.pickObstacles = true;
             this.app.paused = !this.app.paused;
             this.enableListener();
         }
@@ -353,9 +366,12 @@ class MyTrack {
     }
 
     enableListener() {
-        document.addEventListener("pointermove", this.boundPointerMove, false);
-        document.addEventListener("pointerdown", this.boundPointerDown, false);
-        document.addEventListener("pointerup", this.boundPointerUp, false);
+        if (!this.listenerEnabled) {
+            document.addEventListener("pointermove", this.boundPointerMove, false);
+            document.addEventListener("pointerdown", this.boundPointerDown, false);
+            document.addEventListener("pointerup", this.boundPointerUp, false);
+            this.listenerEnabled = true;
+        }
 
     }
 
@@ -363,14 +379,16 @@ class MyTrack {
         document.removeEventListener("pointermove", this.boundPointerMove, false);
         document.removeEventListener("pointerdown", this.boundPointerDown, false);
         document.removeEventListener("pointerup", this.boundPointerUp, false);
+        this.listenerEnabled = false;
     }
 
     onPointerDown() {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
+        console.log(this.pickObstacles)
+        var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList().concat([this.curve]) : this.parkedCarHandler.getCarsList().concat([this.curve]);
 
-        var objects = this.obstacleHandler.getObjectsList().concat([this.curve]);
         //3. compute intersections
         var intersects = this.raycaster.intersectObjects(objects);
 
@@ -396,7 +414,7 @@ class MyTrack {
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
 
-        var objects = this.obstacleHandler.getObjectsList();
+        var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList() : this.parkedCarHandler.getCarsList();
 
         //3. compute intersections
         var intersects = this.raycaster.intersectObjects(objects);
@@ -416,7 +434,7 @@ class MyTrack {
             }
             let obj = null;
             if (model3dObj) {
-                obj = model3dObj.parent.parent;
+                obj = this.pickObstacles ? model3dObj.parent.parent : model3dObj.parent;
             }
             else {
                 obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
@@ -436,6 +454,7 @@ class MyTrack {
             }
 
             if (this.mousePressed) {
+                console.log(obj)
                 if (this.obstacleHandler.getObjectsList().includes(obj)) {
                     if (!this.isOffTrack(obj)) {
                         return;
@@ -443,8 +462,15 @@ class MyTrack {
                     this.selectedObstacle = obj;
                     console.log("selected obstacle: " + this.selectedObstacle);
                 }
-                else {
+                else if (this.parkedCarHandler.getCarsList().includes(obj)) {
+                    if (!this.isOffTrack(obj)) {
+                        return;
+                    }
+                    this.selectedCar = obj;
+                    console.log("selected car: " + this.selectedCar);
+                }
 
+                else {
                     let objIsInCurve = false;
                     this.curve.traverse(child => {
                         if (child === obj) {
@@ -454,6 +480,7 @@ class MyTrack {
 
                     if (objIsInCurve) {
                         if (this.selectedObstacle !== null) {
+                            this.pickObstacles = false;
                             this.selectedObstacle.position.copy(intersects[0].point);
                             this.obstacleHandler.restoreColor(this.selectedObstacle);
                             this.obstacleHandler.update();
@@ -470,13 +497,22 @@ class MyTrack {
     }
 
     restoreColorOfFirstPickedObj() {
-        let obstacles = this.obstacleHandler.getObjectsList();
-        for (var i = 0; i < obstacles.length; i++) {
-            let obstacle = obstacles[i];
-            if (obstacle !== this.selectedObstacle) {
-                this.obstacleHandler.restoreColor(obstacle);
+            let cars = this.parkedCarHandler.getCarsList();
+            for (var i = 0; i < cars.length; i++) {
+                let car = cars[i];
+                if (car !== this.selectedCar) {
+                    this.parkedCarHandler.restoreColor(car);
+                }
             }
-        }
+        
+            let obstacles = this.obstacleHandler.getObjectsList();
+            for (var i = 0; i < obstacles.length; i++) {
+                let obstacle = obstacles[i];
+                if (obstacle !== this.selectedObstacle) {
+                    this.obstacleHandler.restoreColor(obstacle);
+                }
+            }
+
     }
 
 
@@ -493,6 +529,7 @@ class MyTrack {
         this.raycaster.near = 0.1
         this.raycaster.far = 100
         this.selectedObstacle = null
+        this.selectedCar = null
 
 
         this.buildCurve();
