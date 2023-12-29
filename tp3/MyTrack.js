@@ -442,14 +442,8 @@ class MyTrack {
 
             let pickingColor = new THREE.Color();
             pickingColor.setRGB(1, 0, 0);
-            let objIsInCurve = false;
-            this.curve.traverse(child => {
-                if (child === obj) {
-                    objIsInCurve = true;
-                }
-            });
 
-            if (!objIsInCurve) {
+            if (this.isOffTrack(obj)) {
                 this.obstacleHandler.changeColor(obj, pickingColor);
             }
 
@@ -471,14 +465,8 @@ class MyTrack {
                 }
 
                 else {
-                    let objIsInCurve = false;
-                    this.curve.traverse(child => {
-                        if (child === obj) {
-                            objIsInCurve = true;
-                        }
-                    });
 
-                    if (objIsInCurve) {
+                    if (!this.isOffTrack(obj)) {
                         if (this.selectedObstacle !== null) {
                             this.pickObstacles = false;
                             this.selectedObstacle.position.copy(intersects[0].point);
