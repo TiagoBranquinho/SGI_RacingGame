@@ -6,6 +6,8 @@ class MyParkedCars {
         this.app = app;
         this.carNodes = {};
         this.carList = [];
+        this.playerCarList = [];
+        this.botCarList = [];
         this.init();
     }
     init() {
@@ -25,6 +27,12 @@ class MyParkedCars {
         for (let type of ['playersCars', 'botsCars']) {
             for (let i = 0; i < this.carNodes[type].children.length; i++) {
                 const child = this.carNodes[type].children[i];
+                if (type === 'playersCars') {
+                    this.playerCarList.push(child);
+                }
+                else {
+                    this.botCarList.push(child);
+                }
                 this.carList.push(child);
             }
         }
@@ -51,6 +59,10 @@ class MyParkedCars {
 
     getCarsList() {
         return this.carList;
+    }
+
+    isPlayerCar(car) {
+        return this.playerCarList.includes(car);
     }
 
     changeColor(obj, newColor) {

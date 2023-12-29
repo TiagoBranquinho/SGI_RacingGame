@@ -250,6 +250,7 @@ class MyTrack {
             this.mixerPause = true; // Pause the bot animation
             this.checkAnimationStateIsPause()
             this.enableListener();
+            this.checkRestart();
         } else {
             this.player.handler.update();
             this.mixerPause = false; // Unpause the bot animation
@@ -292,6 +293,15 @@ class MyTrack {
         }
 
         this.updateCamera();
+    }
+    
+    checkRestart() {
+        if(this.selectedBotCar !== null && this.selectedCar !== null) {
+            console.log("restarting game with new cars", this.selectedBotCar, this.selectedCar);
+            this.selectedBotCar = null;
+            this.selectedCar = null;
+            this.app.paused = !this.app.paused;
+        }
     }
 
     checkPlayerCollisions() {
@@ -460,8 +470,14 @@ class MyTrack {
                     if (!this.isOffTrack(obj)) {
                         return;
                     }
-                    this.selectedCar = obj;
-                    console.log("selected car: " + this.selectedCar);
+                    if (this.parkedCarHandler.isPlayerCar(obj)) {
+                        this.selectedCar = obj;
+                        console.log("selected car: " + this.selectedCar);
+                    }
+                    else {
+                        this.selectedBotCar = obj;
+                        console.log("selected bot car: " + this.selectedBotCar);
+                    }
                 }
 
                 else {
@@ -485,21 +501,21 @@ class MyTrack {
     }
 
     restoreColorOfFirstPickedObj() {
-            let cars = this.parkedCarHandler.getCarsList();
-            for (var i = 0; i < cars.length; i++) {
-                let car = cars[i];
-                if (car !== this.selectedCar) {
-                    this.parkedCarHandler.restoreColor(car);
-                }
+        let cars = this.parkedCarHandler.getCarsList();
+        for (var i = 0; i < cars.length; i++) {
+            let car = cars[i];
+            if (car !== this.selectedCar && car !== this.selectedBotCar) {
+                this.parkedCarHandler.restoreColor(car);
             }
-        
-            let obstacles = this.obstacleHandler.getObjectsList();
-            for (var i = 0; i < obstacles.length; i++) {
-                let obstacle = obstacles[i];
-                if (obstacle !== this.selectedObstacle) {
-                    this.obstacleHandler.restoreColor(obstacle);
-                }
+        }
+
+        let obstacles = this.obstacleHandler.getObjectsList();
+        for (var i = 0; i < obstacles.length; i++) {
+            let obstacle = obstacles[i];
+            if (obstacle !== this.selectedObstacle) {
+                this.obstacleHandler.restoreColor(obstacle);
             }
+        }
 
     }
 
@@ -518,6 +534,7 @@ class MyTrack {
         this.raycaster.far = 100
         this.selectedObstacle = null
         this.selectedCar = null
+        this.selectedBotCar = null
 
 
         this.buildCurve();

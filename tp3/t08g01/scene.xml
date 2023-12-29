@@ -1006,10 +1006,24 @@
 
             <children>
                 <noderef id="playerCar1" />
+                <noderef id="playerCar2" />
             </children>
         </node>
 
         <node id="playerCar1">
+            <transforms>
+                <translate value3="4.0 0.8 -15.0" />
+                <rotate value3="0 3.14159 0" />
+                <scale value3="3.5 3.5 3.5" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="t08g01/models/car1.glb" />
+                </primitive>
+            </children>
+        </node>
+        <node id="playerCar2">
             <transforms>
                 <translate value3="9 0.1 -15.0" />
                 <rotate value3="0 0 0" />
@@ -1032,19 +1046,34 @@
 
             <children>
                 <noderef id="botCar1" />
+                <noderef id="botCar2" />
             </children>
         </node>
 
         <node id="botCar1">
             <transforms>
-                <translate value3="4.0 0.8 -15.0" />
-                <rotate value3="0 3.14159 0" />
+                <translate value3="4.0 0.8 65.0" />
+                <rotate value3="0 0 0" />
                 <scale value3="3.5 3.5 3.5" />
             </transforms>
 
             <children>
                 <primitive>
                     <model3d filepath="t08g01/models/car1.glb" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="botCar2">
+            <transforms>
+                <translate value3="10.0 0.8 65.0" />
+                <rotate value3="0 3.14159 0" />
+                <scale value3="0.01 0.01 0.01" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <model3d filepath="t08g01/models/car2.glb" />
                 </primitive>
             </children>
         </node>
