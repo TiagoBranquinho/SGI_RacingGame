@@ -116,16 +116,12 @@ class MyMenuHandler {
     }
 
     onPointerDown() {
-        console.log(this.playerCars);
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
-        console.log()
 
         //3. compute intersections
         var intersectsCar = this.raycaster.intersectObjects(this.playerCars);
-
-        console.log(intersectsCar);
 
         this.pickingHelper(intersectsCar)
 
