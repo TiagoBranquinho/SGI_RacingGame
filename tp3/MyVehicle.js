@@ -15,12 +15,12 @@ class MyVehicle {
         this.timeReductionInterval = 5; // Set this to the desired interval in seconds
         this.state = { "drunk": false, "slow": false, "boost": false };
         if (difficulty === 0) {
-            this.name = "Bot"
+            this.name = name
             this.handler = new MyVehicleHandler(this);
             this.lapCount = 0;
         }
         else {
-            this.name = name;
+            this.name = "Bot";
             this.difficulty = difficulty;
         }
         this.init();

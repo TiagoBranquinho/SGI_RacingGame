@@ -11,6 +11,7 @@ class MyTrack {
         this.bot = bot;
         this.obstacleHandler = new MyObstacles(app);
         this.powerupHandler = new MyPowerups(app);
+        this.laps = 1;
         //Curve related attributes
         this.segments = 200;
         this.width = 8;
@@ -21,6 +22,13 @@ class MyTrack {
         this.closedCurve = false;
         this.enableCollisions = false;
         this.placedObstacle = false;
+
+        const cameraOffset = new THREE.Vector3(0, 3, -9);
+        cameraOffset.applyEuler(this.player.model.rotation);
+        this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);
+        this.app.activeCamera.lookAt(this.player.model.position.clone());
+        this.app.controls.target.copy(this.player.model.position.clone());
+        this.app.activeCamera.updateProjectionMatrix();
         
         setTimeout(() => {
             this.enableCollisions = true;
@@ -75,7 +83,19 @@ class MyTrack {
         this.mixerPause = false
 
         this.enableAnimationPosition = true
-        this.animationMaxDuration = 30 //seconds
+        switch(this.bot.difficulty) {
+            case 1:
+                this.animationMaxDuration = 35; //seconds
+                break;
+            case 2:
+                this.animationMaxDuration = 30; //seconds
+                break;
+            case 3:
+                this.animationMaxDuration = 25; //seconds
+                break;
+            default:
+                console.error('Invalid difficulty level');
+        }
     }
 
     /**
@@ -274,6 +294,10 @@ class MyTrack {
                 for (let i = 0; i < this.checkpoints.length; i++) {
                     this.checkpoints[i].reached = false;
                 }
+                if (this.player.lapCount === this.laps) {
+                    this.app.paused = true;
+                    this.app.endGame = true;
+                }
             } else {
                 // Otherwise, move to the next checkpoint
                 this.nextCheckpointIndex++;
@@ -438,7 +462,13 @@ class MyTrack {
                             this.obstacleHandler.restoreColor(this.selectedObstacle);
                             this.obstacleHandler.update();
                             this.selectedObstacle = null;
-                            this.app.paused = !this.app.paused;
+                            const cameraOffset = new THREE.Vector3(0, 3, -9);
+                            cameraOffset.applyEuler(this.player.model.rotation);
+                            this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);
+                            this.app.activeCamera.lookAt(this.player.model.position.clone());
+                            this.app.controls.target.copy(this.player.model.position.clone());
+                            this.app.activeCamera.updateProjectionMatrix();
+                            
                         }
                     }
                 }

@@ -11,6 +11,7 @@ import { MyPolygon } from './MyPolygon.js';
 import { MyTrack } from './MyTrack.js';
 import { MyMenu } from './MyMenu.js';
 import { MyVehicle } from './MyVehicle.js';
+import { MyFirework } from './MyFirework.js';
 
 /**
  *  This class contains the contents of out application
@@ -26,14 +27,10 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-        this.paused = false;
         //this.reader.open("scenes/SGI_TP2_XML_T07_G07_V02/SGI_TP2_XML_T07_G07_V02.xml");
 
-        window.addEventListener('keydown', (event) => {
-            if (event.key === 'p' || event.key === 'P') {
-                this.paused = !this.paused;
-            }
-        });
+        this.fireworks = [];
+        this.setFireworks = false;
     }
 
     showMenu() {
@@ -60,7 +57,7 @@ class MyContents {
         this.track = new MyTrack(this.app, player, bot)
         this.track.init()
 
-        this.paused = true; // Pause the game
+        this.app.paused = true; // Pause the game
         let countdown = 3; // 3 seconds countdown
         let previousText = null;
         let countdownInterval = setInterval(async () => {
@@ -71,7 +68,7 @@ class MyContents {
                 }
         
                 // Add the countdown to the screen and store it in previousText
-                previousText = await this.addText(countdown + '...', new THREE.Vector3(-2, 4, 0), 1.2, 8, true);
+                previousText = await this.addText(countdown + '...', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 countdown--;
             } else {
                 // Remove the previous text from the scene
@@ -79,9 +76,9 @@ class MyContents {
                     this.app.scene.remove(previousText);
                 }
         
-                previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, 8, true);
+                previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 clearInterval(countdownInterval);
-                this.paused = false; // Start the game
+                this.app.paused = false; // Start the game
         
                 // Remove the 'Go!' text after 1 second
                 setTimeout(() => {
@@ -91,6 +88,32 @@ class MyContents {
                 }, 1000);
             }
         }, 1000);
+    }
+
+    endGame(){
+        let playerTime = Math.floor(this.track.mixer.time)
+        let botTime = this.track.laps * this.track.animationMaxDuration
+        let winner = ""
+        let loser = ""
+        if(playerTime < botTime){
+            winner = "1st: " + this.track.player.name + " - " + playerTime + "s"
+            loser = "2nd: " + this.track.bot.name + " - " + botTime + "s"
+
+        }
+        else{
+            winner = "1st: " + this.track.bot.name + " - " + botTime + "s"
+            loser = "2nd: " + this.track.player.name + " - " + playerTime + "s"
+        }
+        this.addText(winner, new THREE.Vector3(100, 100, 295), 20, new THREE.Vector3(0, 0, -100), true);
+        this.addText(loser, new THREE.Vector3(100, 75, 295), 20, new THREE.Vector3(0, 0, -100), true);
+        this.addButton(new THREE.Vector3(75, 50, 295), 50, 20, 0x0088ff, 'Back To Menu', 5, new THREE.Vector3(0, 0, -100), true);
+        this.addButton(new THREE.Vector3(-25, 50, 295), 50, 20, 0x0088ff, 'Restart Race', 5.5, new THREE.Vector3(0, 0, -100), true);
+
+        this.app.activeCamera.position.set(0, 75, 100);
+        this.app.activeCamera.lookAt(new THREE.Vector3(0, 75, 295));
+        this.app.controls.target.set(0, 75, 295);
+        this.app.activeCamera.updateProjectionMatrix();
+        this.setFireworks = true;
     }
 
     /**
@@ -700,7 +723,7 @@ class MyContents {
         this.app.scene.add(obj);
     }
 
-    async addText(text, position, size, rotationQuotient, draw = false) {
+    async addText(text, position, size, orientation, draw = false) {
         return new Promise((resolve, reject) => {
             const loader = new FontLoader();
 
@@ -715,7 +738,7 @@ class MyContents {
 
                 const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
                 const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.lookAt(this.app.activeCamera.position);
+                textMesh.lookAt(orientation);
                 textMesh.position.copy(position);
                 if (draw) {
                     this.draw(textMesh);
@@ -726,9 +749,53 @@ class MyContents {
         });
     }
 
+    async addButton(position, length, height, color, text, size, orientation, draw = false) {
+        let buttonGroup = new THREE.Group();
+        // Create a button
+        const buttonGeometry = new THREE.BoxGeometry(length, height, 0.2);
+        const buttonMaterial = new THREE.MeshBasicMaterial({ color: color });
+        const button = new THREE.Mesh(buttonGeometry, buttonMaterial);
+        // Position the button below the car
+        button.position.copy(position);
+        if (text === 'Start') {
+            button.launchGame = true;
+        }
+        buttonGroup.add(button);
+        let labelPosition = button.position.clone();
+        labelPosition.x += length / 2 - size / 2;
+        labelPosition.y -= size / 2;
+        // Create a text label for the button
+        let label = await this.addText(text, labelPosition, size, orientation); // Corrected here
+        buttonGroup.add(label);
+        if (draw) {
+            this.draw(buttonGroup);
+        }
+        return buttonGroup;
+    }
+
     update(paused) {
         if (this.track !== undefined && this.track !== null) {
             this.track.update(paused);
+        }
+
+        if (this.setFireworks) {
+            if(Math.random()  < 0.05 ) {
+                this.fireworks.push(new MyFirework(this.app, this))
+                console.log("firework added")
+            }
+
+            // for each fireworks 
+            for( let i = 0; i < this.fireworks.length; i++ ) {
+                // is firework finished?
+                if (this.fireworks[i].done) {
+                    // remove firework 
+                    this.fireworks.splice(i,1) 
+                    console.log("firework removed")
+                    continue 
+                }
+                // otherwise upsdate  firework
+                this.fireworks[i].update()
+            }
         }
     }
 }
