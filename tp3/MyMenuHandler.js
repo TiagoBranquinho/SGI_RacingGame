@@ -72,7 +72,6 @@ class MyMenuHandler {
 
     updateName() {
         this.contents.app.scene.remove(this.contents.app.scene.children[3]);
-        console.log(this.contents.app.scene.children)
         this.initName();
 
     }

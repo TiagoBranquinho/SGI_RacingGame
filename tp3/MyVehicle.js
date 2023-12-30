@@ -18,6 +18,7 @@ class MyVehicle {
             this.name = name
             this.handler = new MyVehicleHandler(this);
             this.lapCount = 0;
+            this.name = name;
         }
         else {
             this.name = "Bot";
@@ -28,17 +29,19 @@ class MyVehicle {
     }
     init() {
         let scale;
-        console.log(this.model.name.split('/'));
         if (this.model.name.split('/')[2] === 'car2.glb') {
             scale = 0.01;
+            this.model.rotation.y = Math.PI / 2;
+            this.model.position.set(0, 0.9, 0);
         }
         else {
             scale = 3;
+            this.model.rotation.y = Math.PI / 2;
+            this.model.children[0].rotation.y = Math.PI;
+            this.model.position.set(0, 1.4, 0);
         }
         this.model.scale.set(scale, scale, scale);
-        this.model.position.set(0, 0.9, 0);
         this.model.rotation.x = 0;
-        this.model.rotation.y = Math.PI / 2;
     }
     draw() {
         this.app.scene.add(this.model);

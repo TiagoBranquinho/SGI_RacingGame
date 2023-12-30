@@ -416,11 +416,6 @@ class MyContents {
             object.add(gltf.scene);
         });
         object.name = model3d.filepath
-        if (model3d.filepath.split('/')[2] === 'car1.glb') {
-            console.log(object)
-            object.rotation.y = Math.PI;
-            console.log(object)
-        }
         return object;
     }
 
@@ -523,7 +518,6 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     texWidth = representation.base > 0 ? representation.base : -representation.base;
                     texHeight = representation.top > 0 ? representation.top : -representation.top;
-                    console.log(texWidth, texHeight, mesh.material.map.repeat.x, mesh.material.map.repeat.y, materialref)
                     mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
                     mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
                     mesh.castShadow = castShadow;

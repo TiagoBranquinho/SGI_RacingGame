@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MyObstacles } from './MyObstacles.js';
 import { MyPowerups } from './MyPowerups.js';
+import { MyParkedCars } from './MyParkedCars.js';
 import { MyCheckpoint } from './MyCheckpoint.js';
 
 class MyTrack {
@@ -12,6 +13,7 @@ class MyTrack {
         this.obstacleHandler = new MyObstacles(app);
         this.powerupHandler = new MyPowerups(app);
         this.laps = 1;
+        this.parkedCarHandler = new MyParkedCars(app);
         //Curve related attributes
         this.segments = 200;
         this.width = 8;
@@ -21,7 +23,9 @@ class MyTrack {
         this.showLine = true;
         this.closedCurve = false;
         this.enableCollisions = false;
-        this.placedObstacle = false;
+        this.canPlaceObstacle = true;
+        this.listenerEnabled = false;
+        this.pickObstacles = false;
 
         const cameraOffset = new THREE.Vector3(0, 3, -9);
         cameraOffset.applyEuler(this.player.model.rotation);
@@ -29,10 +33,17 @@ class MyTrack {
         this.app.activeCamera.lookAt(this.player.model.position.clone());
         this.app.controls.target.copy(this.player.model.position.clone());
         this.app.activeCamera.updateProjectionMatrix();
-        
+
+
         setTimeout(() => {
             this.enableCollisions = true;
         }, 1000);
+
+        setTimeout(() => {
+            this.parkedCarHandler.gato();
+        }, 1000);
+
+
 
         this.path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 0, 0),
@@ -258,6 +269,8 @@ class MyTrack {
         if (paused) {
             this.mixerPause = true; // Pause the bot animation
             this.checkAnimationStateIsPause()
+            this.enableListener();
+            this.checkRestart();
         } else {
             this.player.handler.update();
             this.mixerPause = false; // Unpause the bot animation
@@ -282,7 +295,6 @@ class MyTrack {
 
         let checkpoint = this.checkpoints[this.nextCheckpointIndex];
         if (checkpoint.checkReached(this.player.model.position)) {
-            console.log(this.nextCheckpointIndex);
             console.log('Checkpoint reached!');
             // Do something when a checkpoint is reached
 
@@ -302,11 +314,18 @@ class MyTrack {
                 // Otherwise, move to the next checkpoint
                 this.nextCheckpointIndex++;
             }
-            console.log(this.nextCheckpointIndex);
-            console.log(this.checkpoints[this.nextCheckpointIndex]);
         }
 
         this.updateCamera();
+    }
+    
+    checkRestart() {
+        if(this.selectedBotCar !== null && this.selectedCar !== null) {
+            console.log("restarting game with new cars", this.selectedBotCar, this.selectedCar);
+            this.selectedBotCar = null;
+            this.selectedCar = null;
+            this.app.paused = !this.app.paused;
+        }
     }
 
     checkPlayerCollisions() {
@@ -344,8 +363,10 @@ class MyTrack {
             default:
                 break;
         }
-        if(!this.placedObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')){
-            this.placedObstacle = true;
+        if (this.canPlaceObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')) {
+            this.obstacleHandler.gato();
+            this.canPlaceObstacle = false;
+            this.pickObstacles = true;
             this.app.paused = !this.app.paused;
             this.enableListener();
         }
@@ -379,9 +400,12 @@ class MyTrack {
     }
 
     enableListener() {
-        document.addEventListener("pointermove", this.boundPointerMove, false);
-        document.addEventListener("pointerdown", this.boundPointerDown, false);
-        document.addEventListener("pointerup", this.boundPointerUp, false);
+        if (!this.listenerEnabled) {
+            document.addEventListener("pointermove", this.boundPointerMove, false);
+            document.addEventListener("pointerdown", this.boundPointerDown, false);
+            document.addEventListener("pointerup", this.boundPointerUp, false);
+            this.listenerEnabled = true;
+        }
 
     }
 
@@ -389,14 +413,16 @@ class MyTrack {
         document.removeEventListener("pointermove", this.boundPointerMove, false);
         document.removeEventListener("pointerdown", this.boundPointerDown, false);
         document.removeEventListener("pointerup", this.boundPointerUp, false);
+        this.listenerEnabled = false;
     }
 
     onPointerDown() {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
+        console.log(this.pickObstacles)
+        var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList().concat([this.curve]) : this.parkedCarHandler.getCarsList().concat([this.curve]);
 
-        var objects = this.obstacleHandler.getObjectsList().concat([this.curve]);
         //3. compute intersections
         var intersects = this.raycaster.intersectObjects(objects);
 
@@ -422,7 +448,7 @@ class MyTrack {
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
 
-        var objects = this.obstacleHandler.getObjectsList();
+        var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList() : this.parkedCarHandler.getCarsList();
 
         //3. compute intersections
         var intersects = this.raycaster.intersectObjects(objects);
@@ -432,13 +458,31 @@ class MyTrack {
 
     pickingHelper(intersects) {
         if (intersects.length > 0) {
-            console.log(intersects)
-            const obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
-            
-            let pickingColor = 0xdedede;
-            this.obstacleHandler.changeColor(obj, pickingColor);
+            let initObj = intersects[0].object;
+            let model3dObj = null;
+            while (initObj.parent) {
+                if (initObj.type === "Object3D") {
+                    model3dObj = initObj;
+                }
+                initObj = initObj.parent;
+            }
+            let obj = null;
+            if (model3dObj) {
+                obj = this.pickObstacles ? model3dObj.parent.parent : model3dObj.parent;
+            }
+            else {
+                obj = intersects[0].object.parent.parent.type === "Group" ? intersects[0].object.parent.parent : intersects[0].object;
+            }
+
+            let pickingColor = new THREE.Color();
+            pickingColor.setRGB(1, 0, 0);
+
+            if (this.isOffTrack(obj)) {
+                this.obstacleHandler.changeColor(obj, pickingColor);
+            }
 
             if (this.mousePressed) {
+                console.log(obj)
                 if (this.obstacleHandler.getObjectsList().includes(obj)) {
                     if (!this.isOffTrack(obj)) {
                         return;
@@ -446,18 +490,25 @@ class MyTrack {
                     this.selectedObstacle = obj;
                     console.log("selected obstacle: " + this.selectedObstacle);
                 }
+                else if (this.parkedCarHandler.getCarsList().includes(obj)) {
+                    if (!this.isOffTrack(obj)) {
+                        return;
+                    }
+                    if (this.parkedCarHandler.isPlayerCar(obj)) {
+                        this.selectedCar = obj;
+                        console.log("selected car: " + this.selectedCar);
+                    }
+                    else {
+                        this.selectedBotCar = obj;
+                        console.log("selected bot car: " + this.selectedBotCar);
+                    }
+                }
+
                 else {
 
-                    let objIsInCurve = false;
-                    this.curve.traverse(child => {
-                        if (child === obj) {
-                            objIsInCurve = true;
-                        }
-                    });
-
-                    if (objIsInCurve) {
-                        console.log("selected curve");
+                    if (!this.isOffTrack(obj)) {
                         if (this.selectedObstacle !== null) {
+                            this.pickObstacles = false;
                             this.selectedObstacle.position.copy(intersects[0].point);
                             this.obstacleHandler.restoreColor(this.selectedObstacle);
                             this.obstacleHandler.update();
@@ -480,13 +531,22 @@ class MyTrack {
     }
 
     restoreColorOfFirstPickedObj() {
+        let cars = this.parkedCarHandler.getCarsList();
+        for (var i = 0; i < cars.length; i++) {
+            let car = cars[i];
+            if (car !== this.selectedCar && car !== this.selectedBotCar) {
+                this.parkedCarHandler.restoreColor(car);
+            }
+        }
+
         let obstacles = this.obstacleHandler.getObjectsList();
         for (var i = 0; i < obstacles.length; i++) {
             let obstacle = obstacles[i];
-            if (obstacle != this.selectedObstacle) {
+            if (obstacle !== this.selectedObstacle) {
                 this.obstacleHandler.restoreColor(obstacle);
             }
         }
+
     }
 
 
@@ -503,6 +563,8 @@ class MyTrack {
         this.raycaster.near = 0.1
         this.raycaster.far = 100
         this.selectedObstacle = null
+        this.selectedCar = null
+        this.selectedBotCar = null
 
 
         this.buildCurve();
@@ -525,7 +587,6 @@ class MyTrack {
 
         let times = distances.map(distance => (distance / totalDistance) * duration);
 
-        console.log(times);
 
         const positionKF = new THREE.VectorKeyframeTrack('.position', times,
             [
