@@ -12,6 +12,7 @@ import { MyTrack } from './MyTrack.js';
 import { MyMenu } from './MyMenu.js';
 import { MyVehicle } from './MyVehicle.js';
 import { MyFirework } from './MyFirework.js';
+import { MyEndGameHandler } from './MyEndGameHandler.js';
 
 /**
  *  This class contains the contents of out application
@@ -27,6 +28,9 @@ class MyContents {
         this.axis = null
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
+        this.endGameHandler = null;
+        this.restart = false;
+        this.backToMenu = false;
         //this.reader.open("scenes/SGI_TP2_XML_T07_G07_V02/SGI_TP2_XML_T07_G07_V02.xml");
 
         this.fireworks = [];
@@ -79,6 +83,9 @@ class MyContents {
                 previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 clearInterval(countdownInterval);
                 this.app.paused = false; // Start the game
+                //this.app.paused = true;
+                this.app.endGame = true;
+                this.endGame();
         
                 // Remove the 'Go!' text after 1 second
                 setTimeout(() => {
@@ -91,6 +98,9 @@ class MyContents {
     }
 
     endGame(){
+        this.backToMenuGroup = [];
+        this.restartGroup = [];
+        this.track.removeListener();
         let playerTime = Math.floor(this.track.mixer.time - this.track.player.time)
         let botTime = this.track.laps * this.track.animationMaxDuration
         let winner = ""
@@ -114,6 +124,15 @@ class MyContents {
         this.app.controls.target.set(0, 75, 295);
         this.app.activeCamera.updateProjectionMatrix();
         this.setFireworks = true;
+        this.endGameHandler = new MyEndGameHandler(this, this.restartGroup, this.backToMenuGroup);
+    }
+
+    restartGame(){ 
+        console.log("restart");
+    }
+
+    restartMenu(){
+        console.log("back to menu");
     }
 
     /**
@@ -747,12 +766,15 @@ class MyContents {
         let buttonGroup = new THREE.Group();
         // Create a button
         const buttonGeometry = new THREE.BoxGeometry(length, height, 0.2);
-        const buttonMaterial = new THREE.MeshBasicMaterial({ color: color });
+        const buttonMaterial = new THREE.MeshBasicMaterial({ color: color, side : THREE.DoubleSide });
         const button = new THREE.Mesh(buttonGeometry, buttonMaterial);
         // Position the button below the car
         button.position.copy(position);
-        if (text === 'Start') {
-            button.launchGame = true;
+        if (text === 'Restart Race') {
+            button.restart = true;
+        }
+        else if(text === 'Back To Menu'){
+            button.backToMenu = true;
         }
         buttonGroup.add(button);
         let labelPosition = button.position.clone();
@@ -762,14 +784,20 @@ class MyContents {
         let label = await this.addText(text, labelPosition, size, orientation); // Corrected here
         buttonGroup.add(label);
         if (draw) {
+            if (text === 'Restart Race') {
+                this.restartGroup.push(button);
+            }
+            else if(text === 'Back To Menu'){
+                this.backToMenuGroup.push(button);
+            }
             this.draw(buttonGroup);
         }
         return buttonGroup;
     }
 
-    update(paused) {
+    update(paused, endGame) {
         if (this.track !== undefined && this.track !== null) {
-            this.track.update(paused);
+            this.track.update(paused, endGame);
         }
 
         if (this.setFireworks) {

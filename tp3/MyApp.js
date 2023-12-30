@@ -172,6 +172,10 @@ class MyApp {
         this.gui = gui
     }
 
+    endGame(){
+        this.contents.endGame();
+    }
+
     /**
     * the main render function. Called in a requestAnimationFrame loop
     */
@@ -181,7 +185,7 @@ class MyApp {
 
         // update the animation if contents were provided
         if (this.activeCamera !== undefined && this.activeCamera !== null) {
-            this.contents.update(this.paused)
+            this.contents.update(this.paused, this.endGame)
         }
 
         // required if controls.enableDamping or controls.autoRotate are set to true
@@ -191,13 +195,13 @@ class MyApp {
         this.renderer.render(this.scene, this.activeCamera);
 
         if(this.endGame) {
-            this.contents.endGame();
+            //this.contents.endGame();
             //this.init();
             //const canvas = document.getElementById("canvas");
             //canvas.removeChild(canvas.childNodes[1]);
             //canvas.removeChild(canvas.childNodes[1]);
             //this.contents.showMenu();
-            this.endGame = false;
+            //this.endGame = false;
         }
 
         // subsequent async calls to the render loop

@@ -98,6 +98,7 @@ class MyMenu {
             }
             else {
                 this.playerCars.push(button);
+                console.log(text)
             }
             this.draw(buttonGroup);
         }

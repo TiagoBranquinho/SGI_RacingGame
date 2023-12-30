@@ -264,9 +264,16 @@ class MyTrack {
      * this method is called from the render method of the app
      * 
      */
-    update(paused) {
+    update(paused, endGame) {
         // If the game is paused, return immediately
-        if (paused) {
+
+        if (endGame) {
+            this.mixerPause = true; // Pause the bot animation
+            this.checkAnimationStateIsPause()
+            this.removeListener();
+            this.checkRestart();
+        } 
+        else if (paused) {
             this.mixerPause = true; // Pause the bot animation
             this.checkAnimationStateIsPause()
             this.enableListener();
@@ -309,6 +316,7 @@ class MyTrack {
                 if (this.player.lapCount === this.laps) {
                     this.app.paused = true;
                     this.app.endGame = true;
+                    this.app.endGame();
                 }
             } else {
                 // Otherwise, move to the next checkpoint

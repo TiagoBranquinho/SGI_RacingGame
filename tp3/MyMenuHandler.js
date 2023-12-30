@@ -111,12 +111,16 @@ class MyMenuHandler {
     }
 
     onPointerDown() {
+        console.log(this.playerCars);
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
+        console.log()
 
         //3. compute intersections
         var intersectsCar = this.raycaster.intersectObjects(this.playerCars);
+
+        console.log(intersectsCar);
 
         this.pickingHelper(intersectsCar)
 
@@ -163,7 +167,6 @@ class MyMenuHandler {
 
     pickingHelper(intersects) {
         if (intersects.length > 0) {
-            //console.log(intersects)
             const obj = intersects[0].object;
             let pickingColor;
             if (this.playerCars.includes(obj) && !obj.launchGame) {
