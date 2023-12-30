@@ -277,12 +277,12 @@ class MyTrack {
             this.mixerPause = true; // Pause the bot animation
             this.checkAnimationStateIsPause()
             this.enableListener();
-            this.checkRestart();
         } else {
             this.player.handler.update();
             this.mixerPause = false; // Unpause the bot animation
             this.checkAnimationStateIsPause()
             this.removeListener();
+            this.resetPicking();
         }
 
         this.checkTracksEnabled()
@@ -426,7 +426,6 @@ class MyTrack {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
-        console.log(this.pickObstacles)
         var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList().concat([this.curve]) : this.parkedCarHandler.getCarsList().concat([this.curve]);
 
         //3. compute intersections
@@ -503,10 +502,12 @@ class MyTrack {
                     if (this.parkedCarHandler.isPlayerCar(obj)) {
                         this.selectedCar = obj;
                         console.log("selected car: " + this.selectedCar);
+                        this.checkRestart();
                     }
                     else {
                         this.selectedBotCar = obj;
                         console.log("selected bot car: " + this.selectedBotCar);
+                        this.checkRestart();
                     }
                 }
 
@@ -534,6 +535,13 @@ class MyTrack {
         } else {
             this.restoreColorOfFirstPickedObj();
         }
+    }
+
+    resetPicking(){
+        this.selectedObstacle = null;
+        this.selectedCar = null;
+        this.selectedBotCar = null;
+        this.restoreColorOfFirstPickedObj();
     }
 
     restoreColorOfFirstPickedObj() {

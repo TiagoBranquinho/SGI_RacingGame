@@ -39,6 +39,11 @@ class MyApp {
         window.addEventListener('keydown', (event) => {
             if (event.key === 'p' || event.key === 'P') {
                 this.paused = !this.paused;
+                if(this.paused){
+                    if(!this.contents.track.canPlaceObstacle){
+                        this.contents.track.pickObstacles = false;
+                    }
+                }
             }
         });
     }
