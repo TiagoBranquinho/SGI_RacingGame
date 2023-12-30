@@ -48,7 +48,6 @@ class MyMenu {
         const src = 't08g01/models/';
         let carGroup = new THREE.Group();
         let car = this.contents.processModel3D({ filepath: src + name });
-
         // Create a parent group for the car and add all parts to it
         car.position.copy(position);
         car.scale.set(scale, scale, scale);

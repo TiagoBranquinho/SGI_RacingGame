@@ -64,7 +64,7 @@ class MyContents {
         this.car2 = car2;
         this.difficulty = difficulty;
         this.name = name;
-        let player = new MyVehicle(this.app, car, 0, name);
+        let player = new MyVehicle(this.app, car.clone(), 0, name);
         let bot = new MyVehicle(this.app, car2.clone(), difficulty);
         player.model.position.z = 3
         bot.model.position.z = -3
@@ -135,6 +135,7 @@ class MyContents {
     }
 
     restartGame(car, car2, difficulty, name) {
+        this.track.resetPicking();
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
             this.app.scene.remove(obj);
@@ -146,7 +147,7 @@ class MyContents {
 
         this.initCameras();
 
-        let player = new MyVehicle(this.app, car, 0, name);
+        let player = new MyVehicle(this.app, car.clone(), 0, name);
         let bot = new MyVehicle(this.app, car2.clone(), difficulty);
         player.model.position.z = 3
         bot.model.position.z = -3
