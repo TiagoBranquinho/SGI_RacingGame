@@ -57,7 +57,12 @@ class MyMenuHandler {
         console.log(event);
         if (event.key === "Enter") {
             this.removeListenerName();
-            this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+            if(this.contents.data !== null) {
+                this.contents.restartGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+            }
+            else{
+                this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+            }
             return;
         }
         else if (event.key === "Backspace") {

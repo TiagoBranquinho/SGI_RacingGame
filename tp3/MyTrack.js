@@ -316,7 +316,7 @@ class MyTrack {
                 if (this.player.lapCount === this.laps) {
                     this.app.paused = true;
                     this.app.endGame = true;
-                    this.app.endGame();
+                    this.app.contents.endGame();
                 }
             } else {
                 // Otherwise, move to the next checkpoint
@@ -330,9 +330,7 @@ class MyTrack {
     checkRestart() {
         if(this.selectedBotCar !== null && this.selectedCar !== null) {
             console.log("restarting game with new cars", this.selectedBotCar, this.selectedCar);
-            this.selectedBotCar = null;
-            this.selectedCar = null;
-            this.app.paused = !this.app.paused;
+            this.app.contents.restartGame(this.selectedCar, this.selectedBotCar, this.app.contents.difficulty, this.app.contents.name);
         }
     }
 

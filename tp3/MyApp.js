@@ -194,16 +194,6 @@ class MyApp {
         // render the scene
         this.renderer.render(this.scene, this.activeCamera);
 
-        if(this.endGame) {
-            //this.contents.endGame();
-            //this.init();
-            //const canvas = document.getElementById("canvas");
-            //canvas.removeChild(canvas.childNodes[1]);
-            //canvas.removeChild(canvas.childNodes[1]);
-            //this.contents.showMenu();
-            //this.endGame = false;
-        }
-
         // subsequent async calls to the render loop
         requestAnimationFrame(this.render.bind(this));
 

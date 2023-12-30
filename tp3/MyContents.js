@@ -26,6 +26,7 @@ class MyContents {
     constructor(app) {
         this.app = app
         this.axis = null
+        this.data = null;
         this.nurbsBuilder = new MyNurbsBuilder();
         this.reader = new MyFileReader(app, this, this.onSceneLoaded);
         this.endGameHandler = null;
@@ -35,6 +36,10 @@ class MyContents {
 
         this.fireworks = [];
         this.setFireworks = false;
+        this.car = null;
+        this.car2 = null;
+        this.difficulty = null;
+        this.name = null;
     }
 
     showMenu() {
@@ -54,6 +59,10 @@ class MyContents {
         const playerStatus = document.createElement("div");
         playerStatus.id = "player-status";
         canvas.appendChild(playerStatus);
+        this.car = car;
+        this.car2 = car2;
+        this.difficulty = difficulty;
+        this.name = name;
         let player = new MyVehicle(this.app, car, 0, name);
         let bot = new MyVehicle(this.app, car2.clone(), difficulty);
         player.model.position.z = 3
@@ -83,9 +92,6 @@ class MyContents {
                 previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 clearInterval(countdownInterval);
                 this.app.paused = false; // Start the game
-                //this.app.paused = true;
-                this.app.endGame = true;
-                this.endGame();
         
                 // Remove the 'Go!' text after 1 second
                 setTimeout(() => {
@@ -127,12 +133,65 @@ class MyContents {
         this.endGameHandler = new MyEndGameHandler(this, this.restartGroup, this.backToMenuGroup);
     }
 
-    restartGame(){ 
-        console.log("restart");
+    restartGame(car, car2, difficulty, name){ 
+        for(let i = this.app.scene.children.length - 1; i >= 0; i--){
+            let obj = this.app.scene.children[i];
+            this.app.scene.remove(obj); 
+        }
+
+        this.app.endGame = false;
+
+        this.onAfterSceneLoadedAndBeforeRender(this.data);
+
+        let player = new MyVehicle(this.app, car, 0, name);
+        let bot = new MyVehicle(this.app, car2.clone(), difficulty);
+        player.model.position.z = 3
+        bot.model.position.z = -3
+        this.track = new MyTrack(this.app, player, bot)
+        this.track.init()
+
+        this.app.paused = true; // Pause the game
+        let countdown = 3; // 3 seconds countdown
+        let previousText = null;
+        let countdownInterval = setInterval(async () => {
+            if (countdown > 0) {
+                // Remove the previous text from the scene
+                if (previousText) {
+                    this.app.scene.remove(previousText);
+                }
+        
+                // Add the countdown to the screen and store it in previousText
+                previousText = await this.addText(countdown + '...', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
+                countdown--;
+            } else {
+                // Remove the previous text from the scene
+                if (previousText) {
+                    this.app.scene.remove(previousText);
+                }
+        
+                previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
+                clearInterval(countdownInterval);
+                this.app.paused = false; // Start the game
+        
+                // Remove the 'Go!' text after 1 second
+                setTimeout(() => {
+                    if (previousText) {
+                        this.app.scene.remove(previousText);
+                    }
+                }, 1000);
+            }
+        }, 1000);
     }
 
     restartMenu(){
-        console.log("back to menu");
+        for(let i = this.app.scene.children.length - 1; i >= 0; i--){
+            let obj = this.app.scene.children[i];
+            this.app.scene.remove(obj); 
+        }
+
+        this.app.endGame = false;
+
+        this.showMenu();
     }
 
     /**
@@ -141,6 +200,7 @@ class MyContents {
      */
     onSceneLoaded(data) {
         console.info("scene data loaded " + data + ". visit MySceneData javascript class to check contents for each data item.")
+        this.data = data;
         this.onAfterSceneLoadedAndBeforeRender(data);
     }
 
