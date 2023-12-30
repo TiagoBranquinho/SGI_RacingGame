@@ -55,7 +55,6 @@ class MyFirework {
         this.points.castShadow = true;
         this.points.receiveShadow = true;
         this.app.scene.add( this.points )  
-        console.log("firework launched")
     }
 
     /**
@@ -119,7 +118,6 @@ class MyFirework {
      * cleanup
      */
     reset() {
-        console.log("firework reseted")
         this.app.scene.remove( this.points ) 
         this.dest     = [] 
         this.vertices = null
@@ -129,7 +127,6 @@ class MyFirework {
     }
 
     resetExploded() {
-        console.log("firework reseted")
         this.app.scene.remove( this.pointsExploded ) 
         this.destExploded = []
         this.geometrySphere = null
@@ -165,8 +162,6 @@ class MyFirework {
                     // add n particles departing from the location at (vertices[0], vertices[1], vertices[2])
                     let origin = new THREE.Vector3(vertices[0], vertices[1], vertices[2]);
                     this.explode(origin, 500, this.height * 0.05, this.height * 0.8) 
-                    console.log("firework exploded")
-                    console.log(this.pointsExploded) 
                 }
             }
             

@@ -91,7 +91,7 @@ class MyContents {
     }
 
     endGame(){
-        let playerTime = Math.floor(this.track.mixer.time)
+        let playerTime = Math.floor(this.track.mixer.time - this.track.player.time)
         let botTime = this.track.laps * this.track.animationMaxDuration
         let winner = ""
         let loser = ""
@@ -775,7 +775,6 @@ class MyContents {
         if (this.setFireworks) {
             if(Math.random()  < 0.05 ) {
                 this.fireworks.push(new MyFirework(this.app, this))
-                console.log("firework added")
             }
 
             // for each fireworks 
@@ -784,7 +783,6 @@ class MyContents {
                 if (this.fireworks[i].done) {
                     // remove firework 
                     this.fireworks.splice(i,1) 
-                    console.log("firework removed")
                     continue 
                 }
                 // otherwise upsdate  firework
