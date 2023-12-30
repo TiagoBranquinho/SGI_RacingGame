@@ -43,6 +43,7 @@ class MyContents {
     }
 
     showMenu() {
+        this.initCameras();
         this.menu = new MyMenu(this);
         this.menu.display();
         if (this.axis === null) {
@@ -79,7 +80,7 @@ class MyContents {
                 if (previousText) {
                     this.app.scene.remove(previousText);
                 }
-        
+
                 // Add the countdown to the screen and store it in previousText
                 previousText = await this.addText(countdown + '...', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 countdown--;
@@ -88,11 +89,11 @@ class MyContents {
                 if (previousText) {
                     this.app.scene.remove(previousText);
                 }
-        
+
                 previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 clearInterval(countdownInterval);
                 this.app.paused = false; // Start the game
-        
+
                 // Remove the 'Go!' text after 1 second
                 setTimeout(() => {
                     if (previousText) {
@@ -103,7 +104,7 @@ class MyContents {
         }, 1000);
     }
 
-    endGame(){
+    endGame() {
         this.backToMenuGroup = [];
         this.restartGroup = [];
         this.track.removeListener();
@@ -111,12 +112,12 @@ class MyContents {
         let botTime = this.track.laps * this.track.animationMaxDuration
         let winner = ""
         let loser = ""
-        if(playerTime < botTime){
+        if (playerTime < botTime) {
             winner = "1st: " + this.track.player.name + " - " + playerTime + "s"
             loser = "2nd: " + this.track.bot.name + " - " + botTime + "s"
 
         }
-        else{
+        else {
             winner = "1st: " + this.track.bot.name + " - " + botTime + "s"
             loser = "2nd: " + this.track.player.name + " - " + playerTime + "s"
         }
@@ -133,15 +134,17 @@ class MyContents {
         this.endGameHandler = new MyEndGameHandler(this, this.restartGroup, this.backToMenuGroup);
     }
 
-    restartGame(car, car2, difficulty, name){ 
-        for(let i = this.app.scene.children.length - 1; i >= 0; i--){
+    restartGame(car, car2, difficulty, name) {
+        for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
-            this.app.scene.remove(obj); 
+            this.app.scene.remove(obj);
         }
 
         this.app.endGame = false;
 
         this.onAfterSceneLoadedAndBeforeRender(this.data);
+
+        this.initCameras();
 
         let player = new MyVehicle(this.app, car, 0, name);
         let bot = new MyVehicle(this.app, car2.clone(), difficulty);
@@ -159,7 +162,7 @@ class MyContents {
                 if (previousText) {
                     this.app.scene.remove(previousText);
                 }
-        
+
                 // Add the countdown to the screen and store it in previousText
                 previousText = await this.addText(countdown + '...', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 countdown--;
@@ -168,11 +171,11 @@ class MyContents {
                 if (previousText) {
                     this.app.scene.remove(previousText);
                 }
-        
+
                 previousText = await this.addText('Go!', new THREE.Vector3(-2, 4, 0), 1.2, this.app.activeCamera.position, true);
                 clearInterval(countdownInterval);
                 this.app.paused = false; // Start the game
-        
+
                 // Remove the 'Go!' text after 1 second
                 setTimeout(() => {
                     if (previousText) {
@@ -183,10 +186,10 @@ class MyContents {
         }, 1000);
     }
 
-    restartMenu(){
-        for(let i = this.app.scene.children.length - 1; i >= 0; i--){
+    restartMenu() {
+        for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
-            this.app.scene.remove(obj); 
+            this.app.scene.remove(obj);
         }
 
         this.app.endGame = false;
@@ -826,14 +829,14 @@ class MyContents {
         let buttonGroup = new THREE.Group();
         // Create a button
         const buttonGeometry = new THREE.BoxGeometry(length, height, 0.2);
-        const buttonMaterial = new THREE.MeshBasicMaterial({ color: color, side : THREE.DoubleSide });
+        const buttonMaterial = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
         const button = new THREE.Mesh(buttonGeometry, buttonMaterial);
         // Position the button below the car
         button.position.copy(position);
         if (text === 'Restart Race') {
             button.restart = true;
         }
-        else if(text === 'Back To Menu'){
+        else if (text === 'Back To Menu') {
             button.backToMenu = true;
         }
         buttonGroup.add(button);
@@ -847,7 +850,7 @@ class MyContents {
             if (text === 'Restart Race') {
                 this.restartGroup.push(button);
             }
-            else if(text === 'Back To Menu'){
+            else if (text === 'Back To Menu') {
                 this.backToMenuGroup.push(button);
             }
             this.draw(buttonGroup);
@@ -861,22 +864,37 @@ class MyContents {
         }
 
         if (this.setFireworks) {
-            if(Math.random()  < 0.05 ) {
+            if (Math.random() < 0.05) {
                 this.fireworks.push(new MyFirework(this.app, this))
             }
 
             // for each fireworks 
-            for( let i = 0; i < this.fireworks.length; i++ ) {
+            for (let i = 0; i < this.fireworks.length; i++) {
                 // is firework finished?
                 if (this.fireworks[i].done) {
                     // remove firework 
-                    this.fireworks.splice(i,1) 
-                    continue 
+                    this.fireworks.splice(i, 1)
+                    continue
                 }
                 // otherwise upsdate  firework
                 this.fireworks[i].update()
             }
         }
+    }
+    initCameras() {
+        const initialCameras = [
+            {
+                id: 'camera1',
+                type: 'perspective',
+                angle: 75,
+                near: 0.1,
+                far: 1000,
+                location: [0, 0, 8],
+                target: [0, 0, 0]
+            },
+            // Add more cameras as needed
+        ];
+        this.configureCameras(initialCameras, 'camera1');
     }
 }
 

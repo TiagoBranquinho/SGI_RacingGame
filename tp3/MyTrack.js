@@ -88,6 +88,12 @@ class MyTrack {
             new THREE.Vector3(-0, 0.8, -3)
         ];
 
+        if(this.bot.model.name.split('/')[2] === 'car1.glb'){
+            for(let point of this.keyPoints){
+                point.y += 0.6;
+            }
+        }
+
         this.clock = new THREE.Clock()
 
         this.mixerTime = 0

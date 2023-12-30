@@ -18,7 +18,6 @@ class MyMenu {
     }
 
     createMenu() {
-        this.initCameras();
         this.initLights();
         this.addText('F1eup', new THREE.Vector3(-2, 4, 0), 1.2, 8, true);
         this.addText('Choose your car', new THREE.Vector3(-5, -3, 0), 1, -10, true);
