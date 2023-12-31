@@ -6,7 +6,7 @@ class MyVehicle {
     constructor(app, model, difficulty = 0, name="Player") {
         this.app = app;
         this.model = model;
-        this.radius = difficulty === 0 ? 3 : 0.5;
+        this.radius = difficulty === 0 ? 2.5 : 0.2;
         this.collisionsTime = 2;
         this.info = document.getElementById('player-status');
         this.isNormal = true;
@@ -81,7 +81,7 @@ class MyVehicle {
     }
 
     updateState(time) {
-        if (this.handler.slow === 0.4 && time - this.slowTime > this.collisionsTime) {
+        if (this.handler.slow === 0.6 && time - this.slowTime > this.collisionsTime) {
             this.removeSlow();
         }
         if (this.handler.drunk === -1 && time - this.drunkTime > this.collisionsTime) {

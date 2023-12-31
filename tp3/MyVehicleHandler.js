@@ -10,15 +10,15 @@ class MyVehicleHandler {
             "KeyS": false,
             "KeyD": false,
         };
-        this.normalSpeed = 0.6;
+        this.normalSpeed = 0.06;
         this.slow = 1;
         this.drunk = 1;
         this.boost = 1;
         this.velocity = new THREE.Vector3(0, 0, 0);
-        this.acceleration = 0.14;  // Adjust the acceleration factor
-        this.deceleration = 0.1;  // Adjust the deceleration factor
-        this.braking = 0.15;  // Adjust the braking factor
-        this.maxRotationSpeed = 1.7;
+        this.acceleration = 0.000015;  // Adjust the acceleration factor
+        this.deceleration = 0.00001;  // Adjust the deceleration factor
+        this.braking = 0.000018;  // Adjust the braking factor
+        this.maxRotationSpeed = 0.0014;
         this.direction = new THREE.Vector3(0, 0, 1);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -53,11 +53,10 @@ class MyVehicleHandler {
 
         // Create a direction vector based on the vehicle's current rotation
         this.direction.set(0, 0, 1);
-        this.rotationSpeed = this.velocity.length() * 5.4;
+        this.rotationSpeed = this.velocity.length() * 0.045;
         if (this.rotationSpeed > this.maxRotationSpeed) {
             this.rotationSpeed = this.maxRotationSpeed;
         }
-        console.log(this.rotationSpeed);
         this.direction.applyEuler(this.vehicle.model.rotation);
         if (this.keyStates['KeyW']) {
             // Accelerate the vehicle
@@ -102,8 +101,9 @@ class MyVehicleHandler {
         // Update the velocity based on the direction
         this.velocity = this.direction.clone().multiplyScalar(this.velocity.length());
 
+        console.log(this.velocity.length());
         // Update car position so it only moves in the direction it's facing
-        this.vehicle.model.position.add(this.velocity);
+        this.vehicle.model.position.add(this.velocity.clone().multiplyScalar(deltaTime));
 
     }
 
