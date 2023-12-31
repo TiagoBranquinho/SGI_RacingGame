@@ -15,9 +15,6 @@ class MyObstacles {
             this.obstacleNodes[type] = this.dfs(this.app.scene.children[4], type)
         }
         this.update();
-
-
-
     }
 
     gato() {

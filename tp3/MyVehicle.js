@@ -5,7 +5,7 @@ class MyVehicle {
 
     constructor(app, model, difficulty = 0, name="Player") {
         this.app = app;
-        this.model = model.clone();
+        this.model = model;
         this.radius = difficulty === 0 ? 3 : 2;
         this.collisionsTime = 3;
         this.info = document.getElementById('player-status');

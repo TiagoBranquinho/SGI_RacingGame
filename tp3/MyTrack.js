@@ -336,7 +336,8 @@ class MyTrack {
     checkRestart() {
         if(this.selectedBotCar !== null && this.selectedCar !== null) {
             console.log("restarting game with new cars", this.selectedBotCar, this.selectedCar);
-            this.app.contents.restartGame(this.selectedCar.children[0].clone(), this.selectedBotCar.children[0].clone(), this.app.contents.difficulty, this.app.contents.name);
+            this.removeListener();
+            this.app.contents.restartGame(this.selectedCar.clone().children[0], this.selectedBotCar.clone().children[0], this.app.contents.difficulty, this.app.contents.name);
         }
     }
 
@@ -432,6 +433,7 @@ class MyTrack {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
+        console.log(this.pickObstacles)
         var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList().concat([this.curve]) : this.parkedCarHandler.getCarsList().concat([this.curve]);
 
         //3. compute intersections
