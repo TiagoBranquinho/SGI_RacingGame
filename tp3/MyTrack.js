@@ -270,7 +270,7 @@ class MyTrack {
      * this method is called from the render method of the app
      * 
      */
-    update(paused, endGame) {
+    update(paused, endGame, deltaTime) {
         // If the game is paused, return immediately
 
         if (endGame) {
@@ -284,7 +284,7 @@ class MyTrack {
             this.checkAnimationStateIsPause()
             this.enableListener();
         } else {
-            this.player.handler.update();
+            this.player.handler.update(deltaTime);
             this.mixerPause = false; // Unpause the bot animation
             this.checkAnimationStateIsPause()
             this.removeListener();

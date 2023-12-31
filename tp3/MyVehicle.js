@@ -6,8 +6,8 @@ class MyVehicle {
     constructor(app, model, difficulty = 0, name="Player") {
         this.app = app;
         this.model = model;
-        this.radius = difficulty === 0 ? 3 : 2;
-        this.collisionsTime = 3;
+        this.radius = difficulty === 0 ? 3 : 0.5;
+        this.collisionsTime = 2;
         this.info = document.getElementById('player-status');
         this.isNormal = true;
         this.time = 0;
@@ -60,7 +60,7 @@ class MyVehicle {
 
     setSlow(time) {
         this.slowTime = time;
-        this.handler.slow = 0.4;
+        this.handler.slow = 0.6;
         this.state.slow = true;
     }
 

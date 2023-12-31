@@ -91,6 +91,7 @@ class MyEndGameHandler {
                 }
                 else if (obj.backToMenu) {
                     this.selectedButton = obj;
+                    this.contents.track.removeListener();
                     this.removeListener();
                     this.contents.restartMenu();                    
                 }

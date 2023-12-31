@@ -859,9 +859,9 @@ class MyContents {
         return buttonGroup;
     }
 
-    update(paused, endGame) {
+    update(paused, endGame, deltaTime) {
         if (this.track !== undefined && this.track !== null) {
-            this.track.update(paused, endGame);
+            this.track.update(paused, endGame, deltaTime);
         }
 
         if (this.setFireworks) {

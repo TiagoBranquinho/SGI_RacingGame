@@ -35,6 +35,7 @@ class MyApp {
 
         this.paused = false;
         this.endGame = false;
+        this.lastTime = Date.now();
 
         window.addEventListener('keydown', (event) => {
             if (event.key === 'p' || event.key === 'P') {
@@ -190,7 +191,10 @@ class MyApp {
 
         // update the animation if contents were provided
         if (this.activeCamera !== undefined && this.activeCamera !== null) {
-            this.contents.update(this.paused, this.endGame)
+            let now = Date.now();
+            let deltaTime = (now - this.lastTime) / 1000;
+            this.lastTime = now;
+            this.contents.update(this.paused, this.endGame, deltaTime);
         }
 
         // required if controls.enableDamping or controls.autoRotate are set to true
