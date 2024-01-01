@@ -56,6 +56,7 @@ class MyVehicleHandler {
             this.velocity -= this.deceleration * deltaTime;
         }
 
+
         // Update rotation based on input
         if (this.keyStates['KeyA']) {
             this.vehicle.model.rotation.y += this.rotationSpeed * this.drunk * deltaTime;
@@ -72,6 +73,8 @@ class MyVehicleHandler {
             } else if (this.velocity <= 0) {
                 this.velocity -= this.reverseAcceleration * deltaTime;
             }
+        } else if (this.velocity < 0) {
+            this.velocity += this.deceleration * deltaTime;
         }
 
         // Ensure velocity is within limits

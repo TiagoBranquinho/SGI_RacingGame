@@ -3,7 +3,7 @@ import { MyVehicleHandler } from './MyVehicleHandler.js';
 
 class MyVehicle {
 
-    constructor(app, model, difficulty = 0, name="Player") {
+    constructor(app, model, difficulty = 0, name = "Player") {
         this.app = app;
         this.model = model;
         this.radius = difficulty === 0 ? 2.5 : 0.2;
@@ -14,6 +14,8 @@ class MyVehicle {
         this.lastTimeReduction = 0;
         this.timeReductionInterval = 5; // Set this to the desired interval in seconds
         this.state = { "drunk": false, "slow": false, "boost": false };
+        this.currentTime = 0;
+        this.timers = { "drunk": 0, "slow": 0, "boost": 0 };
         if (difficulty === 0) {
             this.name = name
             this.handler = new MyVehicleHandler(this);
@@ -91,7 +93,15 @@ class MyVehicle {
             this.removeBoost();
         }
         this.updateInfo(time);
+        this.updateTimers(time);
     }
+
+    updateTimers(time) {
+        this.timers.boost = parseFloat((this.collisionsTime + this.boostTime - time).toFixed(1));
+        this.timers.drunk = parseFloat((this.collisionsTime + this.drunkTime - time).toFixed(1));
+        this.timers.slow = parseFloat((this.collisionsTime + this.slowTime - time).toFixed(1));
+    }
+
 
     updateInfo(time) {
         let info = "";
@@ -101,6 +111,7 @@ class MyVehicle {
             }
         }
         this.info.innerText = info + "Time: " + Math.floor(time - this.time) + "s";
+        this.currentTime = Math.floor(time - this.time);
     }
 
     reduceTime(time) {
