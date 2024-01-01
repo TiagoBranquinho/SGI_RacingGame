@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 class MyVehicleHandler {
     constructor(vehicle) {
         this.vehicle = vehicle;
@@ -14,21 +12,16 @@ class MyVehicleHandler {
         this.slow = 1;
         this.drunk = 1;
         this.boost = 1;
-        this.velocity = new THREE.Vector3(0, 0, 0);
+        this.velocity = 0;
         this.acceleration = 0.000015;  // Adjust the acceleration factor
         this.deceleration = 0.00001;  // Adjust the deceleration factor
         this.braking = 0.000018;  // Adjust the braking factor
-        this.maxRotationSpeed = 0.0014;
-        this.direction = new THREE.Vector3(0, 0, 1);
+        this.reverseAcceleration = 0.00001;  // Adjust the reverse acceleration factor
+        this.maxRotationSpeed = 0.00145;
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
-        this.update = this.update.bind(this);
-
-        
 
         this.initEventListeners();
-
-        // Start the game loop
     }
 
     initEventListeners() {
@@ -51,62 +44,45 @@ class MyVehicleHandler {
     update(deltaTime) {
         let speed = this.normalSpeed * this.boost * this.slow;
 
-        // Create a direction vector based on the vehicle's current rotation
-        this.direction.set(0, 0, 1);
-        this.rotationSpeed = this.velocity.length() * 0.045;
+        this.rotationSpeed = this.velocity * 0.045;
         if (this.rotationSpeed > this.maxRotationSpeed) {
             this.rotationSpeed = this.maxRotationSpeed;
         }
-        this.direction.applyEuler(this.vehicle.model.rotation);
+
+        // Update acceleration based on input
         if (this.keyStates['KeyW']) {
-            // Accelerate the vehicle
-            this.velocity.add(this.direction.clone().multiplyScalar(this.acceleration * deltaTime));
-            /* for(let wheelNumber = 2; wheelNumber < 3; wheelNumber++){
-                this.vehicle.model.children[0].children[wheelNumber].rotation.x += this.rotationSpeed;
-                console.log(this.vehicle.model.children[0].children[wheelNumber])
-            } */
-        } else if (this.velocity.length() > 0) {
-            // Decelerate the vehicle when 'W' is not pressed
-            this.velocity.add(this.velocity.clone().normalize().negate().multiplyScalar(this.deceleration * deltaTime));
+            this.velocity += this.acceleration * deltaTime;
+        } else if (this.velocity > 0) {
+            this.velocity -= this.deceleration * deltaTime;
         }
 
+        // Update rotation based on input
         if (this.keyStates['KeyA']) {
-            // Rotate the vehicle to the left
-            this.vehicle.model.rotation.y += (this.rotationSpeed * this.drunk * deltaTime);
-        }
-
-        if (this.keyStates['KeyS']) {
-            // Decelerate the vehicle when 'S' is pressed
-            this.velocity.add(this.velocity.clone().normalize().negate().multiplyScalar(this.braking * deltaTime));
+            this.vehicle.model.rotation.y += this.rotationSpeed * this.drunk * deltaTime;
         }
 
         if (this.keyStates['KeyD']) {
-            // Rotate the vehicle to the right
-            this.vehicle.model.rotation.y -= (this.rotationSpeed * this.drunk * deltaTime);
+            this.vehicle.model.rotation.y -= this.rotationSpeed * this.drunk * deltaTime;
         }
 
-
-        // Ensure the y-component of the velocity remains zero
-        this.velocity.y = 0;
-
-        // Limit the velocity to the maximum speed
-        if (this.velocity.length() > speed) {
-            this.velocity = this.velocity.normalize().multiplyScalar(speed);
+        // Update braking
+        if (this.keyStates['KeyS']) {
+            if (this.velocity > 0) {
+                this.velocity -= this.braking * deltaTime;
+            } else if (this.velocity <= 0) {
+                this.velocity -= this.reverseAcceleration * deltaTime;
+            }
         }
 
-        // Update the direction based on the vehicle's rotation
-        this.direction.set(0, 0, 1);
-        this.direction.applyEuler(this.vehicle.model.rotation);
+        // Ensure velocity is within limits
+        this.velocity = Math.min(this.velocity, speed);
 
-        // Update the velocity based on the direction
-        this.velocity = this.direction.clone().multiplyScalar(this.velocity.length());
-
-        console.log(this.velocity.length());
-        // Update car position so it only moves in the direction it's facing
-        this.vehicle.model.position.add(this.velocity.clone().multiplyScalar(deltaTime));
-
+        // Update car position
+        let xMovement = this.velocity * Math.sin(this.vehicle.model.rotation.y);
+        let zMovement = this.velocity * Math.cos(this.vehicle.model.rotation.y);
+        this.vehicle.model.position.x += xMovement * deltaTime;
+        this.vehicle.model.position.z += zMovement * deltaTime;
     }
-
 }
 
 export { MyVehicleHandler };
