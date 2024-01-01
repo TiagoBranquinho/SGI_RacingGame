@@ -57,9 +57,6 @@ class MyContents {
         const canvas = document.getElementById("canvas");
         canvas.removeChild(canvas.childNodes[1]);
         this.reader.open("t08g01/scene.xml");
-        const playerStatus = document.createElement("div");
-        playerStatus.id = "player-status";
-        canvas.appendChild(playerStatus);
         this.car = car;
         this.car2 = car2;
         this.difficulty = difficulty;

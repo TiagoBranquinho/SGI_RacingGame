@@ -8,7 +8,6 @@ class MyVehicle {
         this.model = model;
         this.radius = difficulty === 0 ? 2.5 : 0.2;
         this.collisionsTime = 2;
-        this.info = document.getElementById('player-status');
         this.isNormal = true;
         this.time = 0;
         this.lastTimeReduction = 0;
@@ -92,26 +91,14 @@ class MyVehicle {
         if (this.handler.boost === 2 && time - this.boostTime > this.collisionsTime) {
             this.removeBoost();
         }
-        this.updateInfo(time);
         this.updateTimers(time);
     }
 
     updateTimers(time) {
+        this.currentTime = Math.floor(time - this.time);
         this.timers.boost = parseFloat((this.collisionsTime + this.boostTime - time).toFixed(1));
         this.timers.drunk = parseFloat((this.collisionsTime + this.drunkTime - time).toFixed(1));
         this.timers.slow = parseFloat((this.collisionsTime + this.slowTime - time).toFixed(1));
-    }
-
-
-    updateInfo(time) {
-        let info = "";
-        for (let key in this.state) {
-            if (this.state[key]) {
-                info += key + "\n";
-            }
-        }
-        this.info.innerText = info + "Time: " + Math.floor(time - this.time) + "s";
-        this.currentTime = Math.floor(time - this.time);
     }
 
     reduceTime(time) {
