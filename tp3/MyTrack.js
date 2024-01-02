@@ -404,7 +404,7 @@ class MyTrack {
     }
 
     updateCamera() {
-        const cameraOffset = new THREE.Vector3(0, 3, -9);
+        const cameraOffset = new THREE.Vector3(10, 3, -9);
         cameraOffset.applyEuler(this.player.model.rotation);
         if (!this.app.paused) {
             this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);
