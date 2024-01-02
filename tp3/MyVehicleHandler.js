@@ -100,12 +100,12 @@ class MyVehicleHandler {
 
         if (this.keyStates['KeyD']) {
             for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-                this.vehicle.model.children[0].children[i].rotation.y = - Math.PI / 6;
+                this.vehicle.model.children[0].children[i].rotation.y = - Math.PI / 8;
             }
         }
         if (this.keyStates['KeyA']) {
             for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-                this.vehicle.model.children[0].children[i].rotation.y = Math.PI / 6;
+                this.vehicle.model.children[0].children[i].rotation.y = Math.PI / 8;
             }
         }
     }
