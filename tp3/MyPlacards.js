@@ -123,9 +123,9 @@ class MyPlacards {
         }
     }
 
-    update(player) {
+    update(player, track) {
         let info = [];
-        let firstLine = "lap" + player.lapCount + "/3 " + player.currentTime + "s";
+        let firstLine = "lap" + player.lapCount + "/" + track.laps + " " + player.currentTime + "s";
         info.push(firstLine);
         for (let key in player.state) {
             if (player.state[key]) {

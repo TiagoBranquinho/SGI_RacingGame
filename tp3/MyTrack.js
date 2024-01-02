@@ -15,7 +15,6 @@ class MyTrack {
         this.bot = bot;
         this.obstacleHandler = new MyObstacles(app);
         this.powerupHandler = new MyPowerups(app);
-        this.laps = 1;
         this.parkedCarHandler = new MyParkedCars(app);
         //Curve related attributes
         this.segments = 200;
@@ -287,7 +286,7 @@ class MyTrack {
             this.checkAnimationStateIsPause()
             this.enableListener();
         } else {
-            this.placards.update(this.player);
+            this.placards.update(this.player, this);
             this.player.handler.update(deltaTime);
             this.mixerPause = false; // Unpause the bot animation
             this.checkAnimationStateIsPause()
@@ -404,7 +403,7 @@ class MyTrack {
     }
 
     updateCamera() {
-        const cameraOffset = new THREE.Vector3(10, 3, -9);
+        const cameraOffset = new THREE.Vector3(0, 3, -9);
         cameraOffset.applyEuler(this.player.model.rotation);
         if (!this.app.paused) {
             this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);

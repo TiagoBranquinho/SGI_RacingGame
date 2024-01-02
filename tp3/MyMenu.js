@@ -12,9 +12,10 @@ class MyMenu {
         this.playerCars = [];
         this.botCars = [];
         this.botDifficulty = [];
+        this.laps = [];
         this.rotatableObjects = [];
         this.createMenu();
-        this.menuHandler = new MyMenuHandler(this.contents, this.playerCars, this.botCars, this.botDifficulty, this.rotatableObjects);
+        this.menuHandler = new MyMenuHandler(this.contents, this.playerCars, this.botCars, this.botDifficulty, this.laps, this.rotatableObjects);
     }
 
     createMenu() {
@@ -30,6 +31,11 @@ class MyMenu {
         this.addButton(new THREE.Vector3(8, -1, 0), 1, 0.8, 0x0088ff, '2*', 0.4, 28, true);
         this.addButton(new THREE.Vector3(10, -1, 0), 1, 0.8, 0x0088ff, '3*', 0.4, 28, true);
         this.addText('Difficulty', new THREE.Vector3(7, 0, 0), 0.3, 7, true);
+        this.addText('Laps', new THREE.Vector3(7, -3, 0), 0.3, 7, true);
+        this.addButton(new THREE.Vector3(6, -4, 0), 1, 0.8, 0x0088ff, '1', 0.4, 28, true);
+        this.addButton(new THREE.Vector3(8, -4, 0), 1, 0.8, 0x0088ff, '2', 0.4, 28, true);
+        this.addButton(new THREE.Vector3(10, -4, 0), 1, 0.8, 0x0088ff, '3', 0.4, 28, true);
+        
 
     }
 
@@ -93,6 +99,10 @@ class MyMenu {
             if (text[text.length - 1] === '*') {
                 button.difficulty = Number(text[0]);
                 this.botDifficulty.push(button);
+            }
+            else if (text[text.length - 1] === '1' || text[text.length - 1] === '2' || text[text.length - 1] === '3') {
+                button.laps = Number(text[0]);
+                this.laps.push(button);
             }
             else {
                 this.playerCars.push(button);

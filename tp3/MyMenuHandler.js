@@ -3,11 +3,12 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 class MyMenuHandler {
-    constructor(contents, playerCars, botCars, botDifficulty, rotatableObjects) {
+    constructor(contents, playerCars, botCars, botDifficulty, laps, rotatableObjects) {
         this.contents = contents;
         this.playerCars = playerCars;
         this.botCars = botCars;
         this.botDifficulty = botDifficulty;
+        this.laps = laps;
         this.rotatableObjects = rotatableObjects;
         this.init();
         this.moveListener();
@@ -15,6 +16,7 @@ class MyMenuHandler {
         this.selectedPlayerCar = null; // Track the selected car
         this.selectedBotCar = null; // Track the selected car
         this.selectedBotDifficulty = null;
+        this.selectedLaps = null;
         this.playerName = "name";
     }
     init() {
@@ -25,6 +27,7 @@ class MyMenuHandler {
         this.pickingColorPlayer = 0x00ff00
         this.pickingColorBot = 0xff0000
         this.pickingColorBotDifficulty = 0xdedede
+        this.pickingColorLaps = 0xdeabee
         this.pickingColorStart = 0x0000ff
     }
     moveListener() {
@@ -58,10 +61,10 @@ class MyMenuHandler {
         if (event.key === "Enter") {
             this.removeListenerName();
             if(this.contents.data !== null) {
-                this.contents.restartGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+                this.contents.restartGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.selectedLaps, this.playerName);
             }
             else{
-                this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
+                this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.selectedLaps, this.playerName);
             }
             return;
         }
@@ -132,6 +135,10 @@ class MyMenuHandler {
         var intersectsBotDifficulty = this.raycaster.intersectObjects(this.botDifficulty);
 
         this.pickingHelper(intersectsBotDifficulty)
+
+        var intersectsLaps = this.raycaster.intersectObjects(this.laps);
+
+        this.pickingHelper(intersectsLaps)
     }
 
     onPointerUp() {
@@ -153,7 +160,7 @@ class MyMenuHandler {
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
 
-        var allCars = this.playerCars.concat(this.botCars).concat(this.botDifficulty);
+        var allCars = this.playerCars.concat(this.botCars).concat(this.botDifficulty).concat(this.laps);
         // Compute intersections
         var intersects = this.raycaster.intersectObjects(allCars);
 
@@ -179,6 +186,9 @@ class MyMenuHandler {
             else if (this.botDifficulty.includes(obj)) {
                 pickingColor = this.pickingColorBotDifficulty;
             }
+            else if (this.laps.includes(obj)) {
+                pickingColor = this.pickingColorLaps;
+            }
             else {
                 pickingColor = this.pickingColorStart;
             }
@@ -188,9 +198,8 @@ class MyMenuHandler {
             // Track the selected car when the mouse is pressed
             if (this.mousePressed) {
                 if (obj.launchGame) {
-                    if (this.selectedPlayerCar !== null && this.selectedBotCar !== null && this.selectedBotDifficulty !== null) {
+                    if (this.selectedPlayerCar !== null && this.selectedBotCar !== null && this.selectedBotDifficulty !== null && this.selectedLaps !== null) {
                         this.removeListener();
-                        //this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty);
                         this.nameListener();
                         this.initName();
                     }
@@ -211,6 +220,10 @@ class MyMenuHandler {
                     else if (this.botDifficulty.includes(obj)) {
                         this.selectedBotDifficulty = obj;
                         console.log("selected bot difficulty: " + this.selectedBotDifficulty);
+                    }
+                    else if (this.laps.includes(obj)) {
+                        this.selectedLaps = obj;
+                        console.log("selected laps: " + this.selectedLaps);
                     }
                 }
 
@@ -240,6 +253,13 @@ class MyMenuHandler {
             let difficulty = this.botDifficulty[i];
             if (difficulty != this.selectedBotDifficulty) {
                 difficulty.material.color.setHex(0x0088ff);
+            }
+        }
+
+        for (var i = 0; i < this.laps.length; i++) {
+            let lap = this.laps[i];
+            if (lap != this.selectedLaps) {
+                lap.material.color.setHex(0x0088ff);
             }
         }
 
