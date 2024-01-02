@@ -49,7 +49,7 @@ class MyVehicleHandler {
 
         let speed = this.normalSpeed * this.boost * this.slow;
 
-        this.rotationSpeed = this.velocity * 0.045;
+        this.rotationSpeed = this.velocity * 0.046;
         if (this.rotationSpeed > this.maxRotationSpeed) {
             this.rotationSpeed = this.maxRotationSpeed;
         }
@@ -94,18 +94,17 @@ class MyVehicleHandler {
         this.vehicle.model.position.z += zMovement * deltaTime;
 
         for (let i = 2; i < this.vehicle.model.children[0].children.length; i++) {//rotate each wheel
+            this.vehicle.model.children[0].children[i].rotation.order = 'ZYX';
             this.vehicle.model.children[0].children[i].rotation.x += this.velocity * deltaTime;
         }
 
         if (this.keyStates['KeyD']) {
             for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-                this.vehicle.model.children[0].children[i].rotation.x = 0;
                 this.vehicle.model.children[0].children[i].rotation.y = - Math.PI / 6;
             }
         }
         if (this.keyStates['KeyA']) {
             for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-                this.vehicle.model.children[0].children[i].rotation.x = 0;
                 this.vehicle.model.children[0].children[i].rotation.y = Math.PI / 6;
             }
         }
