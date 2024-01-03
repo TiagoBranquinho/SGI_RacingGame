@@ -28,7 +28,6 @@ class MyTrack {
         this.canPlaceObstacle = true;
         this.listenerEnabled = false;
         this.pickObstacles = false;
-
         const cameraOffset = new THREE.Vector3(0, 3, -9);
         cameraOffset.applyEuler(this.player.model.rotation);
         this.app.activeCamera.position.copy(this.player.model.position).add(cameraOffset);
@@ -340,6 +339,7 @@ class MyTrack {
         if(this.selectedBotCar !== null && this.selectedCar !== null) {
             console.log("restarting game with new cars", this.selectedBotCar, this.selectedCar);
             this.removeListener();
+            this.onPointerUp();
             this.app.contents.restartGame(this.selectedCar.clone().children[0], this.selectedBotCar.clone().children[0], this.app.contents.difficulty, this.app.contents.name);
         }
     }
