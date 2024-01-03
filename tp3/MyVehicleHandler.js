@@ -54,7 +54,7 @@ class MyVehicleHandler {
         }
 
 
-        let speed = this.normalSpeed * this.boost * this.slow;
+        this.maxSpeed = this.normalSpeed * this.boost * this.slow;
 
         this.rotationSpeed = this.velocity * 0.046;
         if (this.rotationSpeed > this.maxRotationSpeed) {
@@ -92,7 +92,7 @@ class MyVehicleHandler {
         }
 
         // Ensure velocity is within limits
-        this.velocity = Math.min(this.velocity, speed);
+        this.velocity = Math.min(this.velocity, this.maxSpeed);
 
         // Update car position
         let xMovement = this.velocity * Math.sin(this.vehicle.model.rotation.y);

@@ -225,9 +225,6 @@ class MyContents {
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
             this.app.scene.remove(obj);
-            obj.geometry.dispose();
-            obj.material.dispose();
-            obj.texture.dispose();
         }
 
         this.app.endGame = false;

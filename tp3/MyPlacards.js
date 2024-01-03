@@ -91,13 +91,13 @@ class MyPlacards {
         screen.name = "screen";
 
         let screenMaterial = new THREE.MeshPhongMaterial({ color: 0x000000, shininess: 100 });
-        let screenGeometry = new THREE.BoxGeometry(8, 0.3, 12); // Adjust dimensions for the screen
+        let screenGeometry = new THREE.BoxGeometry(8, 0.3, 16); // Adjust dimensions for the screen
         let screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
 
         screen.add(screenMesh);
         let textGroup = new THREE.Group();
         textGroup.name = "textGroup";
-        textGroup.position.set(6, 2.5, -4);
+        textGroup.position.set(6, 2.5, -5);
         textGroup.rotation.z = Math.PI / 2;
 
         screen.add(textGroup);
@@ -127,6 +127,8 @@ class MyPlacards {
         let info = [];
         let firstLine = "lap" + player.lapCount + "/" + track.laps + " " + player.currentTime + "s";
         info.push(firstLine);
+        let secondLine = (player.handler.velocity * 100).toFixed(2) + "/" + (player.handler.maxSpeed * 100).toFixed(2) + "km/h";
+        info.push(secondLine);
         for (let key in player.state) {
             if (player.state[key]) {
                 info.push(key + player.timers[key] + "s");
