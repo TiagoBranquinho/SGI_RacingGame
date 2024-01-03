@@ -180,9 +180,6 @@ class MyFirework {
             }
         }
 
-        //console.log(this.pointsExploded)
-        //console.log(this.geometrySphere)
-
         // do only if objects exist
         if( this.pointsExploded && this.geometrySphere )
         {

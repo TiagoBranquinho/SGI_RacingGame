@@ -13,6 +13,7 @@ import { MyMenu } from './MyMenu.js';
 import { MyVehicle } from './MyVehicle.js';
 import { MyFirework } from './MyFirework.js';
 import { MyEndGameHandler } from './MyEndGameHandler.js';
+import { MyShader } from './MyShader.js';
 
 /**
  *  This class contains the contents of out application
@@ -40,6 +41,39 @@ class MyContents {
         this.car2 = null;
         this.difficulty = null;
         this.name = null;
+
+        this.trafficConeTex = new THREE.TextureLoader().load('t08g01/textures/cone.jpg');
+        this.trafficConeTex.wrapS = THREE.RepeatWrapping;
+        this.trafficConeTex.wrapT = THREE.RepeatWrapping;
+
+        this.trafficConeMap = new THREE.TextureLoader().load('t08g01/textures/trafficConeMap.jpg');
+        this.trafficConeApp = new MyShader(this.app, "t08g01/shaders/texture1.vert", "t08g01/shaders/texture3anim.frag", {
+            uSampler1: {type: 'sampler2D', value: this.trafficConeTex },
+            uSampler2: {type: 'sampler2D', value: this.trafficConeMap },
+            normScale: {type: 'f', value: 0.1 },
+            displacement: {type: 'f', value: 0.0 },
+            normalizationFactor: {type: 'f', value: 1 },
+            blendScale: {type: 'f', value: 0.5 },
+            timeFactor: {type: 'f', value: 0.0 },
+            isPicked: {type: 'bool', value: false },
+            
+        })
+
+        this.speedRampTex = new THREE.TextureLoader().load('t08g01/textures/speedRamp.jpg');
+        this.speedRampTex.wrapS = THREE.RepeatWrapping;
+        this.speedRampTex.wrapT = THREE.RepeatWrapping;
+
+        this.speedRampMap = new THREE.TextureLoader().load('t08g01/textures/speedRamp.jpg');
+        this.speedRampApp = new MyShader(this.app, "t08g01/shaders/texture1.vert", "t08g01/shaders/texture3anim.frag", {
+            uSampler1: {type: 'sampler2D', value: this.speedRampTex },
+            uSampler2: {type: 'sampler2D', value: this.speedRampMap },
+            normScale: {type: 'f', value: 0.1 },
+            displacement: {type: 'f', value: 0.0 },
+            normalizationFactor: {type: 'f', value: 1 },
+            blendScale: {type: 'f', value: 0.5 },
+            timeFactor: {type: 'f', value: 0.0 },
+            
+        })
     }
 
     showMenu() {
@@ -406,6 +440,18 @@ class MyContents {
                 material.map.repeat.y = texlength_t
             }
 
+            if (material_el.id === "trafficConeApp") {
+                
+                material = this.trafficConeApp.material;
+                material.defaultAttributeValues.uv = texlength_s
+                material.defaultAttributeValues.uv1 = texlength_t
+            }
+            //else if (material_el.id === "speedRampApp") {             
+            //    material = this.speedRampApp.material;
+            //    material.defaultAttributeValues.uv = texlength_s
+            //    material.defaultAttributeValues.uv1 = texlength_t
+            //}
+
         }
         return material
     }
@@ -489,7 +535,7 @@ class MyContents {
             let texture = new THREE.TextureLoader().load("t08g01/textures/bottle.jpg");
             material.map = texture;
         }
-        let mesh = new THREE.Mesh(geometry, material)
+        let mesh = new THREE.Mesh(geometry, material.clone())
         return mesh
     }
 
@@ -569,8 +615,15 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     texWidth = width > 0 ? width : -width;
                     texHeight = height > 0 ? height : -height;
-                    mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
-                    mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
+                    //if (materialref === "speedRampApp") {
+                    //    console.log(mesh.material.defaultAttributeValues.uv)
+                    //    mesh.material.defaultAttributeValues.uv = texWidth / mesh.material.defaultAttributeValues.uv;
+                    //    mesh.material.defaultAttributeValues.uv1 = texHeight / mesh.material.defaultAttributeValues.uv1;
+                    //}
+                    //else {
+                        mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
+                        mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
+                    //}
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -601,8 +654,14 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     texWidth = representation.base > 0 ? representation.base : -representation.base;
                     texHeight = representation.top > 0 ? representation.top : -representation.top;
-                    mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
-                    mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
+                    if (materialref === "trafficConeApp") {
+                        mesh.material.defaultAttributeValues.uv = texWidth / mesh.material.defaultAttributeValues.uv;
+                        mesh.material.defaultAttributeValues.uv1 = texHeight / mesh.material.defaultAttributeValues.uv1;
+                    }
+                    else {
+                        mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
+                        mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
+                    }
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -862,6 +921,11 @@ class MyContents {
     update(paused, endGame, deltaTime) {
         if (this.track !== undefined && this.track !== null) {
             this.track.update(paused, endGame, deltaTime);
+            if (this.trafficConeApp !== undefined && this.trafficConeApp !== null) {
+                if (this.trafficConeApp.hasUniform("timeFactor")) {
+                    this.trafficConeApp.updateUniformsValue("timeFactor", this.track.mixer.time  );
+                }
+            }
         }
 
         if (this.setFireworks) {

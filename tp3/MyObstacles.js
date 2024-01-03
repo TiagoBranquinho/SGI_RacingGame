@@ -9,6 +9,24 @@ class MyObstacles {
         this.objectList = [];
         console.log(this.app.scene.children)
         this.init();
+
+        //generate material
+        // Assuming you have a texture loader and the texture is loaded
+        let textureLoader = new THREE.TextureLoader();
+        let texture = textureLoader.load('t08g01/textures/cone.jpg');
+
+        // Adjust the texture repeat values
+        texture.repeat.set(0.01, 0.01);
+
+        // Create the material
+        this.coneMaterial = new THREE.MeshPhongMaterial({
+            color: new THREE.Color(1.0, 0.3, 0.0),
+            emissive: new THREE.Color(0.0, 0.0, 0.0),
+            specular: new THREE.Color(0, 0, 0),
+            shininess: 0,
+            map: texture,
+            side: THREE.DoubleSide // This makes the material two-sided
+        });
     }
     init() {
         for (let type of ['cones', 'barrels']) {
@@ -67,7 +85,12 @@ class MyObstacles {
 
     changeColor(obj, newColor) {
         if (obj.material !== undefined) {
-            obj.material.color = newColor;
+            if (obj.material.color === undefined || obj.material.color === null) {
+                obj.material.uniforms["isPicked"].value = true;
+            }
+            else{
+                obj.material.color = newColor;
+            }
         }
         for (let i = 0; i < obj.children.length; i++) {
             this.changeColor(obj.children[i], newColor);
@@ -76,10 +99,15 @@ class MyObstacles {
 
     restoreColor(obj) {
         if (obj.type === 'Mesh' && obj.userData.initialColor !== undefined) {
-            obj.material.color = new THREE.Color();
-            obj.material.color.r = obj.userData.initialColor.r;
-            obj.material.color.g = obj.userData.initialColor.g;
-            obj.material.color.b = obj.userData.initialColor.b;
+            if (obj.material.color === undefined || obj.material.color === null) {
+                obj.material.uniforms["isPicked"].value = false;
+            }
+            else {
+                obj.material.color = new THREE.Color();
+                obj.material.color.r = obj.userData.initialColor.r;
+                obj.material.color.g = obj.userData.initialColor.g;
+                obj.material.color.b = obj.userData.initialColor.b;
+            }
         }
         for (let i = 0; i < obj.children.length; i++) {
             this.restoreColor(obj.children[i]);
@@ -91,9 +119,15 @@ class MyObstacles {
     registerInitialColors(obj) {
         if (obj.type === "Mesh") {
             obj.userData.initialColor = new THREE.Color();
-            obj.userData.initialColor.r = obj.material.color.r;
-            obj.userData.initialColor.g = obj.material.color.g;
-            obj.userData.initialColor.b = obj.material.color.b;
+            obj.userData.initialMaterial = new THREE.MeshPhongMaterial();
+            if (obj.material.color === undefined || obj.material.color === null) {
+                console.log("pass")
+            }
+            else{
+                obj.userData.initialColor.r = obj.material.color.r;
+                obj.userData.initialColor.g = obj.material.color.g;
+                obj.userData.initialColor.b = obj.material.color.b;
+            }
         }
         for (let i = 0; i < obj.children.length; i++) {
             this.registerInitialColors(obj.children[i]);

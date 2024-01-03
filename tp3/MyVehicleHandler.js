@@ -101,7 +101,6 @@ class MyVehicleHandler {
         // Update the velocity based on the direction
         this.velocity = this.direction.clone().multiplyScalar(this.velocity.length());
 
-        console.log(this.velocity.length());
         // Update car position so it only moves in the direction it's facing
         this.vehicle.model.position.add(this.velocity.clone().multiplyScalar(deltaTime));
 
