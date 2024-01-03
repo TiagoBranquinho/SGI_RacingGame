@@ -158,7 +158,7 @@ class MyMenuHandler {
 
         //console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
 
-        //2. set the picking ray from the camera position and mouse coordinates
+        //set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
 
         var allCars = this.playerCars.concat(this.botCars).concat(this.botDifficulty).concat(this.laps);
@@ -169,7 +169,6 @@ class MyMenuHandler {
             this.rotateSquares(event);
         }
 
-        // Call pickingHelper once
         this.pickingHelper(intersects);
     }
 

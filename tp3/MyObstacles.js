@@ -7,7 +7,6 @@ class MyObstacles {
         this.obstacleNodes = {};
         this.obstacles = new Map();
         this.objectList = [];
-        console.log(this.app.scene.children)
         this.init();
 
         //generate material
@@ -35,7 +34,7 @@ class MyObstacles {
         this.update();
     }
 
-    gato() {
+    read() {
         for (let i = 0; i < this.objectList.length; i++) {
             this.registerInitialColors(this.objectList[i])
         }
@@ -121,7 +120,6 @@ class MyObstacles {
             obj.userData.initialColor = new THREE.Color();
             obj.userData.initialMaterial = new THREE.MeshPhongMaterial();
             if (obj.material.color === undefined || obj.material.color === null) {
-                console.log("pass")
             }
             else{
                 obj.userData.initialColor.r = obj.material.color.r;

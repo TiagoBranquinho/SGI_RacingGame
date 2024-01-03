@@ -18,9 +18,6 @@ class MyPowerups {
                 this.objectList.push(child.children[0].children[0]);
             }
         }
-        /* for (let [coord, type] of this.powerups.entries()) {
-            console.log(coord, type);
-        } */
     }
     getPosition(obj) {
         return obj.position;

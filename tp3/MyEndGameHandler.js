@@ -67,10 +67,10 @@ class MyEndGameHandler {
         this.raycaster.setFromCamera(this.pointer, this.contents.app.activeCamera);
 
         var allButtons = this.restartButton.concat(this.backToMenuButton);
+        
         // Compute intersections
         var intersects = this.raycaster.intersectObjects(allButtons);
 
-        // Call pickingHelper once
         this.pickingHelper(intersects);
     }
 

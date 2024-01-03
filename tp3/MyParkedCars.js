@@ -17,7 +17,7 @@ class MyParkedCars {
         this.update();
     }
 
-    gato() {
+    read() {
         for (let i = 0; i < this.carList.length; i++) {
             this.registerInitialColors(this.carList[i])
         }

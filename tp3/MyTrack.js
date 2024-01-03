@@ -41,7 +41,7 @@ class MyTrack {
         }, 1000);
 
         setTimeout(() => {
-            this.parkedCarHandler.gato();
+            this.parkedCarHandler.read();
         }, 1000);
 
 
@@ -293,7 +293,6 @@ class MyTrack {
         let checkpoint = this.checkpoints[this.nextCheckpointIndex];
         if (checkpoint.checkReached(this.player.model.position)) {
             console.log('Checkpoint reached!');
-            // Do something when a checkpoint is reached
 
             // If this is the last checkpoint, increment the lap count and reset the next checkpoint index
             if (this.nextCheckpointIndex === this.checkpoints.length - 1) {
@@ -363,7 +362,7 @@ class MyTrack {
                 break;
         }
         if (this.canPlaceObstacle && (playerPowerUpCollisionType === 'clock' || playerPowerUpCollisionType === 'speedRamp')) {
-            this.obstacleHandler.gato();
+            this.obstacleHandler.read();
             this.canPlaceObstacle = false;
             this.pickObstacles = true;
             this.app.paused = !this.app.paused;
@@ -419,7 +418,6 @@ class MyTrack {
         this.mousePressed = true; // Set the flag when the mouse is pressed~
         //2. set the picking ray from the camera position and mouse coordinates
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
-        console.log(this.pickObstacles)
         var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList().concat([this.curve]) : this.parkedCarHandler.getCarsList().concat([this.curve]);
 
         //3. compute intersections
@@ -434,7 +432,6 @@ class MyTrack {
     }
 
     onPointerMove(event) {
-
         // calculate pointer position in normalized device coordinates
         // (-1 to +1) for both components
 
@@ -444,12 +441,13 @@ class MyTrack {
 
         //console.log("Position x: " + this.pointer.x + " y: " + this.pointer.y);
 
-        //2. set the picking ray from the camera position and mouse coordinates
+        //set the picking ray from the camera position and mouse coordinates
+
         this.raycaster.setFromCamera(this.pointer, this.app.activeCamera);
 
         var objects = this.pickObstacles ? this.obstacleHandler.getObjectsList() : this.parkedCarHandler.getCarsList();
 
-        //3. compute intersections
+        // Compute intersections
         var intersects = this.raycaster.intersectObjects(objects);
 
         this.pickingHelper(intersects)
