@@ -48,12 +48,12 @@ class MyMenuHandler {
 
 
     nameListener() {
-        this.gato = this.input.bind(this);
-        document.addEventListener("keydown", this.gato, false);
+        this.listen = this.input.bind(this);
+        document.addEventListener("keydown", this.listen, false);
     }
 
     removeListenerName() {
-        document.removeEventListener("keydown", this.gato, false);
+        document.removeEventListener("keydown", this.listen, false);
     }
 
     input(event) {
@@ -61,7 +61,7 @@ class MyMenuHandler {
         if (event.key === "Enter") {
             this.removeListenerName();
             if(this.contents.data !== null) {
-                this.contents.restartGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.selectedLaps, this.playerName);
+                this.contents.restartGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);
             }
             else{
                 this.contents.startGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.selectedLaps, this.playerName);

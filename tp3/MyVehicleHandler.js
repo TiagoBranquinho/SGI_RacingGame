@@ -21,7 +21,6 @@ class MyVehicleHandler {
         this.maxRotationSpeed = 0.00145;
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
-
         this.initEventListeners();
     }
 
@@ -43,9 +42,17 @@ class MyVehicleHandler {
     }
 
     update(deltaTime) {
-        for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-            this.vehicle.model.children[0].children[i].rotation.y = 0;
+        if (this.vehicle.model.name.split('/')[2] === 'car2.glb') {
+            for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
+                this.vehicle.model.children[0].children[i].rotation.y = 0;
+            }
         }
+        else {
+            for (let i = 53; i < 55; i++) {//rotate each wheel
+                this.vehicle.model.children[0].children[i].rotation.y = 0;
+            }
+        }
+
 
         let speed = this.normalSpeed * this.boost * this.slow;
 
@@ -93,20 +100,41 @@ class MyVehicleHandler {
         this.vehicle.model.position.x += xMovement * deltaTime;
         this.vehicle.model.position.z += zMovement * deltaTime;
 
-        for (let i = 2; i < this.vehicle.model.children[0].children.length; i++) {//rotate each wheel
-            this.vehicle.model.children[0].children[i].rotation.order = 'ZYX';
-            this.vehicle.model.children[0].children[i].rotation.x += this.velocity * deltaTime;
-        }
+        if (this.vehicle.model.name.split('/')[2] === 'car2.glb') {
 
-        if (this.keyStates['KeyD']) {
-            for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-                this.vehicle.model.children[0].children[i].rotation.y = - Math.PI / 8;
+            for (let i = 2; i < this.vehicle.model.children[0].children.length; i++) {//rotate each wheel
+                this.vehicle.model.children[0].children[i].rotation.order = 'ZYX';
+                this.vehicle.model.children[0].children[i].rotation.x += this.velocity * deltaTime;
+            }
+
+            if (this.keyStates['KeyD']) {
+                for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
+                    this.vehicle.model.children[0].children[i].rotation.y = - Math.PI / 8;
+                }
+            }
+            if (this.keyStates['KeyA']) {
+                for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
+                    this.vehicle.model.children[0].children[i].rotation.y = Math.PI / 8;
+                }
             }
         }
-        if (this.keyStates['KeyA']) {
-            for (let i = 2; i < this.vehicle.model.children[0].children.length - 3; i++) {//rotate each wheel
-                this.vehicle.model.children[0].children[i].rotation.y = Math.PI / 8;
+        else {
+            for (let i = 51; i < 55; i++) {//rotate each wheel
+                this.vehicle.model.children[0].children[i].rotation.order = 'ZYX';
+                this.vehicle.model.children[0].children[i].rotation.x += this.velocity * deltaTime;
             }
+
+            if (this.keyStates['KeyD']) {
+                for (let i = 53; i < 55; i++) {//rotate each wheel
+                    this.vehicle.model.children[0].children[i].rotation.y = - Math.PI / 8;
+                }
+            }
+            if (this.keyStates['KeyA']) {
+                for (let i = 53; i < 55; i++) {//rotate each wheel
+                    this.vehicle.model.children[0].children[i].rotation.y = Math.PI / 8;
+                }
+            }
+
         }
     }
 }

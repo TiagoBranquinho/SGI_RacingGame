@@ -498,7 +498,6 @@ class MyTrack {
             }
 
             if (this.mousePressed) {
-                console.log(obj)
                 if (this.obstacleHandler.getObjectsList().includes(obj)) {
                     if (!this.isOffTrack(obj)) {
                         return;

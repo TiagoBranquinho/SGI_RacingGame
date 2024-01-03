@@ -995,9 +995,9 @@
 
         <node id="playerCar1">
             <transforms>
-                <translate value3="4.0 0.8 -15.0" />
-                <rotate value3="0 3.14159 0" />
-                <scale value3="3.5 3.5 3.5" />
+                <translate value3="4.0 0.75 -15.0" />
+                <rotate value3="0 0 0" />
+                <scale value3="0.75 0.75 0.75" />
             </transforms>
 
             <children>
@@ -1035,9 +1035,9 @@
 
         <node id="botCar1">
             <transforms>
-                <translate value3="4.0 0.8 65.0" />
-                <rotate value3="0 0 0" />
-                <scale value3="3.5 3.5 3.5" />
+                <translate value3="4.0 0.75 65.0" />
+                <rotate value3="0 3.14159 0" />
+                <scale value3="0.75 0.75 0.75" />
             </transforms>
 
             <children>

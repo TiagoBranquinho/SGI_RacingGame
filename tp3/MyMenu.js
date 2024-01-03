@@ -24,7 +24,7 @@ class MyMenu {
         this.addText('Choose your car', new THREE.Vector3(-5, -3, 0), 1, -10, true);
         this.addText('Player', new THREE.Vector3(-7, 0.5, 0), 0.3, 8, true);
         this.addText('Bot', new THREE.Vector3(-7, -1, 0), 0.3, 8, true);
-        this.addInteractiveCar('car1.glb', new THREE.Vector3(3, 2, 0), 2);
+        this.addInteractiveCar('car1.glb', new THREE.Vector3(3, 2, 0), 0.6);
         this.addInteractiveCar('car2.glb', new THREE.Vector3(-3, 2, 0), 0.01);
         this.addButton(new THREE.Vector3(0, -4, 0), 3, 0.8, 0x0088ff, 'Start', 0.4, 28, true);
         this.addButton(new THREE.Vector3(6, -1, 0), 1, 0.8, 0x0088ff, '1*', 0.4, 28, true);

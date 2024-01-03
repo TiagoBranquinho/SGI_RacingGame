@@ -88,6 +88,7 @@ class MyContents {
 
     startGame(car, car2, difficulty, laps, name) {
         this.app.init();
+        this.laps = laps.laps;
         const canvas = document.getElementById("canvas");
         canvas.removeChild(canvas.childNodes[1]);
         this.reader.open("t08g01/scene.xml");
@@ -100,7 +101,7 @@ class MyContents {
         player.model.position.z = 3
         bot.model.position.z = -3
         this.track = new MyTrack(this.app, player, bot)
-        this.track.laps = laps.laps;
+        this.track.laps = this.laps;
         this.track.init()
 
         this.app.paused = true; // Pause the game
@@ -166,7 +167,7 @@ class MyContents {
         this.endGameHandler = new MyEndGameHandler(this, this.restartGroup, this.backToMenuGroup);
     }
 
-    restartGame(car, car2, difficulty, laps, name) {
+    restartGame(car, car2, difficulty, name) {
         this.track.resetPicking();
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
@@ -184,7 +185,7 @@ class MyContents {
         player.model.position.z = 3
         bot.model.position.z = -3
         this.track = new MyTrack(this.app, player, bot)
-        this.track.laps = laps.laps;
+        this.track.laps = this.laps;
         this.track.init()
 
         this.app.paused = true; // Pause the game
@@ -224,6 +225,9 @@ class MyContents {
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
             this.app.scene.remove(obj);
+            obj.geometry.dispose();
+            obj.material.dispose();
+            obj.texture.dispose();
         }
 
         this.app.endGame = false;

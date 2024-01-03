@@ -90,10 +90,12 @@ class MyParkedCars {
 
     registerInitialColors(obj) {
         if (obj.type === "Mesh") {
-            obj.userData.initialColor = new THREE.Color();
-            obj.userData.initialColor.r = obj.material.color.r;
-            obj.userData.initialColor.g = obj.material.color.g;
-            obj.userData.initialColor.b = obj.material.color.b;
+            if(obj.userData.initialColor === undefined || obj.userData.initialColor === null){
+                obj.userData.initialColor = new THREE.Color();
+                obj.userData.initialColor.r = obj.material.color.r;
+                obj.userData.initialColor.g = obj.material.color.g;
+                obj.userData.initialColor.b = obj.material.color.b;
+            }
         }
         for (let i = 0; i < obj.children.length; i++) {
             this.registerInitialColors(obj.children[i]);
