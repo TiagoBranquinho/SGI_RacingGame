@@ -646,7 +646,6 @@ class MyContents {
                     texWidth = width > 0 ? width : -width;
                     texHeight = height > 0 ? height : -height;
                     if (materialref === "speedRampApp") {
-                        console.log(mesh.material.defaultAttributeValues.uv)
                         mesh.material.defaultAttributeValues.uv = texWidth / mesh.material.defaultAttributeValues.uv;
                         mesh.material.defaultAttributeValues.uv1 = texHeight / mesh.material.defaultAttributeValues.uv1;
                     }
