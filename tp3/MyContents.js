@@ -162,12 +162,14 @@ class MyContents {
         this.app.activeCamera.position.set(0, 75, 100);
         this.app.activeCamera.lookAt(new THREE.Vector3(0, 75, 295));
         this.app.controls.target.set(0, 75, 295);
+        this.app.controls.enabled = false;
         this.app.activeCamera.updateProjectionMatrix();
         this.setFireworks = true;
         this.endGameHandler = new MyEndGameHandler(this, this.restartGroup, this.backToMenuGroup);
     }
 
     restartGame(car, car2, difficulty, name) {
+        this.app.controls.enabled = true;
         this.track.resetPicking();
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
@@ -222,6 +224,7 @@ class MyContents {
     }
 
     restartMenu() {
+        this.app.controls.enabled = true;
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
             let obj = this.app.scene.children[i];
             this.app.scene.remove(obj);
