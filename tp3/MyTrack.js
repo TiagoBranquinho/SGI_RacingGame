@@ -4,6 +4,9 @@ import { MyPowerups } from './MyPowerups.js';
 import { MyParkedCars } from './MyParkedCars.js';
 import { MyCheckpoint } from './MyCheckpoint.js';
 
+import { MyTextRenderer } from './MyTextRenderer.js';
+import { MyPlacards } from './MyPlacards.js';
+
 class MyTrack {
 
     constructor(app, player, bot) {
@@ -12,7 +15,6 @@ class MyTrack {
         this.bot = bot;
         this.obstacleHandler = new MyObstacles(app);
         this.powerupHandler = new MyPowerups(app);
-        this.laps = 1;
         this.parkedCarHandler = new MyParkedCars(app);
         //Curve related attributes
         this.segments = 200;
@@ -284,6 +286,7 @@ class MyTrack {
             this.checkAnimationStateIsPause()
             this.enableListener();
         } else {
+            this.placards.update(this.player, this);
             this.player.handler.update(deltaTime);
             this.mixerPause = false; // Unpause the bot animation
             this.checkAnimationStateIsPause()
@@ -574,7 +577,8 @@ class MyTrack {
 
 
     init() {
-
+        this.placards = new MyPlacards(this.app);
+        this.placards.init();
         this.boundPointerMove = this.onPointerMove.bind(this);
         this.boundPointerDown = this.onPointerDown.bind(this);
         this.boundPointerUp = this.onPointerUp.bind(this);
