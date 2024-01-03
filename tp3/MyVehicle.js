@@ -6,7 +6,7 @@ class MyVehicle {
     constructor(app, model, difficulty = 0, name = "Player") {
         this.app = app;
         this.model = model;
-        this.radius = difficulty === 0 ? 2.8 : 0.1;
+        this.radius = difficulty === 0 ? 2.7 : 0.1;
         this.collisionsTime = 2;
         this.isNormal = true;
         this.time = 0;

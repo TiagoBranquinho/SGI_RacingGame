@@ -125,7 +125,7 @@ class MyPlacards {
 
     update(player, track) {
         let info = [];
-        let firstLine = "lap" + player.lapCount + "/" + track.laps + " " + player.currentTime + "s";
+        let firstLine = "lap " + player.lapCount + "/" + track.laps + " " + player.currentTime + "s";
         info.push(firstLine);
         let secondLine = (player.handler.velocity * 100).toFixed(2) + "/" + (player.handler.maxSpeed * 100).toFixed(2) + "km/h";
         info.push(secondLine);
