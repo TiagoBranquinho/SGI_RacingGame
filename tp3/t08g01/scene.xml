@@ -997,7 +997,7 @@
             <transforms>
                 <translate value3="4.0 0.75 -15.0" />
                 <rotate value3="0 0 0" />
-                <scale value3="0.75 0.75 0.75" />
+                <scale value3="0.7 0.7 0.7" />
             </transforms>
 
             <children>
@@ -1037,7 +1037,7 @@
             <transforms>
                 <translate value3="4.0 0.75 65.0" />
                 <rotate value3="0 3.14159 0" />
-                <scale value3="0.75 0.75 0.75" />
+                <scale value3="0.7 0.7 0.7" />
             </transforms>
 
             <children>

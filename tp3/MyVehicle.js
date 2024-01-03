@@ -36,7 +36,7 @@ class MyVehicle {
             this.model.position.set(0, 0.9, 0);
         }
         else {
-            scale = 0.75;
+            scale = 0.7;
             this.model.rotation.y = Math.PI / 2;
             this.model.position.set(0, 1.4, 0);
         }
