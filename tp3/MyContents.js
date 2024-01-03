@@ -74,6 +74,8 @@ class MyContents {
             timeFactor: {type: 'f', value: 0.0 },
             
         })
+
+        this.coneApps = [];
     }
 
     showMenu() {
@@ -538,7 +540,15 @@ class MyContents {
             let texture = new THREE.TextureLoader().load("t08g01/textures/bottle.jpg");
             material.map = texture;
         }
-        let mesh = new THREE.Mesh(geometry, material.clone())
+        let mesh = null;
+        if (materialref === "trafficConeApp") {
+            let coneMat = material.clone();
+            this.coneApps.push(coneMat);
+            mesh = new THREE.Mesh(geometry, coneMat)
+        }
+        else {
+            mesh = new THREE.Mesh(geometry, material)
+        }
         return mesh
     }
 
@@ -924,9 +934,11 @@ class MyContents {
     update(paused, endGame, deltaTime) {
         if (this.track !== undefined && this.track !== null) {
             this.track.update(paused, endGame, deltaTime);
-            if (this.trafficConeApp !== undefined && this.trafficConeApp !== null) {
-                if (this.trafficConeApp.hasUniform("timeFactor")) {
-                    this.trafficConeApp.updateUniformsValue("timeFactor", this.track.mixer.time  );
+            for (let coneApp of this.coneApps) {
+                if (coneApp !== undefined && coneApp !== null) {
+                    if (coneApp.uniforms["timeFactor"].value !== undefined && coneApp.uniforms["timeFactor"].value !== null) {
+                        coneApp.uniforms["timeFactor"].value = this.track.mixer.time;
+                    }
                 }
             }
         }
