@@ -8,6 +8,7 @@ class MyMenu {
 
     constructor(contents) {
         this.contents = contents;
+        contents.initCameras();
         this.menu = new THREE.Group();
         this.playerCars = [];
         this.botCars = [];
@@ -140,24 +141,6 @@ class MyMenu {
                 resolve(textMesh);
             });
         });
-    }
-
-
-
-    initCameras() {
-        const initialCameras = [
-            {
-                id: 'camera1',
-                type: 'perspective',
-                angle: 75,
-                near: 0.1,
-                far: 1000,
-                location: [0, 0, 8],
-                target: [0, 0, 0]
-            },
-            // Add more cameras as needed
-        ];
-        this.contents.configureCameras(initialCameras, 'camera1');
     }
 
     initLights() {

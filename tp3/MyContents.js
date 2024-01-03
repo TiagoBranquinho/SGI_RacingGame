@@ -94,7 +94,6 @@ class MyContents {
     }
 
     showMenu() {
-        this.initCameras();
         this.menu = new MyMenu(this);
         this.menu.display();
         if (this.axis === null) {
@@ -186,6 +185,7 @@ class MyContents {
     }
 
     restartGame(car, car2, difficulty, name) {
+        this.initCameras();
         this.app.controls.enabled = true;
         this.track.resetPicking();
         for (let i = this.app.scene.children.length - 1; i >= 0; i--) {
@@ -196,8 +196,6 @@ class MyContents {
         this.app.endGame = false;
 
         this.onAfterSceneLoadedAndBeforeRender(this.data);
-
-        this.initCameras();
 
         let player = new MyVehicle(this.app, car.clone(), 0, name);
         let bot = new MyVehicle(this.app, car2.clone(), difficulty);
@@ -248,8 +246,12 @@ class MyContents {
         }
 
         this.app.endGame = false;
-
-        this.showMenu();
+        this.menu = new MyMenu(this);
+        this.menu.display();
+        if (this.axis === null) {
+            this.axis = new MyAxis(this.app)
+            this.app.scene.add(this.axis)
+        }
     }
 
     /**
