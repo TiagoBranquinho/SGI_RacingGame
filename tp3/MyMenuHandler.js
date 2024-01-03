@@ -59,6 +59,7 @@ class MyMenuHandler {
     input(event) {
         console.log(event);
         if (event.key === "Enter") {
+            this.onPointerUp();
             this.removeListenerName();
             if(this.contents.data !== null) {
                 this.contents.restartGame(this.selectedPlayerCar.parent.parent.children[0], this.selectedBotCar.parent.parent.children[0], this.selectedBotDifficulty.difficulty, this.playerName);

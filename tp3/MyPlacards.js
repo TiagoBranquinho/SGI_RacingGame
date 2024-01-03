@@ -90,7 +90,7 @@ class MyPlacards {
         let screen = new THREE.Group();
         screen.name = "screen";
 
-        let screenMaterial = new THREE.MeshPhongMaterial({ color: 0x000000, shininess: 100 });
+        let screenMaterial = this.app.contents.screenApp.material;
         let screenGeometry = new THREE.BoxGeometry(8, 0.3, 16); // Adjust dimensions for the screen
         let screenMesh = new THREE.Mesh(screenGeometry, screenMaterial);
 
@@ -111,6 +111,7 @@ class MyPlacards {
 
     updateDisplayText(placard, info) {
         let screen = placard.getObjectByName("screen");
+        console.log(screen.children[0].material.uniforms);
         let textGroup = screen.getObjectByName("textGroup");
 
         for (let i = 0; i < textGroup.children.length; i++) {

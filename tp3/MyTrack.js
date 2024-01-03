@@ -211,29 +211,11 @@ class MyTrack {
 
 
     /**
-     * Build control points and a visual path for debug
+     * Builds a route with control points for the bot
      */
-    debugKeyFrames() {
+    createSpline() {
 
         this.spline = new THREE.CatmullRomCurve3([...this.keyPoints])
-
-        // Setup visual control points
-
-        for (let i = 0; i < this.keyPoints.length; i++) {
-            const geometry = new THREE.SphereGeometry(1, 32, 32)
-            const material = new THREE.MeshBasicMaterial({ color: 0x0000ff })
-            const sphere = new THREE.Mesh(geometry, material)
-            sphere.scale.set(0.2, 0.2, 0.2)
-            sphere.position.set(... this.keyPoints[i])
-
-            this.app.scene.add(sphere)
-        }
-
-        const tubeGeometry = new THREE.TubeGeometry(this.spline, 100, 0.05, 10, false)
-        const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        const tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial)
-
-        this.app.scene.add(tubeMesh)
 
     }
 
@@ -339,6 +321,7 @@ class MyTrack {
     checkRestart() {
         if(this.selectedBotCar !== null && this.selectedCar !== null) {
             console.log("restarting game with new cars", this.selectedBotCar, this.selectedCar);
+            this.onPointerUp();
             this.removeListener();
             this.app.contents.restartGame(this.selectedCar.clone().children[0], this.selectedBotCar.clone().children[0], this.app.contents.difficulty, this.app.contents.name);
         }
@@ -597,7 +580,7 @@ class MyTrack {
         this.player.draw();
 
         //visual debuging the path and the controls points
-        this.debugKeyFrames()
+        this.createSpline()
 
         // Assuming `duration` is the total duration of the animation
         let duration = this.animationMaxDuration; // specify the duration

@@ -47,7 +47,7 @@ class MyContents {
         this.trafficConeTex.wrapT = THREE.RepeatWrapping;
 
         this.trafficConeMap = new THREE.TextureLoader().load('t08g01/textures/trafficConeMap.jpg');
-        this.trafficConeApp = new MyShader(this.app, "t08g01/shaders/texture1.vert", "t08g01/shaders/texture3anim.frag", {
+        this.trafficConeApp = new MyShader(this.app, "t08g01/shaders/texture2.vert", "t08g01/shaders/texture3anim.frag", {
             uSampler1: {type: 'sampler2D', value: this.trafficConeTex },
             uSampler2: {type: 'sampler2D', value: this.trafficConeMap },
             normScale: {type: 'f', value: 0.1 },
@@ -64,7 +64,7 @@ class MyContents {
         this.speedRampTex.wrapT = THREE.RepeatWrapping;
 
         this.speedRampMap = new THREE.TextureLoader().load('t08g01/textures/speedRamp.jpg');
-        this.speedRampApp = new MyShader(this.app, "t08g01/shaders/texture1.vert", "t08g01/shaders/texture3anim.frag", {
+        this.speedRampApp = new MyShader(this.app, "t08g01/shaders/texture1.vert", "t08g01/shaders/texture2anim.frag", {
             uSampler1: {type: 'sampler2D', value: this.speedRampTex },
             uSampler2: {type: 'sampler2D', value: this.speedRampMap },
             normScale: {type: 'f', value: 0.1 },
@@ -73,6 +73,21 @@ class MyContents {
             blendScale: {type: 'f', value: 0.5 },
             timeFactor: {type: 'f', value: 0.0 },
             
+        })
+
+        this.screenTex = new THREE.TextureLoader().load('t08g01/textures/finishLine.jpg');
+        this.screenTex.wrapS = THREE.RepeatWrapping;
+        this.screenTex.wrapT = THREE.RepeatWrapping;
+
+        this.screenMap = new THREE.TextureLoader().load('t08g01/textures/outdoorMap.jpg');
+        this.screenApp = new MyShader(this.app, "t08g01/shaders/texture3.vert", "t08g01/shaders/texture1.frag", {
+            uSampler1: {type: 'sampler2D', value: this.screenTex },
+            uSampler2: {type: 'sampler2D', value: this.screenMap },
+            normScale: {type: 'f', value: 0.1 },
+            displacement: {type: 'f', value: 0.0 },
+            normalizationFactor: {type: 'f', value: 1 },
+            blendScale: {type: 'f', value: 0.5 },
+            timeFactor: {type: 'f', value: 0.0 },
         })
 
         this.coneApps = [];
@@ -451,11 +466,11 @@ class MyContents {
                 material.defaultAttributeValues.uv = texlength_s
                 material.defaultAttributeValues.uv1 = texlength_t
             }
-            //else if (material_el.id === "speedRampApp") {             
-            //    material = this.speedRampApp.material;
-            //    material.defaultAttributeValues.uv = texlength_s
-            //    material.defaultAttributeValues.uv1 = texlength_t
-            //}
+            else if (material_el.id === "speedRampApp") {             
+                material = this.speedRampApp.material;
+                material.defaultAttributeValues.uv = texlength_s
+                material.defaultAttributeValues.uv1 = texlength_t
+            }
 
         }
         return material
@@ -628,15 +643,15 @@ class MyContents {
                     mesh = this.getPrimitiveMesh(geometry, materialref);
                     texWidth = width > 0 ? width : -width;
                     texHeight = height > 0 ? height : -height;
-                    //if (materialref === "speedRampApp") {
-                    //    console.log(mesh.material.defaultAttributeValues.uv)
-                    //    mesh.material.defaultAttributeValues.uv = texWidth / mesh.material.defaultAttributeValues.uv;
-                    //    mesh.material.defaultAttributeValues.uv1 = texHeight / mesh.material.defaultAttributeValues.uv1;
-                    //}
-                    //else {
+                    if (materialref === "speedRampApp") {
+                        console.log(mesh.material.defaultAttributeValues.uv)
+                        mesh.material.defaultAttributeValues.uv = texWidth / mesh.material.defaultAttributeValues.uv;
+                        mesh.material.defaultAttributeValues.uv1 = texHeight / mesh.material.defaultAttributeValues.uv1;
+                    }
+                    else {
                         mesh.material.map.repeat.x = texWidth / mesh.material.map.repeat.x;
                         mesh.material.map.repeat.y = texHeight / mesh.material.map.repeat.y;
-                    //}
+                    }
                     mesh.castShadow = castShadow;
                     mesh.receiveShadow = receiveShadow;
 
@@ -934,6 +949,16 @@ class MyContents {
     update(paused, endGame, deltaTime) {
         if (this.track !== undefined && this.track !== null) {
             this.track.update(paused, endGame, deltaTime);
+            if (this.screenApp !== undefined && this.screenApp !== null) {
+                if (this.screenApp.hasUniform("timeFactor")) {
+                    this.screenApp.updateUniformsValue("timeFactor", this.track.mixer.time);
+                }
+            }
+            if (this.speedRampApp !== undefined && this.speedRampApp !== null) {
+                if (this.speedRampApp.hasUniform("timeFactor")) {
+                    this.speedRampApp.updateUniformsValue("timeFactor", this.track.mixer.time);
+                }
+            }
             for (let coneApp of this.coneApps) {
                 if (coneApp !== undefined && coneApp !== null) {
                     if (coneApp.uniforms["timeFactor"].value !== undefined && coneApp.uniforms["timeFactor"].value !== null) {

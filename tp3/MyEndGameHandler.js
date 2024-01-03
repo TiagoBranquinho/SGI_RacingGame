@@ -86,6 +86,7 @@ class MyEndGameHandler {
             if (this.mousePressed) {
                 if (obj.restart) {
                     this.selectedButton = obj;
+                    this.contents.track.removeListener();
                     this.removeListener();
                     this.contents.setFireworks = false;
                     this.contents.restartGame(this.contents.car, this.contents.car2, this.contents.difficulty, this.contents.name);
