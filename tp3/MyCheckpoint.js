@@ -7,7 +7,7 @@ class MyCheckpoint {
     // Method to check if the player has reached this checkpoint
     checkReached(playerPosition) {
         // You can adjust this distance as needed
-        const reachDistance = 10;
+        const reachDistance = 8;
 
         if (this.position.distanceTo(playerPosition) < reachDistance) {
             this.reached = true;
